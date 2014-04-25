@@ -3,8 +3,6 @@ package de.slikey.effectlib.effect;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.server.v1_7_R3.PacketPlayOutWorldParticles;
-
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
@@ -12,20 +10,20 @@ import org.bukkit.util.Vector;
 
 import de.slikey.effectlib.EffectManager;
 import de.slikey.effectlib.EffectType;
-import de.slikey.effectlib.util.ParticleType;
+import de.slikey.effectlib.util.ParticleEffect;
 
 public class TraceEntityEffect extends EntityEffect {
 
 	/**
 	 * Particle to spawn
 	 */
-	public ParticleType particle = ParticleType.FLAME;
-	
+	public ParticleEffect particle = ParticleEffect.FLAME;
+
 	/**
 	 * Interations to wait before refreshing particles
 	 */
 	public int refresh = 20;
-	
+
 	/**
 	 * World of the trace
 	 */
@@ -61,8 +59,7 @@ public class TraceEntityEffect extends EntityEffect {
 		for (int i = 0; i < waypoints.size(); i++) {
 			Vector position = waypoints.get(i);
 			Location location = new Location(world, position.getX(), position.getY(), position.getZ());
-			PacketPlayOutWorldParticles packet = new PacketPlayOutWorldParticles(particle.getParticleName(), (float) location.getX(), (float) location.getY(), (float) location.getZ(), 0, 0, 0, 0, 0);
-			sendPacket(packet, location, visibleRadiusSquared);
+			particle.display(location, visibleRange);
 		}
 	}
 

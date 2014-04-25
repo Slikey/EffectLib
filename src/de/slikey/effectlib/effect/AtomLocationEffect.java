@@ -1,13 +1,11 @@
 package de.slikey.effectlib.effect;
 
-import net.minecraft.server.v1_7_R3.PacketPlayOutWorldParticles;
-
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
 
 import de.slikey.effectlib.EffectManager;
 import de.slikey.effectlib.EffectType;
-import de.slikey.effectlib.util.ParticleType;
+import de.slikey.effectlib.util.ParticleEffect;
 import de.slikey.effectlib.util.RandomUtils;
 import de.slikey.effectlib.util.VectorUtils;
 
@@ -16,12 +14,12 @@ public class AtomLocationEffect extends LocationEffect {
 	/**
 	 * ParticleType of the nucleus
 	 */
-	public ParticleType particleNucleus = ParticleType.DROP_WATER;
+	public ParticleEffect particleNucleus = ParticleEffect.DRIP_WATER;
 	
 	/**
 	 * ParticleType of orbitals
 	 */
-	public ParticleType particleOrbital = ParticleType.DROP_LAVA;
+	public ParticleEffect particleOrbital = ParticleEffect.DRIP_LAVA;
 	
 	/**
 	 * Radius of the atom
@@ -72,8 +70,7 @@ public class AtomLocationEffect extends LocationEffect {
 		for (int i = 0; i < particlesNucleus; i++) {
 			Vector v = RandomUtils.getRandomVector().multiply(radius * radiusNucleus);
 			location.add(v);
-			PacketPlayOutWorldParticles packet = new PacketPlayOutWorldParticles(particleNucleus.getParticleName(), (float) location.getX(), (float) location.getY(), (float) location.getZ(), 0, 0, 0, 0, 0);
-			sendPacket(packet, location, visibleRadiusSquared);
+			particleNucleus.display(location,visibleRange, 0, 0, 0, 0, 0);
 			location.subtract(v);
 		}
 		for (int i = 0; i < particlesOrbital; i++) {
@@ -84,8 +81,7 @@ public class AtomLocationEffect extends LocationEffect {
 				VectorUtils.rotateAroundAxisX(v, xRotation);
 				VectorUtils.rotateAroundAxisY(v, rotation);
 				location.add(v);
-				PacketPlayOutWorldParticles packet = new PacketPlayOutWorldParticles(particleOrbital.getParticleName(), (float) location.getX(), (float) location.getY(), (float) location.getZ(), 0, 0, 0, 0, 0);
-				sendPacket(packet, location, visibleRadiusSquared);
+				particleOrbital.display(location,visibleRange, 0, 0, 0, 0, 0);
 				location.subtract(v);
 			}
 			step++;

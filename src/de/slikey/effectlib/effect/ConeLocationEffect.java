@@ -1,14 +1,12 @@
 package de.slikey.effectlib.effect;
 
-import net.minecraft.server.v1_7_R3.PacketPlayOutWorldParticles;
-
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
 
 import de.slikey.effectlib.EffectManager;
 import de.slikey.effectlib.EffectType;
 import de.slikey.effectlib.util.MathUtils;
-import de.slikey.effectlib.util.ParticleType;
+import de.slikey.effectlib.util.ParticleEffect;
 import de.slikey.effectlib.util.RandomUtils;
 import de.slikey.effectlib.util.VectorUtils;
 
@@ -17,7 +15,7 @@ public class ConeLocationEffect extends LocationEffect {
 	/**
 	 * ParticleType of spawned particle
 	 */
-	public ParticleType particle = ParticleType.FLAME;
+	public ParticleEffect particle = ParticleEffect.FLAME;
 
 	/**
 	 * Growing per iteration in the lenght (0.05)
@@ -43,7 +41,7 @@ public class ConeLocationEffect extends LocationEffect {
 	 * Conesize in particles per cone
 	 */
 	public int particlesCone = 180;
-	
+
 	/**
 	 * Start-angle or rotation of the cone
 	 */
@@ -53,7 +51,7 @@ public class ConeLocationEffect extends LocationEffect {
 	 * Randomize every cone on creation (false)
 	 */
 	public boolean randomize = false;
-	
+
 	/**
 	 * Current step. Works as counter
 	 */
@@ -79,10 +77,9 @@ public class ConeLocationEffect extends LocationEffect {
 			Vector v = new Vector(Math.cos(angle) * radius, lenght, Math.sin(angle) * radius);
 			VectorUtils.rotateAroundAxisX(v, (location.getPitch() + 90) * MathUtils.degreesToRadians);
 			VectorUtils.rotateAroundAxisY(v, -location.getYaw() * MathUtils.degreesToRadians);
-			
+
 			location.add(v);
-			PacketPlayOutWorldParticles packet = new PacketPlayOutWorldParticles(particle.getParticleName(), (float) location.getX(), (float) location.getY(), (float) location.getZ(), 0, 0, 0, 0, 0);
-			sendPacket(packet, location, visibleRadiusSquared);
+			particle.display(location,visibleRange, 0, 0, 0, 0, 0);
 			location.subtract(v);
 			step++;
 		}

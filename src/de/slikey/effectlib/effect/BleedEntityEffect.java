@@ -1,10 +1,7 @@
 package de.slikey.effectlib.effect;
 
-import net.minecraft.server.v1_7_R3.PacketPlayOutAnimation;
-
 import org.bukkit.Effect;
 import org.bukkit.Location;
-import org.bukkit.craftbukkit.v1_7_R3.entity.CraftEntity;
 import org.bukkit.entity.Entity;
 
 import de.slikey.effectlib.EffectManager;
@@ -36,7 +33,6 @@ public class BleedEntityEffect extends EntityEffect {
 		Location spawn = entity.getLocation();
 		spawn.add(0, RandomUtils.random.nextFloat() * 1.75f, 0);
 		spawn.getWorld().playEffect(spawn, Effect.STEP_SOUND, 152);
-		PacketPlayOutAnimation packet = new PacketPlayOutAnimation(((CraftEntity) entity).getHandle(), 1);
-		sendPacket(packet, spawn, visibleRadiusSquared);
+		entity.playEffect(org.bukkit.EntityEffect.HURT);
 	}
 }

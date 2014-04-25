@@ -1,14 +1,11 @@
 package de.slikey.effectlib.effect;
 
-import net.minecraft.server.v1_7_R3.Packet;
-import net.minecraft.server.v1_7_R3.PacketPlayOutWorldParticles;
-
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
 
 import de.slikey.effectlib.EffectManager;
 import de.slikey.effectlib.EffectType;
-import de.slikey.effectlib.util.ParticleType;
+import de.slikey.effectlib.util.ParticleEffect;
 import de.slikey.effectlib.util.VectorUtils;
 
 public class GridLocationEffect extends LocationEffect {
@@ -16,7 +13,7 @@ public class GridLocationEffect extends LocationEffect {
 	/**
 	 * ParticleType of the nucleus
 	 */
-	public ParticleType particle = ParticleType.FLAME;
+	public ParticleEffect particle = ParticleEffect.FLAME;
 
 	/**
 	 * Rows of the grid
@@ -55,9 +52,9 @@ public class GridLocationEffect extends LocationEffect {
 
 	public GridLocationEffect(EffectManager effectManager, Location location) {
 		super(effectManager, location);
-		type = EffectType.REPEATING;
+		type = EffectType.INSTANT;
 		period = 5;
-		iterations = 200;
+		iterations = 50;
 	}
 
 	@Override
@@ -85,8 +82,7 @@ public class GridLocationEffect extends LocationEffect {
 		v.setZ(0);
 		VectorUtils.rotateAroundAxisY(v, rotation);
 		location.add(v);
-		Packet packet = new PacketPlayOutWorldParticles(particle.getParticleName(), (float) location.getX(), (float) location.getY(), (float) location.getZ(), 0, 0, 0, 0, 0);
-		sendPacket(packet, location, visibleRadiusSquared);
+		particle.display(location, visibleRange, 0, 0, 0, 0, 0);
 		location.subtract(v);
 	}
 

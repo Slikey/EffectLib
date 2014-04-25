@@ -1,10 +1,5 @@
 package de.slikey.effectlib;
 
-import net.minecraft.server.v1_7_R3.Packet;
-
-import org.bukkit.Location;
-import org.bukkit.craftbukkit.v1_7_R3.entity.CraftPlayer;
-import org.bukkit.entity.Player;
 
 public abstract class Effect implements Runnable {
 
@@ -31,6 +26,7 @@ public abstract class Effect implements Runnable {
 
 	/**
 	 * Amount of repititions to do.
+	 * Set this to -1 for an infinite effect
 	 * 
 	 * @see {@link de.slikey.effectlib.EffectType}
 	 */
@@ -47,7 +43,7 @@ public abstract class Effect implements Runnable {
 	 * Display particles to players within this radius. Squared radius for
 	 * performance reasons.
 	 */
-	public float visibleRadiusSquared = 100 * 100;
+	public float visibleRange = 16;
 
 	private boolean done = false;
 	private final EffectManager effectManager;
@@ -97,12 +93,6 @@ public abstract class Effect implements Runnable {
 
 	public final void infinite() {
 		iterations = -1;
-	}
-
-	protected final void sendPacket(Packet packet, Location location, float visibleRadiusSquared) {
-		for (Player reciever : location.getWorld().getPlayers())
-			if (reciever.getLocation().distanceSquared(location) <= visibleRadiusSquared)
-				((CraftPlayer) reciever).getHandle().playerConnection.sendPacket(packet);
 	}
 
 }

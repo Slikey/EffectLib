@@ -1,20 +1,18 @@
 package de.slikey.effectlib.effect;
 
-import net.minecraft.server.v1_7_R3.PacketPlayOutWorldParticles;
-
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
 
 import de.slikey.effectlib.EffectManager;
 import de.slikey.effectlib.EffectType;
-import de.slikey.effectlib.util.ParticleType;
+import de.slikey.effectlib.util.ParticleEffect;
 import de.slikey.effectlib.util.RandomUtils;
 
 public class FountainLocationEffect extends LocationEffect {
 	/**
 	 * Particle of the fountain
 	 */
-	public ParticleType particle = ParticleType.SPLASH;
+	public ParticleEffect particle = ParticleEffect.SPLASH;
 
 	/**
 	 * Amount of strands (10)
@@ -24,12 +22,12 @@ public class FountainLocationEffect extends LocationEffect {
 	/**
 	 * Particles per iteration per strand (100)
 	 */
-	public int particlesStrand = 100;
+	public int particlesStrand = 150;
 
 	/**
 	 * Particles per iteration in the spout
 	 */
-	public int particlesSpout = 150;
+	public int particlesSpout = 200;
 
 	/**
 	 * Radius of strands in blocks
@@ -74,10 +72,7 @@ public class FountainLocationEffect extends LocationEffect {
 				y = Math.sin(Math.PI * j / particlesStrand) * height;
 				z = Math.sin(angle) * radius * ratio;
 				location.add(x, y, z);
-
-				PacketPlayOutWorldParticles packet = new PacketPlayOutWorldParticles(particle.getParticleName(), (float) location.getX(), (float) location.getY(), (float) location.getZ(), 0, 0, 0, 0, 0);
-				sendPacket(packet, location, visibleRadiusSquared);
-
+				particle.display(location, visibleRange, 0, 0, 0, 0, 0);
 				location.subtract(x, y, z);
 			}
 		}
@@ -85,10 +80,7 @@ public class FountainLocationEffect extends LocationEffect {
 			Vector v = RandomUtils.getRandomCircleVector().multiply(RandomUtils.random.nextFloat() * radius * radiusSpout);
 			v.setY(RandomUtils.random.nextFloat() * heightSpout);
 			location.add(v);
-			
-			PacketPlayOutWorldParticles packet = new PacketPlayOutWorldParticles(particle.getParticleName(), (float) location.getX(), (float) location.getY(), (float) location.getZ(), 0, 0, 0, 0, 0);
-			sendPacket(packet, location, visibleRadiusSquared);
-			
+			particle.display(location, visibleRange, 0, 0, 0, 0, 0);
 			location.subtract(v);
 		}
 	}

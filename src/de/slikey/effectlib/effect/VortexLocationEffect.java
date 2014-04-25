@@ -1,14 +1,12 @@
 package de.slikey.effectlib.effect;
 
-import net.minecraft.server.v1_7_R3.PacketPlayOutWorldParticles;
-
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
 
 import de.slikey.effectlib.EffectManager;
 import de.slikey.effectlib.EffectType;
 import de.slikey.effectlib.util.MathUtils;
-import de.slikey.effectlib.util.ParticleType;
+import de.slikey.effectlib.util.ParticleEffect;
 import de.slikey.effectlib.util.VectorUtils;
 
 public class VortexLocationEffect extends LocationEffect {
@@ -16,7 +14,7 @@ public class VortexLocationEffect extends LocationEffect {
 	/**
 	 * ParticleType of spawned particle
 	 */
-	public ParticleType particle = ParticleType.FLAME;
+	public ParticleEffect particle = ParticleEffect.FLAME;
 
 	/**
 	 * Radius of vortex (2)
@@ -65,8 +63,7 @@ public class VortexLocationEffect extends LocationEffect {
 				VectorUtils.rotateAroundAxisY(v, -location.getYaw() * MathUtils.degreesToRadians);
 				
 				location.add(v);
-				PacketPlayOutWorldParticles packet = new PacketPlayOutWorldParticles(particle.getParticleName(), (float) location.getX(), (float) location.getY(), (float) location.getZ(), 0, 0, 0, 0, 0);
-				sendPacket(packet, location, visibleRadiusSquared);
+				particle.display(location, visibleRange);
 				location.subtract(v);
 			}
 			step++;

@@ -1,18 +1,16 @@
 package de.slikey.effectlib.effect;
 
-import net.minecraft.server.v1_7_R3.PacketPlayOutWorldParticles;
-
 import org.bukkit.Location;
 
 import de.slikey.effectlib.EffectManager;
 import de.slikey.effectlib.EffectType;
-import de.slikey.effectlib.util.ParticleType;
+import de.slikey.effectlib.util.ParticleEffect;
 
 public class HelixLocationEffect extends LocationEffect {
 	/**
 	 * Particle to form the helix
 	 */
-	public ParticleType particle = ParticleType.FLAME;
+	public ParticleEffect particle = ParticleEffect.FLAME;
 
 	/**
 	 * Amount of strands
@@ -33,7 +31,7 @@ public class HelixLocationEffect extends LocationEffect {
 	 * Factor for the curves. Negative values reverse rotation.
 	 */
 	public float curve = 10;
-	
+
 	/**
 	 * Rotation of the helix (Fraction of PI)
 	 */
@@ -55,11 +53,7 @@ public class HelixLocationEffect extends LocationEffect {
 				double x = Math.cos(angle) * ratio * radius;
 				double z = Math.sin(angle) * ratio * radius;
 				location.add(x, 0, z);
-
-				PacketPlayOutWorldParticles packet = new PacketPlayOutWorldParticles(particle.getParticleName(), (float) location.getX(), (float) location.getY(), (float) location.getZ(), 0, 0, 0, 0, 0);
-				sendPacket(packet, location, visibleRadiusSquared);
-				
-				// Subtracting x and z to get to the first location again.
+				particle.display(location, visibleRange, 0, 0, 0, 0, 0);
 				location.subtract(x, 0, z);
 			}
 		}
