@@ -92,6 +92,7 @@ public abstract class Effect implements Runnable {
 	}
 
 	public final void infinite() {
+		type = EffectType.REPEATING;
 		iterations = -1;
 	}
 
