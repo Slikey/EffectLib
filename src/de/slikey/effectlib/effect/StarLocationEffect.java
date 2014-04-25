@@ -25,7 +25,7 @@ public class StarLocationEffect extends LocationEffect {
 	/**
 	 * Height of the spikes in blocks
 	 */
-	public float spikeHeight = 4;
+	public float spikeHeight = 3.5f;
 
 	/**
 	 * Half amount of spikes. Creation is only done half and then mirrored.
@@ -47,24 +47,24 @@ public class StarLocationEffect extends LocationEffect {
 	@Override
 	public void onRun() {
 		float radius = 3 * innerRadius / MathUtils.SQRT_3;
-		for (int j = 0; j < 2; j++) {
-			double yRotation = j * Math.PI / 2;
-			for (int i = 0; i < spikesHalf * 2; i++) {
-				double xRotation = i * Math.PI / spikesHalf + j * Math.PI;
-				for (int x = 0; x < particles; x++) {
-					double angle = 2 * Math.PI * x / particles;
-					float height = RandomUtils.random.nextFloat() * spikeHeight;
-					Vector v = new Vector(Math.cos(angle), 0, Math.sin(angle));
-					v.multiply((spikeHeight - height) * radius / spikeHeight);
-					v.setY(innerRadius + height);
-					VectorUtils.rotateAroundAxisX(v, xRotation);
-					VectorUtils.rotateAroundAxisY(v, yRotation);
-					location.add(v);
-					particle.display(location, visibleRange);
-					location.subtract(v);
-				}
+		for (int i = 0; i < spikesHalf * 2; i++) {
+			double xRotation = i * Math.PI / spikesHalf;
+			for (int x = 0; x < particles; x++) {
+				double angle = 2 * Math.PI * x / particles;
+				float height = RandomUtils.random.nextFloat() * spikeHeight;
+				Vector v = new Vector(Math.cos(angle), 0, Math.sin(angle));
+				v.multiply((spikeHeight - height) * radius / spikeHeight);
+				v.setY(innerRadius + height);
+				VectorUtils.rotateAroundAxisX(v, xRotation);
+				location.add(v);
+				particle.display(location, visibleRange);
+				location.subtract(v);
+				VectorUtils.rotateAroundAxisX(v, Math.PI);
+				VectorUtils.rotateAroundAxisY(v, Math.PI / 2);
+				location.add(v);
+				particle.display(location, visibleRange);
+				location.subtract(v);
 			}
-
 		}
 	}
 
