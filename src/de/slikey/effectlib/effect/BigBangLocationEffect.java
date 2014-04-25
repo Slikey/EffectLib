@@ -4,40 +4,58 @@ import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
 import org.bukkit.FireworkEffect.Builder;
 import org.bukkit.Location;
+import org.bukkit.Sound;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Firework;
-import org.bukkit.event.Cancellable;
-import org.bukkit.event.Event;
 import org.bukkit.inventory.meta.FireworkMeta;
+import org.bukkit.util.Vector;
 
 import de.slikey.effectlib.EffectManager;
 import de.slikey.effectlib.EffectType;
+import de.slikey.effectlib.util.RandomUtils;
 
 public class BigBangLocationEffect extends LocationEffect {
+
+	public FireworkEffect firework;
+	public int intensity = 2;
+	public float radius = 2;
+	public int explosions = 10;
+	public int soundInterval = 5;
+	protected int step = 0;
 
 	public BigBangLocationEffect(EffectManager effectManager, Location location) {
 		super(effectManager, location);
 		type = EffectType.REPEATING;
-		period = 40;
-		iterations = 20;
-	}
+		period = 2;
+		iterations = 400;
 
-	@Override
-	public void onRun() {
 		Builder b = FireworkEffect.builder();
 		b.withColor(Color.RED).withColor(Color.ORANGE).withColor(Color.BLACK);
 		b.withFade(Color.BLACK);
 		b.trail(true);
-		FireworkEffect fe = b.build();
-
-		final Firework fw = (Firework) location.getWorld().spawnEntity(location, EntityType.FIREWORK);
-		fw.playEffect(org.bukkit.EntityEffect.WOLF_HEARTS);
-		FireworkMeta meta = fw.getFireworkMeta();
-		meta.setPower(10);
-		meta.addEffect(fe);
-		fw.setFireworkMeta(meta);
-		
-		fw.detonate();
+		firework = b.build();
 	}
 
+	@Override
+	public void onRun() {
+		for (int i = 0; i < explosions; i++) {
+			Vector v = RandomUtils.getRandomVector().multiply(radius);
+			detonate(v);
+			if (step % soundInterval == 0)
+				location.getWorld().playSound(location, Sound.EXPLODE, 100, 1);
+		}
+		step++;
+	}
+
+	protected void detonate(Vector v) {
+		final Firework fw = (Firework) location.getWorld().spawnEntity(location.add(v), EntityType.FIREWORK);
+		location.subtract(v);
+		FireworkMeta meta = fw.getFireworkMeta();
+		meta.setPower(0);
+		for (int i = 0; i < intensity; i++) {
+			meta.addEffect(firework);
+		}
+		fw.setFireworkMeta(meta);
+		fw.detonate();
+	}
 }
