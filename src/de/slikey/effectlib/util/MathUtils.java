@@ -30,6 +30,8 @@ public final class MathUtils {
 	static public final float PI = 3.1415927f;
 	static public final float PI2 = PI * 2;
 
+	static public final float SQRT_3 = 1.73205f;
+	
 	static public final float E = 2.7182818f;
 
 	static private final int SIN_BITS = 14; // 16KB. Adjust for accuracy.
