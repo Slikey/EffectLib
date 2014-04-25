@@ -12,11 +12,30 @@ import de.slikey.effectlib.util.VectorUtils;
 
 public class StarLocationEffect extends LocationEffect {
 
+	/**
+	 * Particles to create the star
+	 */
 	public ParticleEffect particle = ParticleEffect.FLAME;
-	public int particles = 100;
+
+	/**
+	 * Particles per spike
+	 */
+	public int particles = 70;
+
+	/**
+	 * Height of the spikes in blocks
+	 */
 	public float spikeHeight = 4;
+
+	/**
+	 * Half amount of spikes. Creation is only done half and then mirrored.
+	 */
 	public int spikesHalf = 3;
-	public float innerRadius = 1;
+
+	/**
+	 * Inner radius of the star. (0.5)
+	 */
+	public float innerRadius = 0.5f;
 
 	public StarLocationEffect(EffectManager effectManager, Location location) {
 		super(effectManager, location);
