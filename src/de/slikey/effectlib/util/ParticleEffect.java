@@ -789,14 +789,6 @@ public enum ParticleEffect {
 		/**
 		 * @param message
 		 *            Message that will be logged
-		 */
-		public PacketInstantiationException(String message) {
-			super(message);
-		}
-
-		/**
-		 * @param message
-		 *            Message that will be logged
 		 * @param cause
 		 *            Cause of the exception
 		 */
