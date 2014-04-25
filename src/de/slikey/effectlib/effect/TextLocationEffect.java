@@ -16,11 +16,34 @@ import de.slikey.effectlib.util.VectorUtils;
 
 public class TextLocationEffect extends LocationEffect {
 
+	/**
+	 * Particle to draw the text
+	 */
 	public ParticleEffect particle = ParticleEffect.FLAME;
+	
+	/**
+	 * Text to display
+	 */
 	public String text = "Text";
+	
+	/**
+	 * Invert the text
+	 */
 	public boolean invert = false;
+	
+	/**
+	 * Each stepX pixel will be shown. Saves packets for lower fontsizes.
+	 */
 	public int stepX = 2;
+	
+	/**
+	 * Each stepY pixel will be shown. Saves packets for lower fontsizes.
+	 */
 	public int stepY = 2;
+	
+	/**
+	 * Scale the font down
+	 */
 	public float size = (float) 1 / 15;
 
 	protected final StringParser parser;
@@ -49,7 +72,7 @@ public class TextLocationEffect extends LocationEffect {
 				else if (invert && Color.black.getRGB() == clr)
 					continue;
 				Vector v = new Vector(x, image.getHeight() - y, 0).multiply(size);
-				VectorUtils.rotateAroundAxisY(v, -location.getYaw() * MathUtils.degreesToRadians);
+				VectorUtils.rotateAroundAxisY(v, location.getYaw() * MathUtils.degreesToRadians);
 				particle.display(location.add(v), visibleRange);
 				location.subtract(v);
 			}
