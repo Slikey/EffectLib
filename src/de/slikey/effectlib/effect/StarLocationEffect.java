@@ -20,7 +20,7 @@ public class StarLocationEffect extends LocationEffect {
 	/**
 	 * Particles per spike
 	 */
-	public int particles = 70;
+	public int particles = 50;
 
 	/**
 	 * Height of the spikes in blocks

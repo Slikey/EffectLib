@@ -34,22 +34,22 @@ public class TextLocationEffect extends LocationEffect {
 	/**
 	 * Each stepX pixel will be shown. Saves packets for lower fontsizes.
 	 */
-	public int stepX = 2;
+	public int stepX = 1;
 	
 	/**
 	 * Each stepY pixel will be shown. Saves packets for lower fontsizes.
 	 */
-	public int stepY = 2;
+	public int stepY = 1;
 	
 	/**
 	 * Scale the font down
 	 */
-	public float size = (float) 1 / 15;
+	public float size = (float) 1 / 5;
 
 	protected final StringParser parser;
 
 	public TextLocationEffect(EffectManager effectManager, Location location) {
-		this(effectManager, location, new Font("Tahoma", Font.PLAIN, 48));
+		this(effectManager, location, new Font("Tahoma", Font.PLAIN, 16));
 	}
 
 	public TextLocationEffect(EffectManager effectManager, Location location, Font font) {

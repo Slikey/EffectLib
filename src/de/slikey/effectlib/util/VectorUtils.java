@@ -33,6 +33,13 @@ public final class VectorUtils {
 		y = v.getX() * sin + v.getY() * cos;
 		return v.setX(x).setY(y);
 	}
+	
+	public static final Vector rotateVector(Vector v, double angleX, double angleY, double angleZ) {
+		rotateAroundAxisX(v, angleX);
+		rotateAroundAxisY(v, angleY);
+		rotateAroundAxisZ(v, angleZ);
+		return v;
+	}
 
 	public static final double angleToXAxis(Vector vector) {
 		return Math.atan2(vector.getX(), vector.getY());
