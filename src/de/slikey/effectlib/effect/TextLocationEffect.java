@@ -52,8 +52,9 @@ public class TextLocationEffect extends LocationEffect {
 	 * Recommended FALSE
 	 */
 	public boolean realtime = false;
+	
+	public Font font;
 
-	protected final StringParser parser;
 	protected BufferedImage image = null;
 
 	/**
@@ -67,7 +68,8 @@ public class TextLocationEffect extends LocationEffect {
 
 	public TextLocationEffect(EffectManager effectManager, Location location, Font font) {
 		super(effectManager, location);
-		parser = new StringParser(font);
+		this.font = font;
+		image = StringParser.stringToBufferedImage(font, text);
 		type = EffectType.REPEATING;
 		period = 40;
 		iterations = 20;
@@ -77,7 +79,7 @@ public class TextLocationEffect extends LocationEffect {
 	public void onRun() {
 		int clr = 0;
 		if (image == null || realtime)
-			image = parser.stringToBufferedImage(text);
+			image = StringParser.stringToBufferedImage(font, text);
 		for (int y = 0; y < image.getHeight(); y += stepY) {
 			for (int x = 0; x < image.getWidth(); x += stepX) {
 				clr = image.getRGB(x, y);

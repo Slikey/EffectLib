@@ -14,14 +14,13 @@ import java.awt.image.BufferedImage;
  * @author Kevin
  *
  */
-public class StringParser {
-	protected final Font font;
+public final class StringParser {
 	
-	public StringParser(Font font) {
-		this.font = font;
+	private StringParser() {
+		
 	}
 	
-	public BufferedImage stringToBufferedImage(String s) {
+	public static BufferedImage stringToBufferedImage(Font font, String s) {
 	    BufferedImage img = new BufferedImage(1, 1, BufferedImage.TYPE_4BYTE_ABGR);
 	    Graphics g = img.getGraphics();
 	    g.setFont(font);
