@@ -48,7 +48,7 @@ public class CubeLocationEffect extends LocationEffect {
 	/**
 	 * Only the outlines are drawn
 	 */
-	private boolean outlineOnly = true;
+	public boolean outlineOnly = true;
 	
 	/**
 	 * Current step. Works as counter
