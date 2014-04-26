@@ -208,7 +208,7 @@ public enum ParticleEffect {
 	HAPPY_VILLAGER("happyVillager");
 
 	private static final Map<String, ParticleEffect> NAME_MAP = new HashMap<String, ParticleEffect>();
-	private static final double MAX_RANGE = 32;
+	private static final double MAX_RANGE = 50;
 	private static Constructor<?> packetPlayOutWorldParticles;
 	private static Method getHandle;
 	private static Field playerConnection;
