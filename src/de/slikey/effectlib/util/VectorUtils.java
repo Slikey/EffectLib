@@ -33,8 +33,18 @@ public final class VectorUtils {
 		y = v.getX() * sin + v.getY() * cos;
 		return v.setX(x).setY(y);
 	}
-	
+
 	public static final Vector rotateVector(Vector v, double angleX, double angleY, double angleZ) {
+		// double x = v.getX(), y = v.getY(), z = v.getZ();
+		// double cosX = Math.cos(angleX), sinX = Math.sin(angleX), cosY =
+		// Math.cos(angleY), sinY = Math.sin(angleY), cosZ = Math.cos(angleZ),
+		// sinZ = Math.sin(angleZ);
+		// double nx, ny, nz;
+		// nx = (x * cosY + z * sinY) * (x * cosZ - y * sinZ);
+		// ny = (y * cosX - z * sinX) * (x * sinZ + y * cosZ);
+		// nz = (y * sinX + z * cosX) * (-x * sinY + z * cosY);
+		// return v.setX(nx).setY(ny).setZ(nz);
+		// Having some strange behavior up there.. Have to look in it later. TODO
 		rotateAroundAxisX(v, angleX);
 		rotateAroundAxisY(v, angleY);
 		rotateAroundAxisZ(v, angleZ);
