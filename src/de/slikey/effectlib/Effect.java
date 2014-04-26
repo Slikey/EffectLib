@@ -43,7 +43,7 @@ public abstract class Effect implements Runnable {
 	 * Display particles to players within this radius. Squared radius for
 	 * performance reasons.
 	 */
-	public float visibleRange = 16;
+	public float visibleRange = 32;
 
 	private boolean done = false;
 	private final EffectManager effectManager;

@@ -19,17 +19,17 @@ public class DnaLocationEffect extends LocationEffect {
 	/**
 	 * Particle of base 1
 	 */
-	public ParticleEffect particleBase1 = ParticleEffect.DRIP_LAVA;
+	public ParticleEffect particleBase1 = ParticleEffect.WAKE;
 	
 	/**
 	 * Particle of base 2
 	 */
-	public ParticleEffect particleBase2 = ParticleEffect.DRIP_WATER;
+	public ParticleEffect particleBase2 = ParticleEffect.RED_DUST;
 
 	/**
 	 * Radials to turn per step
 	 */
-	public double radials = Math.PI / 90;
+	public double radials = Math.PI / 30;
 
 	/**
 	 * Radius of dna-double-helix
@@ -39,7 +39,7 @@ public class DnaLocationEffect extends LocationEffect {
 	/**
 	 * Particles to spawn per interation
 	 */
-	public int particlesHelix = 30;
+	public int particlesHelix = 3;
 	
 	/**
 	 * Particles per base
@@ -54,12 +54,12 @@ public class DnaLocationEffect extends LocationEffect {
 	/**
 	 * Growth per particle
 	 */
-	public float grow = 0.05f;
+	public float grow = 0.2f;
 
 	/**
 	 * Particles between every base
 	 */
-	public float baseInterval = 20;
+	public float baseInterval = 10;
 
 	/**
 	 * Current step. Works as counter

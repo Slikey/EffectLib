@@ -41,6 +41,11 @@ public class CubeLocationEffect extends LocationEffect {
 	public int particles = 8;
 
 	/**
+	 * True if rotation is enable
+	 */
+	public boolean enableRotation = true;
+
+	/**
 	 * Current step. Works as counter
 	 */
 	protected int step = 0;
@@ -54,10 +59,12 @@ public class CubeLocationEffect extends LocationEffect {
 
 	@Override
 	public void onRun() {
-		double xRotation, yRotation, zRotation;
-		xRotation = step * angularVelocityX;
-		yRotation = step * angularVelocityY;
-		zRotation = step * angularVelocityZ;
+		double xRotation = 0, yRotation = 0, zRotation = 0;
+		if (enableRotation) {
+			xRotation = step * angularVelocityX;
+			yRotation = step * angularVelocityY;
+			zRotation = step * angularVelocityZ;
+		}
 		float a = edgeLenght / 2;
 		for (int x = 0; x <= particles; x++) {
 			float posX = edgeLenght * ((float) x / particles) - a;
@@ -68,7 +75,8 @@ public class CubeLocationEffect extends LocationEffect {
 						continue;
 					float posZ = edgeLenght * ((float) z / particles) - a;
 					Vector v = new Vector(posX, posY, posZ);
-					VectorUtils.rotateVector(v, xRotation, yRotation, zRotation);
+					if (enableRotation)
+						VectorUtils.rotateVector(v, xRotation, yRotation, zRotation);
 					particle.display(location.add(v), visibleRange);
 					location.subtract(v);
 				}
