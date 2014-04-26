@@ -19,7 +19,7 @@ public class TextLocationEffect extends LocationEffect {
 	/**
 	 * Particle to draw the text
 	 */
-	public ParticleEffect particle = ParticleEffect.FLAME;
+	public ParticleEffect particle = ParticleEffect.FIREWORKS_SPARK;
 
 	/**
 	 * Text to display
@@ -69,8 +69,8 @@ public class TextLocationEffect extends LocationEffect {
 		super(effectManager, location);
 		parser = new StringParser(font);
 		type = EffectType.REPEATING;
-		period = 10;
-		iterations = -1;
+		period = 40;
+		iterations = 20;
 	}
 
 	@Override
