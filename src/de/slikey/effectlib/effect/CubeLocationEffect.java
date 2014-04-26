@@ -46,6 +46,11 @@ public class CubeLocationEffect extends LocationEffect {
 	public boolean enableRotation = true;
 
 	/**
+	 * Only the outlines are drawn
+	 */
+	private boolean outlineOnly = true;
+	
+	/**
 	 * Current step. Works as counter
 	 */
 	protected int step = 0;
@@ -59,6 +64,56 @@ public class CubeLocationEffect extends LocationEffect {
 
 	@Override
 	public void onRun() {
+		if (outlineOnly) {
+			drawCubeOutline();
+		} else {
+			drawCubeWalls();
+		}
+		step++;
+	}
+
+	private void drawCubeOutline() {
+		double xRotation = 0, yRotation = 0, zRotation = 0;
+		if (enableRotation) {
+			xRotation = step * angularVelocityX;
+			yRotation = step * angularVelocityY;
+			zRotation = step * angularVelocityZ;
+		}
+		float a = edgeLenght / 2;
+		// top and bottom
+		double angleX, angleY;
+		Vector v = new Vector();
+		for (int i = 0; i < 4; i++) {
+			angleY = i * Math.PI / 2;
+			for (int j = 0; j < 2; j++) {
+				angleX = j * Math.PI;
+				for (int p = 0; p <= particles; p++) {
+					v.setX(a).setY(a);
+					v.setZ(edgeLenght * p / particles - a);
+					VectorUtils.rotateAroundAxisX(v, angleX);
+					VectorUtils.rotateAroundAxisY(v, angleY);
+
+					if (enableRotation)
+						VectorUtils.rotateVector(v, xRotation, yRotation, zRotation);
+					particle.display(location.add(v), visibleRange);
+					location.subtract(v);
+				}
+			}
+			// pillars
+			for (int p = 0; p <= particles; p++) {
+				v.setX(a).setZ(a);
+				v.setY(edgeLenght * p / particles - a);
+				VectorUtils.rotateAroundAxisY(v, angleY);
+				
+				if (enableRotation)
+					VectorUtils.rotateVector(v, xRotation, yRotation, zRotation);
+				particle.display(location.add(v), visibleRange);
+				location.subtract(v);
+			}
+		}
+	}
+
+	private void drawCubeWalls() {
 		double xRotation = 0, yRotation = 0, zRotation = 0;
 		if (enableRotation) {
 			xRotation = step * angularVelocityX;
@@ -82,6 +137,5 @@ public class CubeLocationEffect extends LocationEffect {
 				}
 			}
 		}
-		step++;
 	}
 }

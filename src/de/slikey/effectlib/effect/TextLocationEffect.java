@@ -69,7 +69,6 @@ public class TextLocationEffect extends LocationEffect {
 	public TextLocationEffect(EffectManager effectManager, Location location, Font font) {
 		super(effectManager, location);
 		this.font = font;
-		image = StringParser.stringToBufferedImage(font, text);
 		type = EffectType.REPEATING;
 		period = 40;
 		iterations = 20;
