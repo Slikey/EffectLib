@@ -45,11 +45,9 @@ public class ArcLocationEffect extends LocationEffect {
 			Vector v = link.clone().normalize().multiply((float) lenght * i / particles);
 			float x = ((float) i / particles) * lenght - lenght / 2;
 			float y = (float) (-pitch * Math.pow(x, 2) + height);
-			location.add(v);
-			location.add(0, y, 0);
+			location.add(v).add(0, y, 0);
 			particle.display(location, visibleRange);
-			location.subtract(0, y, 0);
-			location.subtract(v);
+			location.subtract(0, y, 0).subtract(v);
 
 			step++;
 		}
