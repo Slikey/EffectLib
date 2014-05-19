@@ -50,7 +50,7 @@ import de.slikey.effectlib.listener.ItemListener;
 * &lt;dependency&gt;
 * 	&lt;groupId&gt;de.slikey&lt;/groupId&gt;
 * 	&lt;artifactId&gt;EffectLib&lt;/artifactId&gt;
-* 	&lt;version&gt;1.0&lt;/version&gt;
+* 	&lt;version&gt;1.4&lt;/version&gt;
 * 	&lt;scope&gt;provided&lt;/scope&gt;
 * &lt;/dependency&gt;
 * &lt;/dependencies&gt;
