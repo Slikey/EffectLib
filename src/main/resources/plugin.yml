@@ -1,5 +1,5 @@
 name: EffectLib
-version: v1.3
+version: ${project.version}
 description: This library supports other plugins to perform cool effects.
 author: Slikey
 website: http://www.kevin-carstens.de/
