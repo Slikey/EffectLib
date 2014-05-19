@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>de.slikey</groupId>
 	<artifactId>EffectLib</artifactId>
-	<version>1.4-SNAPSHOT</version>
+	<version>1.4</version>
 	<name> EffectLib </name>
 	<url>http://www.kevin-carstens.de/</url>
 
@@ -22,7 +22,6 @@
 	</scm>
 
 	<distributionManagement>
-		<!-- I will host this for you if you want -elMakers -->
 		<repository>
 			<id>maven.elmakers.com</id>
 			<url>http://maven.elmakers.com/repository/</url>
