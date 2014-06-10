@@ -1,30 +1,55 @@
 package de.slikey.effectlib;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import org.bukkit.Bukkit;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.scheduler.BukkitTask;
 
 import de.slikey.effectlib.util.Disposable;
 
 /**
- * Dispose the EffectManager if you don't need him anymore. {@link
- * EffectManager.dispose()}
+ * Dispose the EffectManager if you don't need him anymore.
  * 
  * @author Kevin
  * 
  */
 public final class EffectManager implements Disposable {
 
-	private final EffectLib effectLib;
+	private final Plugin owningPlugin;
 	private final Map<Effect, BukkitTask> effects;
+    private static List<EffectManager> effectManagers;
 	private boolean disposed;
 	private boolean disposeOnTermination;
 
-	public EffectManager(EffectLib effectLib) {
-		this.effectLib = effectLib;
+    public static void initialize() {
+        effectManagers = new ArrayList<EffectManager>();
+    }
+
+    public static List<EffectManager> getManagers() {
+        if (effectManagers == null) {
+            initialize();
+        }
+        return effectManagers;
+    }
+
+    public static void disposeAll() {
+        if (effectManagers != null) {
+            for (Iterator<EffectManager> i = effectManagers.iterator(); i.hasNext(); ) {
+                EffectManager em = i.next();
+                i.remove();
+                em.dispose();
+            }
+        }
+    }
+
+	public EffectManager(Plugin owningPlugin) {
+		this.owningPlugin = owningPlugin;
 		effects = new HashMap<Effect, BukkitTask>();
 		disposed = false;
 		disposeOnTermination = false;
@@ -40,13 +65,13 @@ public final class EffectManager implements Disposable {
 		BukkitTask task = null;
 		switch (effect.type) {
 			case INSTANT:
-				task = s.runTask(effectLib, effect);
+				task = s.runTask(owningPlugin, effect);
 				break;
 			case DELAYED:
-				task = s.runTaskLater(effectLib, effect, effect.delay);
+				task = s.runTaskLater(owningPlugin, effect, effect.delay);
 				break;
 			case REPEATING:
-				task = s.runTaskTimer(effectLib, effect, effect.delay, effect.period);
+				task = s.runTaskTimer(owningPlugin, effect, effect.delay, effect.period);
 				break;
 		}
 		synchronized (this) {
@@ -64,7 +89,7 @@ public final class EffectManager implements Disposable {
 			effects.remove(effect);
 		}
 		if (effect.callback != null)
-			Bukkit.getScheduler().runTask(effectLib, effect.callback);
+			Bukkit.getScheduler().runTask(owningPlugin, effect.callback);
 		if (disposeOnTermination && effects.size() == 0)
 			dispose();
 	}
@@ -74,7 +99,9 @@ public final class EffectManager implements Disposable {
 			return;
 		disposed = true;
 		cancel(false);
-		effectLib.getEffectManagers().remove(this);
+        if (effectManagers != null) {
+            effectManagers.remove(this);
+        }
 	}
 
 	public void disposeOnTermination() {

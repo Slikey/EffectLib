@@ -96,7 +96,6 @@ public final class EffectLib extends JavaPlugin {
 
 	private static EffectLib instance;
 	private EntityManager entityManager;
-	private List<EffectManager> effectManagers;
 
 	public EffectLib() {
 		super();
@@ -110,7 +109,7 @@ public final class EffectLib extends JavaPlugin {
 	@Override
 	public void onEnable() {
 		entityManager = new EntityManager(this);
-		effectManagers = new ArrayList<EffectManager>();
+        EffectManager.initialize();
 
 		loadListeners();
 	}
@@ -118,11 +117,7 @@ public final class EffectLib extends JavaPlugin {
 	@Override
 	public void onDisable() {
 		entityManager.dispose();
-		for (Iterator<EffectManager> i = effectManagers.iterator(); i.hasNext();) {
-			EffectManager em = i.next();
-			i.remove();
-			em.dispose();
-		}
+        EffectManager.disposeAll();
 		HandlerList.unregisterAll(this);
 	}
 
@@ -135,6 +130,6 @@ public final class EffectLib extends JavaPlugin {
 	}
 
 	public List<EffectManager> getEffectManagers() {
-		return effectManagers;
+		return EffectManager.getManagers();
 	}
 }
