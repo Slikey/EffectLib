@@ -61,6 +61,10 @@ public final class EffectManager implements Disposable {
 		if (disposeOnTermination)
 			throw new IllegalStateException("EffectManager is awaiting termination to dispose and not able to accept any effects.");
 
+        if (effects.containsKey(effect)) {
+            effect.cancel(false);
+        }
+
 		BukkitScheduler s = Bukkit.getScheduler();
 		BukkitTask task = null;
 		switch (effect.type) {
@@ -86,6 +90,10 @@ public final class EffectManager implements Disposable {
 
 	public void done(Effect effect) {
 		synchronized (this) {
+            BukkitTask existingTask = effects.get(effect);
+            if (existingTask != null) {
+                existingTask.cancel();
+            }
 			effects.remove(effect);
 		}
 		if (effect.callback != null)
