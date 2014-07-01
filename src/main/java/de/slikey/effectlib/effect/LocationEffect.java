@@ -1,5 +1,6 @@
 package de.slikey.effectlib.effect;
 
+import org.apache.commons.lang.Validate;
 import org.bukkit.Location;
 
 import de.slikey.effectlib.Effect;
@@ -13,7 +14,8 @@ public abstract class LocationEffect extends Effect {
 
 	public LocationEffect(EffectManager effectManager, Location location) {
 		super(effectManager);
-		this.location = location;
+        Validate.notNull(location, "Location cannot be null!");
+        this.location = location;
 	}
 
 }

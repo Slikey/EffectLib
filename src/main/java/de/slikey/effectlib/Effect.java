@@ -1,6 +1,8 @@
 package de.slikey.effectlib;
 
 
+import org.apache.commons.lang.Validate;
+
 public abstract class Effect implements Runnable {
 
 	/**
@@ -49,6 +51,7 @@ public abstract class Effect implements Runnable {
 	private final EffectManager effectManager;
 
 	public Effect(EffectManager effectManager) {
+        Validate.notNull(effectManager, "EffectManager cannot be null!");
 		this.effectManager = effectManager;
 	}
 
@@ -59,7 +62,7 @@ public abstract class Effect implements Runnable {
 			done = true;
 	}
 
-	private final void done() {
+	private void done() {
 		done = true;
 		effectManager.done(this);
 	}
