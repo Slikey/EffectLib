@@ -55,7 +55,8 @@ public class DragonLocationEffect extends LocationEffect {
             float x = step % particles;
             float y = (float) (pitch * Math.pow(step, 2));
             Vector v = new Vector(x * length / particles, y, 0);
-            VectorUtils.rotateAroundAxisX(v, location.getPitch() * MathUtils.degreesToRadians);
+            VectorUtils.rotateAroundAxisX(v, RandomUtils.getRandomAngle());
+            VectorUtils.rotateAroundAxisZ(v, location.getPitch() * MathUtils.degreesToRadians);
             VectorUtils.rotateAroundAxisY(v, -location.getYaw() * MathUtils.degreesToRadians);
             particle.display(location.add(v), visibleRange, 0, 0, 0, 0, 1);
             location.subtract(v);
