@@ -62,7 +62,7 @@ public class DragonLocationEffect extends LocationEffect {
         for (int i = 0; i < arcs; i++) {
             float pitch = 1 + rndF.get(i) * 2 * this.pitch - this.pitch;
             float x = step % particles;
-            float y = (float) (pitch * Math.pow(step, 2));
+            float y = (float) (pitch * Math.pow(step % particles, 2));
             Vector v = new Vector(x * length / particles, y, 0);
             VectorUtils.rotateAroundAxisX(v, rndAngle.get(i));
             VectorUtils.rotateAroundAxisZ(v, location.getPitch() * MathUtils.degreesToRadians);
