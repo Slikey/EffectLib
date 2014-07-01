@@ -22,12 +22,12 @@ public class DragonLocationEffect extends LocationEffect {
     /**
      * Pitch of the dragon arc
      */
-    public float pitch = .2f;
+    public float pitch = .1f;
 
     /**
      * Arcs to build the breath
      */
-    public int arcs = 10;
+    public int arcs = 20;
 
     /**
      * Particles per arc
@@ -37,7 +37,7 @@ public class DragonLocationEffect extends LocationEffect {
     /**
      * Steps per iteration
      */
-    public int stepsPerIteration = 3;
+    public int stepsPerIteration = 2;
 
     /**
      * Length in blocks
@@ -49,30 +49,35 @@ public class DragonLocationEffect extends LocationEffect {
      */
     protected int step = 0;
 
-    protected final List<Float> rndF, rndAngle;
+    protected final List<Float> rndF;
+    protected final List<Double> rndAngle;
 
     public DragonLocationEffect(EffectManager effectManager, Location location) {
         super(effectManager, location);
         type = EffectType.REPEATING;
-        period = 5;
+        period = 2;
         iterations = 200;
         rndF = new ArrayList<Float>(arcs);
-        rndAngle = new ArrayList<Float>(arcs);
+        rndAngle = new ArrayList<Double>(arcs);
     }
 
     @Override
     public void onRun() {
-        while (rndF.size() < arcs) rndF.add(RandomUtils.random.nextFloat());
-        while (rndAngle.size() < arcs) rndAngle.add(RandomUtils.random.nextFloat());
         for (int j = 0; j < stepsPerIteration; j++) {
+            if (step % particles == 0) {
+                rndF.clear();
+                rndAngle.clear();
+            }
+            while (rndF.size() < arcs) rndF.add(RandomUtils.random.nextFloat());
+            while (rndAngle.size() < arcs) rndAngle.add(RandomUtils.getRandomAngle());
             for (int i = 0; i < arcs; i++) {
-                float pitch = 1 + rndF.get(i) * 2 * this.pitch - this.pitch;
-                float x = step % particles;
+                float pitch = rndF.get(i) * 2 * this.pitch - this.pitch;
+                float x = (step % particles) * length / particles;
                 float y = (float) (pitch * Math.pow(x, 2));
-                Vector v = new Vector(x * length / particles, y, 0);
+                Vector v = new Vector(x, y, 0);
                 VectorUtils.rotateAroundAxisX(v, rndAngle.get(i));
                 VectorUtils.rotateAroundAxisZ(v, location.getPitch() * MathUtils.degreesToRadians);
-                VectorUtils.rotateAroundAxisY(v, -location.getYaw() * MathUtils.degreesToRadians);
+                VectorUtils.rotateAroundAxisY(v, -(location.getYaw() + 90) * MathUtils.degreesToRadians);
                 particle.display(location.add(v), visibleRange, 0, 0, 0, 0, 1);
                 location.subtract(v);
             }
