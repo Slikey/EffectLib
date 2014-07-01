@@ -27,6 +27,16 @@ public class DragonLocationEffect extends LocationEffect {
     public int arcs = 10;
 
     /**
+     * Particles per arc
+     */
+    public int particles = 30;
+
+    /**
+     * Length in blocks
+     */
+    public float length = 4;
+
+    /**
      * Current step. Works as counter
      */
     protected int step = 0;
@@ -42,9 +52,9 @@ public class DragonLocationEffect extends LocationEffect {
     public void onRun() {
         for (int i = 0; i < arcs; i++) {
             float pitch = 1 + RandomUtils.random.nextFloat() * 2 * this.pitch - this.pitch;
-            float x = step;
+            float x = step % particles;
             float y = (float) (pitch * Math.pow(step, 2));
-            Vector v = new Vector(x, y, 0);
+            Vector v = new Vector(x * length / particles, y, 0);
             VectorUtils.rotateAroundAxisX(v, location.getPitch() * MathUtils.degreesToRadians);
             VectorUtils.rotateAroundAxisY(v, -location.getYaw() * MathUtils.degreesToRadians);
             particle.display(location.add(v), visibleRange, 0, 0, 0, 0, 1);
