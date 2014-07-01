@@ -116,7 +116,6 @@ public final class EffectManager implements Disposable {
         }
 
         if (effects == null) {
-            owningPlugin.getLogger().info("Failed to construct EffectLib class: " + effectLibClass.getName());
             return null;
         }
 
@@ -172,7 +171,6 @@ public final class EffectManager implements Disposable {
 
             return true;
         } catch (Exception ex) {
-            ex.printStackTrace();
         }
 
         return false;
