@@ -55,6 +55,10 @@ public abstract class Effect implements Runnable {
 		this.effectManager = effectManager;
 	}
 
+    public final void cancel() {
+        cancel(true);
+    }
+
 	public final void cancel(boolean callback) {
 		if (callback)
 			done();
