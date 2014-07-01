@@ -13,75 +13,75 @@ import java.util.Random;
 
 public class CylinderLocationEffect extends LocationEffect {
 
-	/**
-	 * Particle of the cube
-	 */
-	public ParticleEffect particle = ParticleEffect.FLAME;
+    /**
+     * Particle of the cube
+     */
+    public ParticleEffect particle = ParticleEffect.FLAME;
 
-	/**
-	 * Radius of cylinder
-	 */
-	public float radius = 1;
+    /**
+     * Radius of cylinder
+     */
+    public float radius = 1;
 
     /**
      * Height of Cylinder
      */
     public float height = 3;
 
-	/**
-	 * Turns the cube by this angle each iteration around the x-axis
-	 */
-	public double angularVelocityX = Math.PI / 200;
+    /**
+     * Turns the cube by this angle each iteration around the x-axis
+     */
+    public double angularVelocityX = Math.PI / 200;
 
-	/**
-	 * Turns the cube by this angle each iteration around the y-axis
-	 */
-	public double angularVelocityY = Math.PI / 170;
+    /**
+     * Turns the cube by this angle each iteration around the y-axis
+     */
+    public double angularVelocityY = Math.PI / 170;
 
-	/**
-	 * Turns the cube by this angle each iteration around the z-axis
-	 */
-	public double angularVelocityZ = Math.PI / 155;
+    /**
+     * Turns the cube by this angle each iteration around the z-axis
+     */
+    public double angularVelocityZ = Math.PI / 155;
 
     /**
      * Rotation of the cylinder
      */
     public double rotationX, rotationY, rotationZ;
 
-	/**
-	 * Particles in each row
-	 */
-	public int particles = 100;
+    /**
+     * Particles in each row
+     */
+    public int particles = 100;
 
-	/**
-	 * True if rotation is enable
-	 */
-	public boolean enableRotation = true;
+    /**
+     * True if rotation is enable
+     */
+    public boolean enableRotation = true;
 
     /**
      * Toggles the cylinder to be solid
      */
     public boolean solid = false;
 
-	/**
-	 * Current step. Works as counter
-	 */
-	protected int step = 0;
+    /**
+     * Current step. Works as counter
+     */
+    protected int step = 0;
 
     /**
      * Ratio of sides to entire surface
      */
     protected float sideRatio = 0;
 
-	public CylinderLocationEffect(EffectManager effectManager, Location location) {
-		super(effectManager, location);
-		type = EffectType.REPEATING;
-		period = 2;
-		iterations = 200;
-	}
+    public CylinderLocationEffect(EffectManager effectManager, Location location) {
+        super(effectManager, location);
+        type = EffectType.REPEATING;
+        period = 2;
+        iterations = 200;
+    }
 
-	@Override
-	public void onRun() {
+    @Override
+    public void onRun() {
         if (sideRatio == 0) calculateSideRatio();
         Random r = RandomUtils.random;
         double xRotation = rotationX, yRotation = rotationY, zRotation = rotationZ;
@@ -114,8 +114,8 @@ public class CylinderLocationEffect extends LocationEffect {
             location.subtract(v);
         }
         particle.display(location, visibleRange);
-		step++;
-	}
+        step++;
+    }
 
     protected void calculateSideRatio() {
         float grounds, side;
