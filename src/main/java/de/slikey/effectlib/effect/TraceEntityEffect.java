@@ -22,7 +22,12 @@ public class TraceEntityEffect extends EntityEffect {
 	/**
 	 * Interations to wait before refreshing particles
 	 */
-	public int refresh = 20;
+	public int refresh = 5;
+
+    /**
+     * Maximum amount of way points
+     */
+    public int maxWayPoints = 30;
 
 	/**
 	 * World of the trace
@@ -32,7 +37,7 @@ public class TraceEntityEffect extends EntityEffect {
 	/**
 	 * Waypoints of the trace
 	 */
-	protected List<Vector> waypoints;
+	protected List<Vector> wayPoints;
 
 	protected int step = 0;
 
@@ -41,7 +46,7 @@ public class TraceEntityEffect extends EntityEffect {
 		type = EffectType.REPEATING;
 		period = 1;
 		iterations = 600;
-		waypoints = new ArrayList<Vector>();
+        wayPoints = new ArrayList<Vector>();
 	}
 
 	@Override
@@ -52,12 +57,14 @@ public class TraceEntityEffect extends EntityEffect {
 			cancel(true);
 			return;
 		}
-		waypoints.add(entity.getLocation().toVector());
+        if (wayPoints.size() >= maxWayPoints)
+            wayPoints.remove(0);
+        wayPoints.add(entity.getLocation().toVector());
 		step++;
 		if (step % refresh != 0)
 			return;
-		for (int i = 0; i < waypoints.size(); i++) {
-			Vector position = waypoints.get(i);
+		for (int i = 0; i < wayPoints.size(); i++) {
+			Vector position = wayPoints.get(i);
 			Location location = new Location(world, position.getX(), position.getY(), position.getZ());
 			particle.display(location, visibleRange);
 		}
