@@ -1,5 +1,6 @@
 package de.slikey.effectlib.effect;
 
+import net.minecraft.util.org.apache.commons.lang3.Validate;
 import org.bukkit.entity.Entity;
 
 import de.slikey.effectlib.Effect;
@@ -10,6 +11,7 @@ public abstract class EntityEffect extends Effect {
 	
 	public EntityEffect(EffectManager effectManager, Entity entity) {
 		super(effectManager);
+        Validate.notNull(entity, "Entity cannot be null!");
 		this.entity = entity;
 	}
 
