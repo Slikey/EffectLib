@@ -35,6 +35,11 @@ public class DragonLocationEffect extends LocationEffect {
     public int particles = 30;
 
     /**
+     * Steps per iteration
+     */
+    public int stepsPerIteration = 3;
+
+    /**
      * Length in blocks
      */
     public float length = 4;
@@ -59,17 +64,19 @@ public class DragonLocationEffect extends LocationEffect {
     public void onRun() {
         while (rndF.size() < arcs) rndF.add(RandomUtils.random.nextFloat());
         while (rndAngle.size() < arcs) rndAngle.add(RandomUtils.random.nextFloat());
-        for (int i = 0; i < arcs; i++) {
-            float pitch = 1 + rndF.get(i) * 2 * this.pitch - this.pitch;
-            float x = step % particles;
-            float y = (float) (pitch * Math.pow(step % particles, 2));
-            Vector v = new Vector(x * length / particles, y, 0);
-            VectorUtils.rotateAroundAxisX(v, rndAngle.get(i));
-            VectorUtils.rotateAroundAxisZ(v, location.getPitch() * MathUtils.degreesToRadians);
-            VectorUtils.rotateAroundAxisY(v, -location.getYaw() * MathUtils.degreesToRadians);
-            particle.display(location.add(v), visibleRange, 0, 0, 0, 0, 1);
-            location.subtract(v);
+        for (int j = 0; j < stepsPerIteration; j++) {
+            for (int i = 0; i < arcs; i++) {
+                float pitch = 1 + rndF.get(i) * 2 * this.pitch - this.pitch;
+                float x = step % particles;
+                float y = (float) (pitch * Math.pow(x, 2));
+                Vector v = new Vector(x * length / particles, y, 0);
+                VectorUtils.rotateAroundAxisX(v, rndAngle.get(i));
+                VectorUtils.rotateAroundAxisZ(v, location.getPitch() * MathUtils.degreesToRadians);
+                VectorUtils.rotateAroundAxisY(v, -location.getYaw() * MathUtils.degreesToRadians);
+                particle.display(location.add(v), visibleRange, 0, 0, 0, 0, 1);
+                location.subtract(v);
+            }
+            step++;
         }
-        step++;
     }
 }
