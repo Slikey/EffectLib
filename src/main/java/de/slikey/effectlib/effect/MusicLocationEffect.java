@@ -9,6 +9,11 @@ import de.slikey.effectlib.util.ParticleEffect;
 
 public class MusicLocationEffect extends LocationEffect {
 
+    /**
+     * Particle to be spawned
+     */
+    public ParticleEffect particle = ParticleEffect.NOTE;
+
 	/**
 	 * Radials to spawn next note.
 	 */
@@ -35,7 +40,7 @@ public class MusicLocationEffect extends LocationEffect {
 	public void onRun() {
 		Vector v = new Vector(Math.cos(radialsPerStep * step) * radius, .2f, Math.sin(radialsPerStep * step) * radius);
 		location.add(v);
-		ParticleEffect.NOTE.display(location, visibleRange);
+		particle.display(location, visibleRange);
 		location.subtract(v);
 		step++;
 	}
