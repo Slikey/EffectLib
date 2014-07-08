@@ -37,10 +37,10 @@ public class LineLocationEffect extends LocationEffect {
 	public void onRun() {
         float ratio = length / particles;
         Vector v = link.clone().multiply(ratio);
-        location.subtract(v);
+        Location loc = location.clone().subtract(v);
         for (int i = 0; i < particles; i++) {
-            location.add(v);
-            particle.display(location, visibleRange);
+            loc.add(v);
+            particle.display(loc, visibleRange);
         }
 	}
 
