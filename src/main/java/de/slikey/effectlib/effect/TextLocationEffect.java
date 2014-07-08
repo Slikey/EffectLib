@@ -77,20 +77,26 @@ public class TextLocationEffect extends LocationEffect {
 	@Override
 	public void onRun() {
 		int clr = 0;
-		if (image == null || realtime)
-			image = StringParser.stringToBufferedImage(font, text);
-		for (int y = 0; y < image.getHeight(); y += stepY) {
-			for (int x = 0; x < image.getWidth(); x += stepX) {
-				clr = image.getRGB(x, y);
-				if (!invert && Color.black.getRGB() != clr)
-					continue;
-				else if (invert && Color.black.getRGB() == clr)
-					continue;
-				Vector v = new Vector((float) image.getWidth() / 2 - x, (float) image.getHeight() / 2 - y, 0).multiply(size);
-				VectorUtils.rotateAroundAxisY(v, -location.getYaw() * MathUtils.degreesToRadians);
-				particle.display(location.add(v), visibleRange);
-				location.subtract(v);
-			}
-		}
+        try {
+            if (image == null || realtime)
+                image = StringParser.stringToBufferedImage(font, text);
+            for (int y = 0; y < image.getHeight(); y += stepY) {
+                for (int x = 0; x < image.getWidth(); x += stepX) {
+                    clr = image.getRGB(x, y);
+                    if (!invert && Color.black.getRGB() != clr)
+                        continue;
+                    else if (invert && Color.black.getRGB() == clr)
+                        continue;
+                    Vector v = new Vector((float) image.getWidth() / 2 - x, (float) image.getHeight() / 2 - y, 0).multiply(size);
+                    VectorUtils.rotateAroundAxisY(v, -location.getYaw() * MathUtils.degreesToRadians);
+                    particle.display(location.add(v), visibleRange);
+                    location.subtract(v);
+                }
+            }
+        } catch (Exception ex) {
+            // This seems to happen on bad characters in strings,
+            // I'm choosing to ignore the exception and cancel the effect for now.
+            cancel(true);
+        }
 	}
 }

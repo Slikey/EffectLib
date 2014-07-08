@@ -91,6 +91,9 @@ import de.slikey.effectlib.listener.ItemListener;
 *       }
 * </pre>
 *
+* If is also possible to shade in EffectLib so you don't have to rely on an external
+* plugin.
+*
 */
 public final class EffectLib extends JavaPlugin {
 
