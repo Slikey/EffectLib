@@ -20,12 +20,12 @@ public class LineLocationEffect extends LocationEffect {
 	public int particles = 100;
 
 	protected final Vector link;
-	protected final float lenght;
+	protected final float length;
 
 	public LineLocationEffect(EffectManager effectManager, Location start, Location stop) {
 		super(effectManager, start);
 		link = stop.toVector().subtract(start.toVector());
-		lenght = (float) link.length();
+        length = (float) link.length();
 		link.normalize();
 
 		type = EffectType.INSTANT;
@@ -35,13 +35,13 @@ public class LineLocationEffect extends LocationEffect {
 
 	@Override
 	public void onRun() {
-		for (int i = 0; i < particles; i++) {
-			float ratio = (float) i * lenght / particles;
-			Vector v = link.clone().multiply(ratio);
-			location.add(v);
-			particle.display(location, visibleRange);
-			location.subtract(v);
-		}
+        float ratio = length / particles;
+        Vector v = link.clone().multiply(ratio);
+        location.subtract(v);
+        for (int i = 0; i < particles; i++) {
+            location.add(v);
+            particle.display(location, visibleRange);
+        }
 	}
 
 }
