@@ -71,6 +71,7 @@ import de.slikey.effectlib.listener.ItemListener;
 * This will relocate the library so you don't conflict with another instance
 * of it, even though all the EffectLib code is built in. Here is an example pom section:
 *
+* <pre>
 * &lt;plugin&gt;
 *     &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
 *     &lt;artifactId&gt;maven-shade-plugin&lt;/artifactId&gt;
@@ -92,6 +93,7 @@ import de.slikey.effectlib.listener.ItemListener;
 *         &lt;/execution&gt;
 *     &lt;/executions&gt;
 * &lt;/plugin&gt;
+* </pre>
 *
 * Once shaded, you can instantiate an EffectManager directly, passing it your Plugin
 * instance.
