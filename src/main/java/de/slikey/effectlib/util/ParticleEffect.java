@@ -205,7 +205,11 @@ public enum ParticleEffect {
 	 * @appearance Green stars
 	 * @displayed by bone meal and when trading with a villager
 	 */
-	HAPPY_VILLAGER("happyVillager");
+	HAPPY_VILLAGER("happyVillager"),
+
+    ICON_CRACK("iconcrack_{subtype}"),
+    BLOCK_CRACK("blockcrack_{subtype}"),
+    TILE_CRACK("tilecrack_{subtype}");
 
 	private static final Map<String, ParticleEffect> NAME_MAP = new HashMap<String, ParticleEffect>();
 	private static final double MAX_RANGE = 50;
@@ -497,8 +501,50 @@ public enum ParticleEffect {
 			range = MAX_RANGE;
 		// throw new
 		// IllegalArgumentException("Range cannot exceed the maximum value of 16");
+        if (this == BLOCK_CRACK || this == ICON_CRACK || this == TILE_CRACK) {
+            throw new IllegalArgumentException("Missing subtype for parameterized ParticleEffect");
+        }
 		sendPacket(getPlayers(center, range), instantiatePacket(name, center, offsetX, offsetY, offsetZ, speed, amount));
 	}
+
+    /**
+     * Displays a particle effect which is only visible for all players within a
+     * certain range in the world of @param center
+     *
+     * This can be used with the parameterized particle types.
+     *
+     * @param subtype
+     *            The particle subtype, normally an item id
+     * @param center
+     *            Center location of the effect
+     * @param range
+     *            Range of the visibility
+     * @param offsetX
+     *            Maximum distance particles can fly away from the center on the
+     *            x-axis
+     * @param offsetY
+     *            Maximum distance particles can fly away from the center on the
+     *            y-axis
+     * @param offsetZ
+     *            Maximum distance particles can fly away from the center on the
+     *            z-axis
+     * @param speed
+     *            Display speed of the particles
+     * @param amount
+     *            Amount of particles
+     * @throws @IllegalArgumentException if the range is higher than 20
+     * @see #sendPacket
+     * @see #instantiatePacket
+     */
+    public void display(String subtype, Location center, double range, float offsetX, float offsetY, float offsetZ, float speed, int amount) {
+        if (range > MAX_RANGE)
+            range = MAX_RANGE;
+        String particleName = name;
+        if (this == BLOCK_CRACK || this == ICON_CRACK || this == TILE_CRACK) {
+            particleName = particleName.replace("{subtype}", subtype);
+        }
+        sendPacket(getPlayers(center, range), instantiatePacket(particleName, center, offsetX, offsetY, offsetZ, speed, amount));
+    }
 
 	public void display(Location center, double range) {
 		display(center, range, 0, 0, 0, 0, 0);
