@@ -210,6 +210,7 @@ public enum ParticleEffect {
 	private static final Map<String, ParticleEffect> NAME_MAP = new HashMap<String, ParticleEffect>();
 	private static final double MAX_RANGE = 50;
 	private static Constructor<?> packetPlayOutWorldParticles;
+    private static boolean legacy = false;
 	private static Method getHandle;
 	private static Field playerConnection;
 	private static Method sendPacket;
@@ -220,7 +221,12 @@ public enum ParticleEffect {
 			NAME_MAP.put(p.name, p);
 		try {
 			packetPlayOutWorldParticles = ReflectionHandler.getConstructor(PacketType.PLAY_OUT_WORLD_PARTICLES.getPacket(), String.class, float.class, float.class, float.class, float.class, float.class, float.class, float.class, int.class);
-			getHandle = ReflectionHandler.getMethod("CraftPlayer", SubPackageType.ENTITY, "getHandle");
+			// 1.6 Backwards compatibility
+            if (packetPlayOutWorldParticles == null) {
+                packetPlayOutWorldParticles = ReflectionHandler.getConstructor(PacketType.PLAY_OUT_WORLD_PARTICLES.getPacket());
+                legacy = true;
+            }
+            getHandle = ReflectionHandler.getMethod("CraftPlayer", SubPackageType.ENTITY, "getHandle");
 			playerConnection = ReflectionHandler.getField("EntityPlayer", PackageType.MINECRAFT_SERVER, "playerConnection");
 			sendPacket = ReflectionHandler.getMethod(playerConnection.getType(), "sendPacket", ReflectionHandler.getClass("Packet", PackageType.MINECRAFT_SERVER));
 		} catch (Exception e) {
@@ -303,6 +309,36 @@ public enum ParticleEffect {
 		if (amount < 1)
 			amount = 1;
 		try {
+            if (legacy) {
+                // This is really slow, but only here for backwards compatibility.
+                Object packet = packetPlayOutWorldParticles.newInstance();
+                for (Field field : packet.getClass().getDeclaredFields())
+                {
+                    field.setAccessible(true);
+                    String fieldName = field.getName();
+                    if (fieldName.equals("a")) {
+                        field.set(packet, name);
+                    } else if (fieldName.equals("b")) {
+                        field.setFloat(packet, (float)center.getX());
+                    } else if (fieldName.equals("c")) {
+                        field.setFloat(packet, (float)center.getY());
+                    } else if (fieldName.equals("d")) {
+                        field.setFloat(packet, (float)center.getZ());
+                    } else if (fieldName.equals("e")) {
+                        field.setFloat(packet, offsetX);
+                    } else if (fieldName.equals("f")) {
+                        field.setFloat(packet, offsetY);
+                    } else if (fieldName.equals("g")) {
+                        field.setFloat(packet, offsetZ);
+                    } else if (fieldName.equals("h")) {
+                        field.setFloat(packet, speed);
+                    } else if (fieldName.equals("i")) {
+                        field.setInt(packet, amount);
+                    }
+                }
+
+                return packet;
+            }
 			return packetPlayOutWorldParticles.newInstance(name, (float) center.getX(), (float) center.getY(), (float) center.getZ(), offsetX, offsetY, offsetZ, speed, amount);
 		} catch (Exception e) {
 			throw new PacketInstantiationException("Packet instantiation failed", e);
@@ -452,8 +488,6 @@ public enum ParticleEffect {
 	 *            Display speed of the particles
 	 * @param amount
 	 *            Amount of particles
-	 * @param players
-	 *            Receivers of the effect
 	 * @throws @IllegalArgumentException if the range is higher than 20
 	 * @see #sendPacket
 	 * @see #instantiatePacket
@@ -489,8 +523,6 @@ public enum ParticleEffect {
 	 *            Display speed of the particles
 	 * @param amount
 	 *            Amount of particles
-	 * @param players
-	 *            Receivers of the effect
 	 * @see #display(Location, double, float, float, float, float, int)
 	 */
 	public void display(Location center, float offsetX, float offsetY, float offsetZ, float speed, int amount) {

@@ -530,25 +530,42 @@ public final class ReflectionHandler {
 		PLAY_OUT_UPDATE_TIME("PacketPlayOutUpdateTime"),
 		PLAY_OUT_WINDOW_ITEMS("PacketPlayOutWindowItems"),
 		PLAY_OUT_WORLD_EVENT("PacketPlayOutWorldEvent"),
-		PLAY_OUT_WORLD_PARTICLES("PacketPlayOutWorldParticles"),
+		PLAY_OUT_WORLD_PARTICLES("PacketPlayOutWorldParticles", "Packet63WorldParticles"),
 		STATUS_IN_PING("PacketStatusInPing"),
 		STATUS_IN_START("PacketStatusInStart"),
 		STATUS_OUT_PONG("PacketStatusOutPong"),
 		STATUS_OUT_SERVER_INFO("PacketStatusOutServerInfo");
 
 		private final String name;
+        private final String legacy;
 		private Class<?> packet;
 
 		private PacketType(String name) {
 			this.name = name;
+            this.legacy = null;
 		}
+
+        private PacketType(String name, String legacy) {
+            this.name = name;
+            this.legacy = legacy;
+        }
 
 		public String getName() {
 			return this.getName();
 		}
 
 		public Class<?> getPacket() throws Exception {
-			return packet == null ? packet = ReflectionHandler.getClass(name, PackageType.MINECRAFT_SERVER) : packet;
+            if (packet == null) {
+                try {
+                    packet = ReflectionHandler.getClass(name, PackageType.MINECRAFT_SERVER);
+                } catch(Exception ex) {
+                    if (legacy == null) {
+                        throw ex;
+                    }
+                    packet = ReflectionHandler.getClass(legacy, PackageType.MINECRAFT_SERVER);
+                }
+            }
+            return packet;
 		}
 	}
 }
