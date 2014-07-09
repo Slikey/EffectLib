@@ -10,6 +10,11 @@ import de.slikey.effectlib.util.RandomUtils;
 
 public class SmokeEntityEffect extends EntityEffect {
 
+    /**
+     * ParticleType of spawned particle
+     */
+    public ParticleEffect particle = ParticleEffect.SMOKE;
+
 	public SmokeEntityEffect(EffectManager effectManager, Entity entity) {
 		super(effectManager, entity);
 		type = EffectType.REPEATING;
@@ -23,7 +28,7 @@ public class SmokeEntityEffect extends EntityEffect {
 			Location location = entity.getLocation();
 			location.add(RandomUtils.getRandomCircleVector().multiply(RandomUtils.random.nextDouble() * 0.6d));
 			location.add(0, RandomUtils.random.nextFloat() * 2, 0);
-			ParticleEffect.SMOKE.display(location, visibleRange);
+            particle.display(location, visibleRange);
 		}
 	}
 
