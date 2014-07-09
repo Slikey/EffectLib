@@ -66,7 +66,37 @@ import de.slikey.effectlib.listener.ItemListener;
 * &lt;/repositories&gt;
 * </pre>
 *
-* \section plugin_sec Detailed Usage
+* If you don't want to depend on EffectLib as an external library, you
+* can use the Maven shade plugin to "shade" the library into your own plugin.
+* This will relocate the library so you don't conflict with another instance
+* of it, even though all the EffectLib code is built in. Here is an example pom section:
+*
+* &lt;plugin&gt;
+*     &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
+*     &lt;artifactId&gt;maven-shade-plugin&lt;/artifactId&gt;
+*     &lt;version&gt;1.5&lt;/version&gt;
+*     &lt;executions&gt;
+*         &lt;execution&gt;
+*             &lt;phase&gt;package&lt;/phase&gt;
+*             &lt;goals&gt;
+*                 &lt;goal&gt;shade&lt;/goal&gt;
+*             &lt;/goals&gt;
+*             &lt;configuration&gt;
+*                 &lt;relocations&gt;
+*                     &lt;relocation&gt;
+*                         &lt;pattern&gt;de.slikey&lt;/pattern&gt;
+*                         &lt;shadedPattern&gt;org.myplugin.slikey&lt;/shadedPattern&gt;
+*                     &lt;/relocation&gt;
+*                 &lt;/relocations&gt;
+*             &lt;/configuration&gt;
+*         &lt;/execution&gt;
+*     &lt;/executions&gt;
+* &lt;/plugin&gt;
+*
+* Once shaded, you can instantiate an EffectManager directly, passing it your Plugin
+* instance.
+*
+* \section plugin_sec Unshaded Usage
 *
 * 1. Get the instance of EffectLib first:
 * <i>EffectLib lib = getEffectLib(); // See below</i>
@@ -90,9 +120,6 @@ import de.slikey.effectlib.listener.ItemListener;
 *           return (EffectLib)effectLib;
 *       }
 * </pre>
-*
-* If is also possible to shade in EffectLib so you don't have to rely on an external
-* plugin.
 *
 */
 public final class EffectLib extends JavaPlugin {
