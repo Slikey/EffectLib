@@ -10,6 +10,8 @@ import de.slikey.effectlib.util.RandomUtils;
 
 public class BleedEntityEffect extends EntityEffect {
 
+    public boolean hurt = true;
+
 	/**
 	 * Duration in ticks, the blood-particles take to despawn.
 	 */
@@ -33,6 +35,8 @@ public class BleedEntityEffect extends EntityEffect {
 		Location spawn = entity.getLocation();
 		spawn.add(0, RandomUtils.random.nextFloat() * 1.75f, 0);
 		spawn.getWorld().playEffect(spawn, Effect.STEP_SOUND, 152);
-		entity.playEffect(org.bukkit.EntityEffect.HURT);
+        if (hurt) {
+            entity.playEffect(org.bukkit.EntityEffect.HURT);
+        }
 	}
 }
