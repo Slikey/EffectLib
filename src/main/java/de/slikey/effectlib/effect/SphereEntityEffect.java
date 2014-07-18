@@ -38,11 +38,12 @@ public class SphereEntityEffect extends EntityEffect {
 
 	@Override
 	public void onRun() {
+        Location location = entity.getLocation();
+        location.add(0, yOffset, 0);
 		for (int i = 0; i < particles; i++) {
-            Location location = entity.getLocation();
-            location.add(0, yOffset, 0);
-            location.add(RandomUtils.getRandomCircleVector().multiply(RandomUtils.random.nextDouble() * radius));
-            particle.display(location, visibleRange);
+            Vector v = RandomUtils.getRandomCircleVector().multiply(RandomUtils.random.nextDouble() * radius);
+            particle.display(location.add(v), visibleRange);
+            location.subtract(v);
 		}
 	}
 
