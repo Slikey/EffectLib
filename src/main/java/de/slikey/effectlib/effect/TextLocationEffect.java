@@ -1,82 +1,81 @@
 package de.slikey.effectlib.effect;
 
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.image.BufferedImage;
-
-import org.bukkit.Location;
-import org.bukkit.util.Vector;
-
 import de.slikey.effectlib.EffectManager;
 import de.slikey.effectlib.EffectType;
 import de.slikey.effectlib.util.MathUtils;
 import de.slikey.effectlib.util.ParticleEffect;
 import de.slikey.effectlib.util.StringParser;
 import de.slikey.effectlib.util.VectorUtils;
+import org.bukkit.Location;
+import org.bukkit.util.Vector;
+
+import java.awt.*;
+import java.awt.image.BufferedImage;
 
 public class TextLocationEffect extends LocationEffect {
 
-	/**
-	 * Particle to draw the text
-	 */
-	public ParticleEffect particle = ParticleEffect.FIREWORKS_SPARK;
+    /**
+     * Particle to draw the text
+     */
+    public ParticleEffect particle = ParticleEffect.FIREWORKS_SPARK;
 
-	/**
-	 * Text to display
-	 */
-	public String text = "Text";
+    /**
+     * Text to display
+     */
+    public String text = "Text";
 
-	/**
-	 * Invert the text
-	 */
-	public boolean invert = false;
+    /**
+     * Invert the text
+     */
+    public boolean invert = false;
 
-	/**
-	 * Each stepX pixel will be shown. Saves packets for lower fontsizes.
-	 */
-	public int stepX = 1;
+    /**
+     * Each stepX pixel will be shown. Saves packets for lower fontsizes.
+     */
+    public int stepX = 1;
 
-	/**
-	 * Each stepY pixel will be shown. Saves packets for lower fontsizes.
-	 */
-	public int stepY = 1;
+    /**
+     * Each stepY pixel will be shown. Saves packets for lower fontsizes.
+     */
+    public int stepY = 1;
 
-	/**
-	 * Scale the font down
-	 */
-	public float size = (float) 1 / 5;
+    /**
+     * Scale the font down
+     */
+    public float size = (float) 1 / 5;
 
-	/**
-	 * Set this only to true if you are working with changing text. I'll advice
-	 * the parser to recalculate the BufferedImage every iteration.
-	 * Recommended FALSE
-	 */
-	public boolean realtime = false;
-	
-	public Font font;
+    /**
+     * Set this only to true if you are working with changing text. I'll advice
+     * the parser to recalculate the BufferedImage every iteration.
+     * Recommended FALSE
+     */
+    public boolean realtime = false;
 
-	protected BufferedImage image = null;
+    /**
+     * Font to create the Text
+     */
+    public Font font;
 
-	/**
-	 * 
-	 * @param effectManager
-	 * @param location Location of the point in the middle of the text
-	 */
-	public TextLocationEffect(EffectManager effectManager, Location location) {
-		this(effectManager, location, new Font("Tahoma", Font.PLAIN, 16));
-	}
+    /**
+     * Contains an image version of the String
+     */
+    protected BufferedImage image = null;
 
-	public TextLocationEffect(EffectManager effectManager, Location location, Font font) {
-		super(effectManager, location);
-		this.font = font;
-		type = EffectType.REPEATING;
-		period = 40;
-		iterations = 20;
-	}
+    public TextLocationEffect(EffectManager effectManager, Location location) {
+        this(effectManager, location, new Font("Tahoma", Font.PLAIN, 16));
+    }
 
-	@Override
-	public void onRun() {
-		int clr = 0;
+    public TextLocationEffect(EffectManager effectManager, Location location, Font font) {
+        super(effectManager, location);
+        this.font = font;
+        type = EffectType.REPEATING;
+        period = 40;
+        iterations = 20;
+    }
+
+    @Override
+    public void onRun() {
+        int clr = 0;
         try {
             if (image == null || realtime)
                 image = StringParser.stringToBufferedImage(font, text);
@@ -98,5 +97,5 @@ public class TextLocationEffect extends LocationEffect {
             // I'm choosing to ignore the exception and cancel the effect for now.
             cancel(true);
         }
-	}
+    }
 }

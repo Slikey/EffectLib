@@ -1,16 +1,18 @@
 package de.slikey.effectlib.effect;
 
-import org.bukkit.entity.Player;
-
 import de.slikey.effectlib.Effect;
 import de.slikey.effectlib.EffectManager;
+import org.bukkit.entity.Player;
 
 public abstract class PlayerEffect extends Effect {
-	protected final Player player;
+    /**
+     * Player affected by the Effect
+     */
+    protected final Player player;
 
-	public PlayerEffect(EffectManager effectManager, Player player) {
-		super(effectManager);
-		this.player = player;
-	}
+    public PlayerEffect(EffectManager effectManager, Player player) {
+        super(effectManager);
+        this.player = player;
+    }
 
 }

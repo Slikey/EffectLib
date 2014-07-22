@@ -1,14 +1,13 @@
 package de.slikey.effectlib.effect;
 
-import org.bukkit.entity.Entity;
-
 import de.slikey.effectlib.EffectManager;
+import org.bukkit.entity.Entity;
 
 public class SkyRocketEntityEffect extends JumpEntityEffect {
 
-	public SkyRocketEntityEffect(EffectManager effectManager, Entity entity) {
-		super(effectManager, entity);
-		power = 10;
-	}
+    public SkyRocketEntityEffect(EffectManager effectManager, Entity entity) {
+        super(effectManager, entity);
+        power = 10;
+    }
 
 }

@@ -1,14 +1,12 @@
 package de.slikey.effectlib;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
-import org.bukkit.event.HandlerList;
-import org.bukkit.plugin.java.JavaPlugin;
-
 import de.slikey.effectlib.entity.EntityManager;
 import de.slikey.effectlib.listener.ItemListener;
+import org.bukkit.event.HandlerList;
+import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.java.JavaPlugin;
+
+import java.util.List;
 
 /*! \mainpage EffectLib Plugin API
 *
@@ -150,7 +148,7 @@ public final class EffectLib extends JavaPlugin {
 	public void onDisable() {
 		entityManager.dispose();
         EffectManager.disposeAll();
-		HandlerList.unregisterAll(this);
+		HandlerList.unregisterAll((Plugin) this);
 	}
 
 	private void loadListeners() {
@@ -164,4 +162,5 @@ public final class EffectLib extends JavaPlugin {
 	public List<EffectManager> getEffectManagers() {
 		return EffectManager.getManagers();
 	}
+
 }

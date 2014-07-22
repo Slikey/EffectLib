@@ -14,43 +14,36 @@ import java.util.List;
 
 public class DragonLocationEffect extends LocationEffect {
 
+    protected final List<Float> rndF;
+    protected final List<Double> rndAngle;
     /**
      * ParticleType of spawned particle
      */
     public ParticleEffect particle = ParticleEffect.FLAME;
-
     /**
      * Pitch of the dragon arc
      */
     public float pitch = .1f;
-
     /**
      * Arcs to build the breath
      */
     public int arcs = 20;
-
     /**
      * Particles per arc
      */
     public int particles = 30;
-
     /**
      * Steps per iteration
      */
     public int stepsPerIteration = 2;
-
     /**
      * Length in blocks
      */
     public float length = 4;
-
     /**
      * Current step. Works as counter
      */
     protected int step = 0;
-
-    protected final List<Float> rndF;
-    protected final List<Double> rndAngle;
 
     public DragonLocationEffect(EffectManager effectManager, Location location) {
         super(effectManager, location);
