@@ -90,6 +90,8 @@ public class WaveLocationEffect extends LocationEffect {
      */
     public void invalidate() {
         firstStep = false;
+        waterCache.clear();
+        cloudCache.clear();
 
         Vector s1 = new Vector(-lengthFront, 0, 0);
         Vector s2 = new Vector(lengthBack, 0, 0);
