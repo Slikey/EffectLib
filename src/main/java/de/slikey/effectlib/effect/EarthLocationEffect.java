@@ -2,6 +2,7 @@ package de.slikey.effectlib.effect;
 
 import de.slikey.effectlib.EffectManager;
 import de.slikey.effectlib.EffectType;
+import de.slikey.effectlib.util.MathUtils;
 import de.slikey.effectlib.util.ParticleEffect;
 import de.slikey.effectlib.util.RandomUtils;
 import de.slikey.effectlib.util.VectorUtils;
@@ -13,12 +14,24 @@ import java.util.Set;
 
 public class EarthLocationEffect extends LocationEffect {
 
-    public int precision = 1000;
+    /**
+     * Precision of generation. Higher numbers have better results, but increase the time of generation. Don't pick Number above 10.000
+     */
+    public int precision = 100;
 
+    /**
+     * Amount of Particles to form the World
+     */
     public int particles = 500;
 
+    /**
+     * Radius of the World
+     */
     public float radius = 1;
 
+    /**
+     * Height of the mountains.
+     */
     public float mountainHeight = .5f;
 
     /**
@@ -26,8 +39,14 @@ public class EarthLocationEffect extends LocationEffect {
      */
     protected int step = 0;
 
+    /**
+     * Triggers invalidation on first run
+     */
     protected boolean firstStep = true;
 
+    /**
+     * Caches vectors to increase performance
+     */
     protected final Set<Vector> cacheGreen, cacheBlue;
 
     public EarthLocationEffect(EffectManager effectManager, Location location) {
@@ -45,8 +64,19 @@ public class EarthLocationEffect extends LocationEffect {
         cacheBlue.clear();
 
         Set<Vector> cache = new HashSet<Vector>();
-        for (int i = 0; i < particles; i++)
-            cache.add(RandomUtils.getRandomVector().multiply(radius));
+        int sqrtParticles = (int) Math.sqrt(particles);
+        float theta = 0, phi, thetaStep = MathUtils.PI / sqrtParticles, phiStep = MathUtils.PI2 / sqrtParticles;
+        for (int i = 0; i < sqrtParticles; i++) {
+            theta += thetaStep;
+            phi = 0;
+            for (int j = 0; j < sqrtParticles; j++) {
+                phi += phiStep;
+                float x = radius * MathUtils.sin(theta) * MathUtils.cos(phi);
+                float y = radius * MathUtils.sin(theta) * MathUtils.sin(phi);
+                float z = radius * MathUtils.cos(theta);
+                cache.add(new Vector(x, y, z));
+            }
+        }
 
         float increase = mountainHeight / precision;
         for (int i = 0; i < precision; i++) {
