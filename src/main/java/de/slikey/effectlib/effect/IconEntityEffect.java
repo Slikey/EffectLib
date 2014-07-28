@@ -6,7 +6,6 @@ import de.slikey.effectlib.util.ParticleEffect;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 
-@Deprecated
 public class IconEntityEffect extends EntityEffect {
 
     /**
