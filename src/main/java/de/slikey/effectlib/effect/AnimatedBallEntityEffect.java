@@ -57,6 +57,9 @@ public class AnimatedBallEntityEffect extends EntityEffect {
 
     public AnimatedBallEntityEffect(EffectManager effectManager, Entity entity) {
         super(effectManager, entity);
+        this.type = EffectType.REPEATING;
+        this.iterations = Integer.MAX_VALUE -1;
+        this.period = 1;
     }
 
     @Override
