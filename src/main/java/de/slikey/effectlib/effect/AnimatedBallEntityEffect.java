@@ -1,6 +1,7 @@
 package de.slikey.effectlib.effect;
 
 import de.slikey.effectlib.EffectManager;
+import de.slikey.effectlib.EffectType;
 import de.slikey.effectlib.util.MathUtils;
 import de.slikey.effectlib.util.ParticleEffect;
 import de.slikey.effectlib.util.VectorUtils;
