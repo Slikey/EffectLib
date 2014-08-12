@@ -4,6 +4,7 @@ package de.slikey.effectlib;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
+import org.bukkit.util.Vector;
 
 import java.lang.ref.WeakReference;
 
@@ -58,7 +59,13 @@ public abstract class Effect implements Runnable {
      * A value of 0 indicates no caching should be done- this may be
      * expensive.
      */
-    public int locationUpdateInterval = 250;
+    public int locationUpdateInterval = 100;
+
+    /**
+     * If true, and a "target" Location or Entity is set, the two Locations
+     * will orient to face one another.
+     */
+    public boolean autoOrient = true;
 
     private Location location = null;
     private WeakReference<Entity> entity = new WeakReference<Entity>(null);
@@ -99,7 +106,7 @@ public abstract class Effect implements Runnable {
 
 	@Override
 	public final void run() {
-        if (!isValid()) {
+        if (!validate()) {
             cancel();
             return;
         }
@@ -118,9 +125,20 @@ public abstract class Effect implements Runnable {
 		}
 	}
 
-    protected boolean isValid() {
+    protected boolean validate() {
         // Check for a valid Location
-        return getLocation() != null;
+        Location location = getLocation();
+        if (location == null) return false;
+        if (autoOrient) {
+            Location target = getTarget();
+            if (target != null) {
+                Vector direction = target.toVector().subtract(location.toVector());
+                location.setDirection(direction);
+                target.setDirection(direction.multiply(-1));
+            }
+        }
+
+        return true;
     }
 
 	public final void start() {
