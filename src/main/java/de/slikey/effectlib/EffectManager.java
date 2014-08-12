@@ -86,15 +86,7 @@ public final class EffectManager implements Disposable {
 		}
 	}
 
-    public Effect[] start(String effectClass, ConfigurationSection parameters, Location origin, Location target) {
-        return start(effectClass, parameters, origin, target, null, null);
-    }
-
-    public Effect[] start(String effectClass, ConfigurationSection parameters, Location origin, Location target, Entity originEntity, Entity targetEntity) {
-        return start(effectClass, parameters, origin, target, originEntity, targetEntity);
-    }
-
-    public Effect[] start(String effectClass, ConfigurationSection parameters, Location origin, Location target, Entity originEntity, Entity targetEntity, Map<String, String> textMap) {
+    public Effect start(String effectClass, ConfigurationSection parameters, Location origin, Location target, Entity originEntity, Entity targetEntity, Map<String, String> textMap) {
         Class<? extends Effect> effectLibClass = null;
         try {
             // A shaded manager may provide a fully-qualified path.
@@ -107,37 +99,32 @@ public final class EffectManager implements Disposable {
             return null;
         }
 
-        Effect[] effects = tryPointConstructor(effectLibClass, origin, target);
-        if (effects == null) {
-            effects = tryEntityConstructor(effectLibClass, originEntity, targetEntity);
-            if (effects == null) {
-                effects = tryLineConstructor(effectLibClass, origin, target);
-            }
+        Effect effect = null;
+        try {
+            Constructor constructor = effectLibClass.getConstructor(EffectManager.class);
+            effect = (Effect) constructor.newInstance(this);
+        } catch (Exception ex) {
+            owningPlugin.getLogger().warning("Error creating Effect class: " + effectClass);
         }
-
-        if (effects == null) {
+        if (effect == null) {
             return null;
         }
+        effect.setLocation(origin);
+        effect.setTarget(target);
+        effect.setTargetEntity(targetEntity);
+        effect.setEntity(originEntity);
 
         Collection<String> keys = parameters.getKeys(false);
-        for (Effect effect : effects) {
-            for (String key : keys) {
-                if (key.equals("class")) continue;
+        for (String key : keys) {
+            if (key.equals("class")) continue;
 
-                if (!setField(effect, key, parameters, textMap)) {
-                    owningPlugin.getLogger().warning("Unable to assign EffectLib property " + key + " of class " + effectLibClass.getName());
-                }
-            }
-
-            try {
-                Method startMethod = effectLibClass.getMethod("start");
-                startMethod.invoke(effect);
-            } catch (Throwable ex) {
-
+            if (!setField(effect, key, parameters, textMap)) {
+                owningPlugin.getLogger().warning("Unable to assign EffectLib property " + key + " of class " + effectLibClass.getName());
             }
         }
 
-        return effects;
+        effect.start();
+        return effect;
     }
 
     protected boolean setField(Object effect, String key, ConfigurationSection section, Map<String, String> textMap) {
@@ -174,66 +161,6 @@ public final class EffectManager implements Disposable {
         }
 
         return false;
-    }
-
-    protected Effect[] tryPointConstructor(Class<? extends Effect> effectLibClass, Location origin, Location target) {
-        if (origin == null && target == null) return null;
-
-        Effect[] players = null;
-        try {
-            Constructor constructor = effectLibClass.getConstructor(EffectManager.class, Location.class);
-            if (target != null && origin != null) {
-                players = new Effect[2];
-                players[0] = (Effect)constructor.newInstance(this, target);
-                players[1] = (Effect)constructor.newInstance(this, origin);
-            } else if (target != null) {
-                players = new Effect[1];
-                players[0] = (Effect)constructor.newInstance(this, target);
-            } else if (origin != null) {
-                players = new Effect[1];
-                players[0] = (Effect)constructor.newInstance(this, origin);
-            }
-        } catch (Exception ex) {
-            players = null;
-        }
-        return players;
-    }
-
-    protected Effect[] tryEntityConstructor(Class<? extends Effect> effectLibClass, Entity origin, Entity target) {
-        if (target == null && origin == null) return null;
-
-        Effect[] players = null;
-        try {
-            Constructor constructor = effectLibClass.getConstructor(EffectManager.class, Entity.class);
-            if (target != null && origin != null) {
-                players = new Effect[2];
-                players[0] = (Effect)constructor.newInstance(this, target);
-                players[1] = (Effect)constructor.newInstance(this, origin);
-            } else if (target != null) {
-                players = new Effect[1];
-                players[0] = (Effect)constructor.newInstance(this, target);
-            } else if (origin != null) {
-                players = new Effect[1];
-                players[0] = (Effect)constructor.newInstance(this, origin);
-            }
-        } catch (Exception ex) {
-            players = null;
-        }
-        return players;
-    }
-
-    protected Effect[] tryLineConstructor(Class<? extends Effect> effectLibClass, Location origin, Location target) {
-        if (origin == null || target == null) return null;
-
-        Effect[] players = null;
-        try {
-            Constructor constructor = effectLibClass.getConstructor(EffectManager.class, Location.class, Location.class);
-            players = new Effect[1];
-            players[0] = (Effect)constructor.newInstance(this, origin, target);
-        } catch (Exception ex) {
-            players = null;
-        }
-        return players;
     }
 
 	public void cancel(boolean callback) {
