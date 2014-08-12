@@ -1,5 +1,6 @@
 package de.slikey.effectlib.effect;
 
+import de.slikey.effectlib.Effect;
 import de.slikey.effectlib.EffectManager;
 import de.slikey.effectlib.EffectType;
 import de.slikey.effectlib.util.MathUtils;
@@ -12,7 +13,7 @@ import org.bukkit.util.Vector;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
-public class TextEffect extends LocationEffect {
+public class TextEffect extends Effect {
 
     /**
      * Particle to draw the text
@@ -61,20 +62,25 @@ public class TextEffect extends LocationEffect {
      */
     protected BufferedImage image = null;
 
-    public TextEffect(EffectManager effectManager, Location location) {
-        this(effectManager, location, new Font("Tahoma", Font.PLAIN, 16));
-    }
-
-    public TextEffect(EffectManager effectManager, Location location, Font font) {
-        super(effectManager, location);
-        this.font = font;
+    public TextEffect(EffectManager effectManager) {
+        super(effectManager);
+        this.font = new Font("Tahoma", Font.PLAIN, 16);
         type = EffectType.REPEATING;
         period = 40;
         iterations = 20;
     }
 
+    public void setFont(Font font) {
+        this.font = font;
+    }
+
     @Override
     public void onRun() {
+        if (font == null) {
+            cancel();
+            return;
+        }
+        Location location = getLocation();
         int clr = 0;
         try {
             if (image == null || realtime)

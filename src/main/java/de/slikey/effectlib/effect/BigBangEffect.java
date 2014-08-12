@@ -1,5 +1,6 @@
 package de.slikey.effectlib.effect;
 
+import de.slikey.effectlib.Effect;
 import de.slikey.effectlib.EffectManager;
 import de.slikey.effectlib.EffectType;
 import de.slikey.effectlib.util.RandomUtils;
@@ -13,8 +14,7 @@ import org.bukkit.entity.Firework;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.util.Vector;
 
-@Deprecated
-public class BigBangEffect extends LocationEffect {
+public class BigBangEffect extends Effect {
 
     public FireworkEffect firework;
     public int intensity = 2;
@@ -23,8 +23,8 @@ public class BigBangEffect extends LocationEffect {
     public int soundInterval = 5;
     protected int step = 0;
 
-    public BigBangEffect(EffectManager effectManager, Location location) {
-        super(effectManager, location);
+    public BigBangEffect(EffectManager effectManager) {
+        super(effectManager);
         type = EffectType.REPEATING;
         period = 2;
         iterations = 400;
@@ -38,16 +38,17 @@ public class BigBangEffect extends LocationEffect {
 
     @Override
     public void onRun() {
+        Location location = getLocation();
         for (int i = 0; i < explosions; i++) {
             Vector v = RandomUtils.getRandomVector().multiply(radius);
-            detonate(v);
+            detonate(location, v);
             if (step % soundInterval == 0)
                 location.getWorld().playSound(location, Sound.EXPLODE, 100, 1);
         }
         step++;
     }
 
-    protected void detonate(Vector v) {
+    protected void detonate(Location location, Vector v) {
         final Firework fw = (Firework) location.getWorld().spawnEntity(location.add(v), EntityType.FIREWORK);
         location.subtract(v);
         FireworkMeta meta = fw.getFireworkMeta();

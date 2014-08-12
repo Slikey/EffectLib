@@ -1,5 +1,6 @@
 package de.slikey.effectlib.effect;
 
+import de.slikey.effectlib.Effect;
 import de.slikey.effectlib.EffectManager;
 import de.slikey.effectlib.EffectType;
 import de.slikey.effectlib.util.MathUtils;
@@ -9,7 +10,7 @@ import de.slikey.effectlib.util.VectorUtils;
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
 
-public class StarEffect extends LocationEffect {
+public class StarEffect extends Effect {
 
     /**
      * Particles to create the star
@@ -36,8 +37,8 @@ public class StarEffect extends LocationEffect {
      */
     public float innerRadius = 0.5f;
 
-    public StarEffect(EffectManager effectManager, Location location) {
-        super(effectManager, location);
+    public StarEffect(EffectManager effectManager) {
+        super(effectManager);
         type = EffectType.REPEATING;
         period = 4;
         iterations = 50;
@@ -45,6 +46,7 @@ public class StarEffect extends LocationEffect {
 
     @Override
     public void onRun() {
+        Location location = getLocation();
         float radius = 3 * innerRadius / MathUtils.SQRT_3;
         for (int i = 0; i < spikesHalf * 2; i++) {
             double xRotation = i * Math.PI / spikesHalf;

@@ -1,5 +1,6 @@
 package de.slikey.effectlib.effect;
 
+import de.slikey.effectlib.Effect;
 import de.slikey.effectlib.EffectManager;
 import de.slikey.effectlib.EffectType;
 import de.slikey.effectlib.util.MathUtils;
@@ -12,7 +13,7 @@ import org.bukkit.util.Vector;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DragonEffect extends LocationEffect {
+public class DragonEffect extends Effect {
 
     protected final List<Float> rndF;
     protected final List<Double> rndAngle;
@@ -45,8 +46,8 @@ public class DragonEffect extends LocationEffect {
      */
     protected int step = 0;
 
-    public DragonEffect(EffectManager effectManager, Location location) {
-        super(effectManager, location);
+    public DragonEffect(EffectManager effectManager) {
+        super(effectManager);
         type = EffectType.REPEATING;
         period = 2;
         iterations = 200;
@@ -56,6 +57,7 @@ public class DragonEffect extends LocationEffect {
 
     @Override
     public void onRun() {
+        Location location = getLocation();
         for (int j = 0; j < stepsPerIteration; j++) {
             if (step % particles == 0) {
                 rndF.clear();

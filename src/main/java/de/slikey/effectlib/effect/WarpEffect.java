@@ -1,12 +1,13 @@
 package de.slikey.effectlib.effect;
 
+import de.slikey.effectlib.Effect;
 import de.slikey.effectlib.EffectManager;
 import de.slikey.effectlib.EffectType;
 import de.slikey.effectlib.util.ParticleEffect;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 
-public class WarpEffect extends EntityEffect {
+public class WarpEffect extends Effect {
 
     /**
      * Radius of the spawned circles
@@ -38,8 +39,8 @@ public class WarpEffect extends EntityEffect {
      */
     protected int step = 0;
 
-    public WarpEffect(EffectManager effectManager, Entity entity) {
-        super(effectManager, entity);
+    public WarpEffect(EffectManager effectManager) {
+        super(effectManager);
         type = EffectType.REPEATING;
         period = 2;
         iterations = rings;
@@ -47,7 +48,7 @@ public class WarpEffect extends EntityEffect {
 
     @Override
     public void onRun() {
-        Location location = entity.getLocation();
+        Location location = getLocation();
         if (step > rings)
             step = 0;
         double x, y, z;

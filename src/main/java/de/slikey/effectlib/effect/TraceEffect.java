@@ -1,5 +1,6 @@
 package de.slikey.effectlib.effect;
 
+import de.slikey.effectlib.Effect;
 import de.slikey.effectlib.EffectManager;
 import de.slikey.effectlib.EffectType;
 import de.slikey.effectlib.util.ParticleEffect;
@@ -11,7 +12,7 @@ import org.bukkit.util.Vector;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TraceEffect extends EntityEffect {
+public class TraceEffect extends Effect {
 
     /**
      * Particle to spawn
@@ -43,8 +44,8 @@ public class TraceEffect extends EntityEffect {
      */
     protected World world;
 
-    public TraceEffect(EffectManager effectManager, Entity entity) {
-        super(effectManager, entity);
+    public TraceEffect(EffectManager effectManager) {
+        super(effectManager);
         type = EffectType.REPEATING;
         period = 1;
         iterations = 600;
@@ -53,21 +54,25 @@ public class TraceEffect extends EntityEffect {
 
     @Override
     public void onRun() {
+        Location location = getLocation();
         if (world == null) {
-            world = entity.getWorld();
-        } else if (entity.getWorld() != world) {
+            world = location.getWorld();
+        } else if (!location.getWorld().equals(world)) {
             cancel(true);
             return;
         }
+
         if (wayPoints.size() >= maxWayPoints)
             wayPoints.remove(0);
-        wayPoints.add(entity.getLocation().toVector());
+
+        wayPoints.add(location.toVector());
         step++;
         if (step % refresh != 0)
             return;
+
         for (Vector position : wayPoints) {
-            Location location = new Location(world, position.getX(), position.getY(), position.getZ());
-            particle.display(location, visibleRange);
+            Location particleLocation = new Location(world, position.getX(), position.getY(), position.getZ());
+            particle.display(particleLocation, visibleRange);
         }
     }
 

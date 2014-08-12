@@ -1,5 +1,6 @@
 package de.slikey.effectlib.effect;
 
+import de.slikey.effectlib.Effect;
 import de.slikey.effectlib.EffectManager;
 import de.slikey.effectlib.EffectType;
 import de.slikey.effectlib.util.ParticleEffect;
@@ -12,7 +13,7 @@ import org.bukkit.util.Vector;
  *
  * @author Kevin
  */
-public class HillEffect extends LocationEffect {
+public class HillEffect extends Effect {
 
     /**
      * ParticleType of spawned particle
@@ -40,8 +41,8 @@ public class HillEffect extends LocationEffect {
      */
     public double yRotation = Math.PI / 7;
 
-    public HillEffect(EffectManager effectManager, Location location) {
-        super(effectManager, location);
+    public HillEffect(EffectManager effectManager) {
+        super(effectManager);
         type = EffectType.REPEATING;
         period = 10;
         iterations = 20;
@@ -49,6 +50,7 @@ public class HillEffect extends LocationEffect {
 
     @Override
     public void onRun() {
+        Location location = getLocation();
         Vector v = new Vector();
         for (int x = 0; x <= particles; x++) {
             double y1 = Math.sin(Math.PI * x / particles);

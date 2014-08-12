@@ -1,22 +1,13 @@
 package de.slikey.effectlib.effect;
 
+import de.slikey.effectlib.Effect;
 import de.slikey.effectlib.EffectManager;
 import de.slikey.effectlib.EffectType;
 import de.slikey.effectlib.util.ParticleEffect;
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
 
-public class ArcEffect extends LocationEffect {
-
-    /**
-     * Links the two Locations
-     */
-    protected final Vector link;
-
-    /**
-     * Length of the link between two Locations
-     */
-    protected final float length;
+public class ArcEffect extends Effect {
 
     /**
      * ParticleType of spawned particle
@@ -38,11 +29,8 @@ public class ArcEffect extends LocationEffect {
      */
     protected int step = 0;
 
-    public ArcEffect(EffectManager effectManager, Location start, Location stop) {
-        super(effectManager, start);
-        link = stop.toVector().subtract(start.toVector());
-        length = (float) link.length();
-
+    public ArcEffect(EffectManager effectManager) {
+        super(effectManager);
         type = EffectType.REPEATING;
         period = 1;
         iterations = 200;
@@ -50,6 +38,14 @@ public class ArcEffect extends LocationEffect {
 
     @Override
     public void onRun() {
+        Location location = getLocation();
+        Location target = getTarget();
+        if (target == null) {
+            cancel();
+            return;
+        }
+        Vector link = target.toVector().subtract(location.toVector());
+        float length = (float) link.length();
         float pitch = (float) (4 * height / Math.pow(length, 2));
         for (int i = 0; i < particles; i++) {
             Vector v = link.clone().normalize().multiply((float) length * i / particles);

@@ -1,5 +1,6 @@
 package de.slikey.effectlib.effect;
 
+import de.slikey.effectlib.Effect;
 import de.slikey.effectlib.EffectManager;
 import de.slikey.effectlib.EffectType;
 import de.slikey.effectlib.util.MathUtils;
@@ -11,7 +12,7 @@ import org.bukkit.util.Vector;
 
 import java.util.Random;
 
-public class CylinderEffect extends LocationEffect {
+public class CylinderEffect extends Effect {
 
     /**
      * Particle of the cube
@@ -73,8 +74,8 @@ public class CylinderEffect extends LocationEffect {
      */
     protected float sideRatio = 0;
 
-    public CylinderEffect(EffectManager effectManager, Location location) {
-        super(effectManager, location);
+    public CylinderEffect(EffectManager effectManager) {
+        super(effectManager);
         type = EffectType.REPEATING;
         period = 2;
         iterations = 200;
@@ -82,6 +83,7 @@ public class CylinderEffect extends LocationEffect {
 
     @Override
     public void onRun() {
+        Location location = getLocation();
         if (sideRatio == 0) calculateSideRatio();
         Random r = RandomUtils.random;
         double xRotation = rotationX, yRotation = rotationY, zRotation = rotationZ;

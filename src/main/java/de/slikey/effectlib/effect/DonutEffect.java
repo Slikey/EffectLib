@@ -1,5 +1,6 @@
 package de.slikey.effectlib.effect;
 
+import de.slikey.effectlib.Effect;
 import de.slikey.effectlib.EffectManager;
 import de.slikey.effectlib.EffectType;
 import de.slikey.effectlib.util.ParticleEffect;
@@ -7,7 +8,7 @@ import de.slikey.effectlib.util.VectorUtils;
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
 
-public class DonutEffect extends LocationEffect {
+public class DonutEffect extends Effect {
 
     /**
      * ParticleType of spawned particle
@@ -39,8 +40,8 @@ public class DonutEffect extends LocationEffect {
      */
     public double xRotation, yRotation, zRotation = 0;
 
-    public DonutEffect(EffectManager effectManager, Location location) {
-        super(effectManager, location);
+    public DonutEffect(EffectManager effectManager) {
+        super(effectManager);
         type = EffectType.REPEATING;
         period = 10;
         iterations = 20;
@@ -48,6 +49,7 @@ public class DonutEffect extends LocationEffect {
 
     @Override
     public void onRun() {
+        Location location = getLocation();
         Vector v = new Vector();
         for (int i = 0; i < circles; i++) {
             double theta = 2 * Math.PI * i / circles;

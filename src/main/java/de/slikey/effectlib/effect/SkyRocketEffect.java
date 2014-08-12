@@ -5,8 +5,8 @@ import org.bukkit.entity.Entity;
 
 public class SkyRocketEffect extends JumpEffect {
 
-    public SkyRocketEffect(EffectManager effectManager, Entity entity) {
-        super(effectManager, entity);
+    public SkyRocketEffect(EffectManager effectManager) {
+        super(effectManager);
         power = 10;
     }
 

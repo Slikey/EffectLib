@@ -1,5 +1,6 @@
 package de.slikey.effectlib.effect;
 
+import de.slikey.effectlib.Effect;
 import de.slikey.effectlib.EffectManager;
 import de.slikey.effectlib.EffectType;
 import de.slikey.effectlib.util.MathUtils;
@@ -11,7 +12,7 @@ import org.bukkit.util.Vector;
 import java.util.Collection;
 import java.util.HashSet;
 
-public class WaveEffect extends LocationEffect {
+public class WaveEffect extends Effect {
 
     /**
      * Velocity of the wave
@@ -74,13 +75,12 @@ public class WaveEffect extends LocationEffect {
      */
     protected boolean firstStep = true;
 
-    public WaveEffect(EffectManager effectManager, Location location) {
-        super(effectManager, location);
+    public WaveEffect(EffectManager effectManager) {
+        super(effectManager);
 
         type = EffectType.REPEATING;
         period = 5;
         iterations = 50;
-        velocity.copy(location.getDirection().setY(0).normalize().multiply(0.2));
         waterCache = new HashSet<Vector>();
         cloudCache = new HashSet<Vector>();
     }
@@ -88,7 +88,7 @@ public class WaveEffect extends LocationEffect {
     /**
      * Call this method when you change anything related to the creation of the wave
      */
-    public void invalidate() {
+    public void invalidate(Location location) {
         firstStep = false;
         waterCache.clear();
         cloudCache.clear();
@@ -150,7 +150,11 @@ public class WaveEffect extends LocationEffect {
 
     @Override
     public void onRun() {
-        if (firstStep) invalidate();
+        Location location = getLocation();
+        if (firstStep) {
+            velocity.copy(location.getDirection().setY(0).normalize().multiply(0.2));
+            invalidate(location);
+        }
         location.add(velocity);
 
         for (Vector v : cloudCache) {

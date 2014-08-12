@@ -1,12 +1,13 @@
 package de.slikey.effectlib.effect;
 
+import de.slikey.effectlib.Effect;
 import de.slikey.effectlib.EffectManager;
 import de.slikey.effectlib.EffectType;
 import de.slikey.effectlib.util.ParticleEffect;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 
-public class IconEffect extends EntityEffect {
+public class IconEffect extends Effect {
 
     /**
      * ParticleType of spawned particle
@@ -15,8 +16,8 @@ public class IconEffect extends EntityEffect {
 
     public int yOffset = 2;
 
-    public IconEffect(EffectManager effectManager, Entity entity) {
-        super(effectManager, entity);
+    public IconEffect(EffectManager effectManager) {
+        super(effectManager);
         type = EffectType.REPEATING;
         period = 4;
         iterations = 25;
@@ -24,9 +25,8 @@ public class IconEffect extends EntityEffect {
 
     @Override
     public void onRun() {
-        // Location to spawn the blood-item.
-        Location spawn = entity.getLocation();
-        spawn.add(0, yOffset, 0);
-        particle.display(spawn, visibleRange);
+        Location location = getLocation();
+        location.add(0, yOffset, 0);
+        particle.display(location, visibleRange);
     }
 }

@@ -1,5 +1,6 @@
 package de.slikey.effectlib.effect;
 
+import de.slikey.effectlib.Effect;
 import de.slikey.effectlib.EffectManager;
 import de.slikey.effectlib.util.MathUtils;
 import de.slikey.effectlib.util.ParticleEffect;
@@ -11,7 +12,7 @@ import org.bukkit.util.Vector;
  * Creates a 2D Heart in 3D space. Thanks to the author for sharing it!
  * @author <a href="http://forums.bukkit.org/members/qukie.90952701/">Qukie</a>
  */
-public class HeartEffect extends LocationEffect {
+public class HeartEffect extends Effect {
 
     /**
      * ParticleType of spawned particle
@@ -56,12 +57,13 @@ public class HeartEffect extends LocationEffect {
     public float compilaction = 2F;
 
 
-    public HeartEffect(EffectManager effectManager, Location location) {
-        super(effectManager, location);
+    public HeartEffect(EffectManager effectManager) {
+        super(effectManager);
     }
 
     @Override
     public void onRun() {
+        Location location = getLocation();
         Vector vector = new Vector();
         for (int i = 0; i < particles; i++) {
             float alpha = ((MathUtils.PI / compilaction) / particles) * i;

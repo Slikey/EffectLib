@@ -1,5 +1,6 @@
 package de.slikey.effectlib.effect;
 
+import de.slikey.effectlib.Effect;
 import de.slikey.effectlib.EffectManager;
 import de.slikey.effectlib.EffectType;
 import de.slikey.effectlib.util.MathUtils;
@@ -12,7 +13,7 @@ import org.bukkit.util.Vector;
 import java.util.HashSet;
 import java.util.Set;
 
-public class EarthEffect extends LocationEffect {
+public class EarthEffect extends Effect {
 
     /**
      * Precision of generation. Higher numbers have better results, but increase the time of generation. Don't pick Number above 10.000
@@ -49,8 +50,8 @@ public class EarthEffect extends LocationEffect {
      */
     protected final Set<Vector> cacheGreen, cacheBlue;
 
-    public EarthEffect(EffectManager effectManager, Location location) {
-        super(effectManager, location);
+    public EarthEffect(EffectManager effectManager) {
+        super(effectManager);
         type = EffectType.REPEATING;
         period = 5;
         iterations = 200;
@@ -112,6 +113,7 @@ public class EarthEffect extends LocationEffect {
 
     @Override
     public void onRun() {
+        Location location = getLocation();
         if (firstStep) invalidate();
         for (Vector v : cacheGreen) {
             ParticleEffect.HAPPY_VILLAGER.display(location.add(v), visibleRange, 0, 0, 0, 0, 3);

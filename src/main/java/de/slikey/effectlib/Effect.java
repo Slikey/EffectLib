@@ -62,7 +62,10 @@ public abstract class Effect implements Runnable {
 
     private Location location = null;
     private WeakReference<Entity> entity = new WeakReference<Entity>(null);
+    private Location target = null;
+    private WeakReference<Entity> targetEntity = new WeakReference<Entity>(null);
     private long lastLocationUpdate = 0;
+    private long lastTargetUpdate = 0;
 
 	private boolean done = false;
 	private final EffectManager effectManager;
@@ -96,6 +99,10 @@ public abstract class Effect implements Runnable {
 
 	@Override
 	public final void run() {
+        if (!isValid()) {
+            cancel();
+            return;
+        }
 		if (done)
 			return;
 		onRun();
@@ -111,6 +118,11 @@ public abstract class Effect implements Runnable {
 		}
 	}
 
+    protected boolean isValid() {
+        // Check for a valid Location
+        return getLocation() != null;
+    }
+
 	public final void start() {
 		effectManager.start(this);
 	}
@@ -121,8 +133,36 @@ public abstract class Effect implements Runnable {
 	}
 
     /**
+     * Extending Effect classes can use this to determine the Entity this
+     * Effect is centered upon.
+     *
+     * This may return null, even for an Effect that was set with an Entity,
+     * if the Entity gets GC'd.
+     */
+    public Entity getEntity()
+    {
+        return this.entity.get();
+    }
+
+    /**
+     * Extending Effect classes can use this to determine the Entity this
+     * Effect is targeted upon. This is probably a very rare case, such as
+     * an Effect that "links" two Entities together somehow. (Idea!)
+     *
+     * This may return null, even for an Effect that was set with a target Entity,
+     * if the Entity gets GC'd.
+     */
+    public Entity getTargetEntity()
+    {
+        return this.targetEntity.get();
+    }
+
+    /**
      * Extending Effect classes should use this method to obtain the
      * current "root" Location of the effect.
+     *
+     * This method will not return null when called from onRun. Effects
+     * with invalid locations will be cancelled.
      */
     public Location getLocation()
     {
@@ -135,6 +175,53 @@ public abstract class Effect implements Runnable {
         }
 
         return location;
+    }
+
+    /**
+     * Extending Effect classes should use this method to obtain the
+     * current "target" Location of the effect.
+     *
+     * Unlike getLocation, this may return null.
+     */
+    public Location getTarget()
+    {
+        Entity entityReference = targetEntity.get();
+        if (entityReference != null) {
+            long now = System.currentTimeMillis();
+            if (locationUpdateInterval == 0 || lastTargetUpdate == 0 || lastTargetUpdate + locationUpdateInterval > now) {
+                target = entityReference.getLocation();
+            }
+        }
+
+        return target;
+    }
+
+    /**
+     * Set the Entity this Effect is centered on.
+     */
+    public void setEntity(Entity entity) {
+        this.entity = new WeakReference<Entity>(entity);
+    }
+
+    /**
+     * Set the Entity this Effect is targeting.
+     */
+    public void setTargetEntity(Entity entity) {
+        this.targetEntity = new WeakReference<Entity>(entity);
+    }
+
+    /**
+     * Set the Location this Effect is centered on.
+     */
+    public void setLocation(Location location) {
+        this.location = location.clone();
+    }
+
+    /**
+     * Set the Location this Effect is targeting.
+     */
+    public void setTarget(Location location) {
+        this.target = location.clone();
     }
 }
 

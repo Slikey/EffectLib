@@ -1,5 +1,6 @@
 package de.slikey.effectlib.effect;
 
+import de.slikey.effectlib.Effect;
 import de.slikey.effectlib.EffectManager;
 import de.slikey.effectlib.EffectType;
 import de.slikey.effectlib.util.ParticleEffect;
@@ -8,7 +9,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.util.Vector;
 
-public class SphereEffect extends EntityEffect {
+public class SphereEffect extends Effect {
     /**
      * ParticleType of spawned particle
      */
@@ -29,8 +30,8 @@ public class SphereEffect extends EntityEffect {
      */
     public int particles = 50;
 
-    public SphereEffect(EffectManager effectManager, Entity entity) {
-        super(effectManager, entity);
+    public SphereEffect(EffectManager effectManager) {
+        super(effectManager);
         type = EffectType.REPEATING;
         iterations = 500;
         period = 1;
@@ -38,7 +39,7 @@ public class SphereEffect extends EntityEffect {
 
     @Override
     public void onRun() {
-        Location location = entity.getLocation();
+        Location location = getLocation();
         location.add(0, yOffset, 0);
         for (int i = 0; i < particles; i++) {
             Vector v = RandomUtils.getRandomCircleVector().multiply(RandomUtils.random.nextDouble() * radius);

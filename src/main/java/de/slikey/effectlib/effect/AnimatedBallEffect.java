@@ -1,5 +1,6 @@
 package de.slikey.effectlib.effect;
 
+import de.slikey.effectlib.Effect;
 import de.slikey.effectlib.EffectManager;
 import de.slikey.effectlib.EffectType;
 import de.slikey.effectlib.util.MathUtils;
@@ -14,7 +15,7 @@ import org.bukkit.util.Vector;
  * https://www.youtube.com/watch?feature=player_embedded&v=RUjIw_RprRw
  * @author <a href="http://forums.bukkit.org/members/qukie.90952701/">Qukie</a>
  */
-public class AnimatedBallEffect extends EntityEffect {
+public class AnimatedBallEffect extends Effect {
 
     /**
      * ParticleType of spawned particle
@@ -56,8 +57,8 @@ public class AnimatedBallEffect extends EntityEffect {
      */
     protected int step;
 
-    public AnimatedBallEffect(EffectManager effectManager, Entity entity) {
-        super(effectManager, entity);
+    public AnimatedBallEffect(EffectManager effectManager) {
+        super(effectManager);
         this.type = EffectType.REPEATING;
         this.iterations = 500;
         this.period = 1;
@@ -66,7 +67,7 @@ public class AnimatedBallEffect extends EntityEffect {
     @Override
     public void onRun() {
         Vector vector = new Vector();
-        Location location = entity.getLocation();
+        Location location = getLocation();
         for (int i = 0; i < particlesPerIteration; i++) {
             step++;
 

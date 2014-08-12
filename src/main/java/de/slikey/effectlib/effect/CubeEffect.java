@@ -1,5 +1,6 @@
 package de.slikey.effectlib.effect;
 
+import de.slikey.effectlib.Effect;
 import de.slikey.effectlib.EffectManager;
 import de.slikey.effectlib.EffectType;
 import de.slikey.effectlib.util.ParticleEffect;
@@ -7,7 +8,7 @@ import de.slikey.effectlib.util.VectorUtils;
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
 
-public class CubeEffect extends LocationEffect {
+public class CubeEffect extends Effect {
 
     /**
      * Particle of the cube
@@ -55,8 +56,8 @@ public class CubeEffect extends LocationEffect {
      */
     protected int step = 0;
 
-    public CubeEffect(EffectManager effectManager, Location location) {
-        super(effectManager, location);
+    public CubeEffect(EffectManager effectManager) {
+        super(effectManager);
         type = EffectType.REPEATING;
         period = 5;
         iterations = 200;
@@ -64,15 +65,16 @@ public class CubeEffect extends LocationEffect {
 
     @Override
     public void onRun() {
+        Location location = getLocation();
         if (outlineOnly) {
-            drawCubeOutline();
+            drawCubeOutline(location);
         } else {
-            drawCubeWalls();
+            drawCubeWalls(location);
         }
         step++;
     }
 
-    private void drawCubeOutline() {
+    private void drawCubeOutline(Location location) {
         double xRotation = 0, yRotation = 0, zRotation = 0;
         if (enableRotation) {
             xRotation = step * angularVelocityX;
@@ -113,7 +115,7 @@ public class CubeEffect extends LocationEffect {
         }
     }
 
-    private void drawCubeWalls() {
+    private void drawCubeWalls(Location location) {
         double xRotation = 0, yRotation = 0, zRotation = 0;
         if (enableRotation) {
             xRotation = step * angularVelocityX;

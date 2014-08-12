@@ -1,11 +1,12 @@
 package de.slikey.effectlib.effect;
 
+import de.slikey.effectlib.Effect;
 import de.slikey.effectlib.EffectManager;
 import de.slikey.effectlib.EffectType;
 import de.slikey.effectlib.util.ParticleEffect;
 import org.bukkit.Location;
 
-public class HelixEffect extends LocationEffect {
+public class HelixEffect extends Effect {
     /**
      * Particle to form the helix
      */
@@ -36,8 +37,8 @@ public class HelixEffect extends LocationEffect {
      */
     public double rotation = Math.PI / 4;
 
-    public HelixEffect(EffectManager effectManager, Location location) {
-        super(effectManager, location);
+    public HelixEffect(EffectManager effectManager) {
+        super(effectManager);
         type = EffectType.REPEATING;
         period = 10;
         iterations = 8;
@@ -45,6 +46,7 @@ public class HelixEffect extends LocationEffect {
 
     @Override
     public void onRun() {
+        Location location = getLocation();
         for (int i = 1; i <= strands; i++) {
             for (int j = 1; j <= particles; j++) {
                 float ratio = (float) j / particles;

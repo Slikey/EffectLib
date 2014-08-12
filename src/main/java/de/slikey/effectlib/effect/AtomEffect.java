@@ -1,5 +1,6 @@
 package de.slikey.effectlib.effect;
 
+import de.slikey.effectlib.Effect;
 import de.slikey.effectlib.EffectManager;
 import de.slikey.effectlib.EffectType;
 import de.slikey.effectlib.util.ParticleEffect;
@@ -8,7 +9,7 @@ import de.slikey.effectlib.util.VectorUtils;
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
 
-public class AtomEffect extends LocationEffect {
+public class AtomEffect extends Effect {
 
     /**
      * ParticleType of the nucleus
@@ -60,8 +61,8 @@ public class AtomEffect extends LocationEffect {
      */
     protected int step = 0;
 
-    public AtomEffect(EffectManager effectManager, Location location) {
-        super(effectManager, location);
+    public AtomEffect(EffectManager effectManager) {
+        super(effectManager);
         type = EffectType.REPEATING;
         period = 2;
         iterations = 200;
@@ -69,6 +70,7 @@ public class AtomEffect extends LocationEffect {
 
     @Override
     public void onRun() {
+        Location location = getLocation();
         for (int i = 0; i < particlesNucleus; i++) {
             Vector v = RandomUtils.getRandomVector().multiply(radius * radiusNucleus);
             location.add(v);

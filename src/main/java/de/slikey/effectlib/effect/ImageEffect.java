@@ -1,5 +1,6 @@
 package de.slikey.effectlib.effect;
 
+import de.slikey.effectlib.Effect;
 import de.slikey.effectlib.EffectManager;
 import de.slikey.effectlib.EffectType;
 import de.slikey.effectlib.util.MathUtils;
@@ -14,7 +15,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
-public class ImageEffect extends LocationEffect {
+public class ImageEffect extends Effect {
 
     /**
      * Particle to draw the image
@@ -46,16 +47,29 @@ public class ImageEffect extends LocationEffect {
      */
     protected BufferedImage image = null;
 
-    public ImageEffect(EffectManager effectManager, Location location, File file) throws IOException {
-        super(effectManager, location);
-        image = ImageIO.read(file);
+    public ImageEffect(EffectManager effectManager) throws IOException {
+        super(effectManager);
         type = EffectType.REPEATING;
         period = 10;
         iterations = 60;
     }
 
+    public void loadFile(File file) {
+        try {
+            image = ImageIO.read(file);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            image = null;
+        }
+    }
+
     @Override
     public void onRun() {
+        if (image == null) {
+            cancel();
+            return;
+        }
+        Location location = getLocation();
         int clr;
         for (int y = 0; y < image.getHeight(); y += stepY) {
             for (int x = 0; x < image.getWidth(); x += stepX) {
