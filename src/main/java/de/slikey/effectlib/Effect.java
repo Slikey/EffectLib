@@ -2,6 +2,10 @@ package de.slikey.effectlib;
 
 
 import org.apache.commons.lang.Validate;
+import org.bukkit.Location;
+import org.bukkit.entity.Entity;
+
+import java.lang.ref.WeakReference;
 
 public abstract class Effect implements Runnable {
 
@@ -46,6 +50,19 @@ public abstract class Effect implements Runnable {
 	 * performance reasons.
 	 */
 	public float visibleRange = 32;
+
+    /**
+     * The interval at which we will update the cached Entity Location.
+     * This value is specified in milliseconds.
+     *
+     * A value of 0 indicates no caching should be done- this may be
+     * expensive.
+     */
+    public int locationUpdateInterval = 250;
+
+    private Location location = null;
+    private WeakReference<Entity> entity = new WeakReference<Entity>(null);
+    private long lastLocationUpdate = 0;
 
 	private boolean done = false;
 	private final EffectManager effectManager;
@@ -103,4 +120,21 @@ public abstract class Effect implements Runnable {
 		iterations = -1;
 	}
 
+    /**
+     * Extending Effect classes should use this method to obtain the
+     * current "root" Location of the effect.
+     */
+    public Location getLocation()
+    {
+        Entity entityReference = entity.get();
+        if (entityReference != null) {
+            long now = System.currentTimeMillis();
+            if (locationUpdateInterval == 0 || lastLocationUpdate == 0 || lastLocationUpdate + locationUpdateInterval > now) {
+                location = entityReference.getLocation();
+            }
+        }
+
+        return location;
+    }
 }
+
