@@ -232,14 +232,14 @@ public abstract class Effect implements Runnable {
      * Set the Location this Effect is centered on.
      */
     public void setLocation(Location location) {
-        this.location = location.clone();
+        this.location = location == null ? null : location.clone();
     }
 
     /**
      * Set the Location this Effect is targeting.
      */
     public void setTarget(Location location) {
-        this.target = location.clone();
+        this.target = location == null ? null : location.clone();
     }
 }
 
