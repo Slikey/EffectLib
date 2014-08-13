@@ -13,6 +13,8 @@ import java.util.Collection;
 import java.util.HashSet;
 
 public class WaveEffect extends Effect {
+    public ParticleEffect particle = ParticleEffect.DRIP_WATER;
+    public ParticleEffect cloudParticle = ParticleEffect.CLOUD;
 
     /**
      * Velocity of the wave
@@ -159,12 +161,12 @@ public class WaveEffect extends Effect {
 
         for (Vector v : cloudCache) {
             location.add(v);
-            ParticleEffect.CLOUD.display(location, visibleRange, 0, 0, 0, 0, 1);
+            cloudParticle.display(location, visibleRange, 0, 0, 0, 0, 1);
             location.subtract(v);
         }
         for (Vector v : waterCache) {
             location.add(v);
-            ParticleEffect.DRIP_WATER.display(location, visibleRange, 0, 0, 0, 0, 1);
+            particle.display(location, visibleRange, 0, 0, 0, 0, 1);
             location.subtract(v);
         }
     }
