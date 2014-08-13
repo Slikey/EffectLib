@@ -17,9 +17,8 @@ public class CubeEffect extends Effect {
 
     /**
      * Length of the edges
-     * Yay for the typo
      */
-    public float edgeLenght = 3;
+    public float edgeLength = 3;
 
     /**
      * Turns the cube by this angle each iteration around the x-axis

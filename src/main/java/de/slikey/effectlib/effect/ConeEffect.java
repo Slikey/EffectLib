@@ -18,7 +18,7 @@ public class ConeEffect extends Effect {
     public ParticleEffect particle = ParticleEffect.FLAME;
 
     /**
-     * Growing per iteration in the lenght (0.05)
+     * Growing per iteration in the length (0.05)
      */
     public float lengthGrow = .05f;
 

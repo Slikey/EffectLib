@@ -48,9 +48,8 @@ public class DnaEffect extends Effect {
 
     /**
      * Length of the dna-double-helix
-     * Yay for the typo
      */
-    public float lenght = 15;
+    public float length = 15;
 
     /**
      * Growth per particle

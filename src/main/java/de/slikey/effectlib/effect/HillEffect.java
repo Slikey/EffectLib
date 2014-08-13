@@ -32,9 +32,8 @@ public class HillEffect extends Effect {
 
     /**
      * Length of the edge
-     * Yay for the typo
      */
-    public float edgeLenght = 6.5f;
+    public float edgeLength = 6.5f;
 
     /**
      * Rotation of the Hill
