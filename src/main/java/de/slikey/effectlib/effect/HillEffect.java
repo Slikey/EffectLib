@@ -55,7 +55,7 @@ public class HillEffect extends Effect {
             double y1 = Math.sin(Math.PI * x / particles);
             for (int z = 0; z <= particles; z++) {
                 double y2 = Math.sin(Math.PI * z / particles);
-                v.setX(edgeLenght * x / particles).setZ(edgeLenght * z / particles);
+                v.setX(edgeLength * x / particles).setZ(edgeLength * z / particles);
                 v.setY(height * y1 * y2);
                 VectorUtils.rotateAroundAxisY(v, yRotation);
 

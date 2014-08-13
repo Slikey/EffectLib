@@ -80,7 +80,7 @@ public class CubeEffect extends Effect {
             yRotation = step * angularVelocityY;
             zRotation = step * angularVelocityZ;
         }
-        float a = edgeLenght / 2;
+        float a = edgeLength / 2;
         // top and bottom
         double angleX, angleY;
         Vector v = new Vector();
@@ -90,7 +90,7 @@ public class CubeEffect extends Effect {
                 angleX = j * Math.PI;
                 for (int p = 0; p <= particles; p++) {
                     v.setX(a).setY(a);
-                    v.setZ(edgeLenght * p / particles - a);
+                    v.setZ(edgeLength * p / particles - a);
                     VectorUtils.rotateAroundAxisX(v, angleX);
                     VectorUtils.rotateAroundAxisY(v, angleY);
 
@@ -103,7 +103,7 @@ public class CubeEffect extends Effect {
             // pillars
             for (int p = 0; p <= particles; p++) {
                 v.setX(a).setZ(a);
-                v.setY(edgeLenght * p / particles - a);
+                v.setY(edgeLength * p / particles - a);
                 VectorUtils.rotateAroundAxisY(v, angleY);
 
                 if (enableRotation)
@@ -121,15 +121,15 @@ public class CubeEffect extends Effect {
             yRotation = step * angularVelocityY;
             zRotation = step * angularVelocityZ;
         }
-        float a = edgeLenght / 2;
+        float a = edgeLength / 2;
         for (int x = 0; x <= particles; x++) {
-            float posX = edgeLenght * ((float) x / particles) - a;
+            float posX = edgeLength * ((float) x / particles) - a;
             for (int y = 0; y <= particles; y++) {
-                float posY = edgeLenght * ((float) y / particles) - a;
+                float posY = edgeLength * ((float) y / particles) - a;
                 for (int z = 0; z <= particles; z++) {
                     if (x != 0 && x != particles && y != 0 && y != particles && z != 0 && z != particles)
                         continue;
-                    float posZ = edgeLenght * ((float) z / particles) - a;
+                    float posZ = edgeLength * ((float) z / particles) - a;
                     Vector v = new Vector(posX, posY, posZ);
                     if (enableRotation)
                         VectorUtils.rotateVector(v, xRotation, yRotation, zRotation);

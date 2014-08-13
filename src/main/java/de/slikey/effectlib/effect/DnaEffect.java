@@ -77,7 +77,7 @@ public class DnaEffect extends Effect {
     public void onRun() {
         Location location = getLocation();
         for (int j = 0; j < particlesHelix; j++) {
-            if (step * grow > lenght)
+            if (step * grow > length)
                 step = 0;
             for (int i = 0; i < 2; i++) {
                 double angle = step * radials + Math.PI * i;
