@@ -23,7 +23,7 @@ public class SphereEffect extends Effect {
     /**
      * Y-Offset of the sphere
      */
-    public double yOffset = 1.5;
+    public double yOffset = 0;
 
     /**
      * Particles to display
