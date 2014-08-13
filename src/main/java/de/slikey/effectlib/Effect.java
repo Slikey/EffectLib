@@ -67,6 +67,16 @@ public abstract class Effect implements Runnable {
      */
     public boolean autoOrient = true;
 
+    /**
+     * If set, will offset all locations
+     */
+    public Vector offset = null;
+
+    /**
+     * If set, will offset the target location
+     */
+    public Vector targetOffset = null;
+
     private Location location = null;
     private WeakReference<Entity> entity = new WeakReference<Entity>(null);
     private Location target = null;
@@ -188,7 +198,7 @@ public abstract class Effect implements Runnable {
         if (entityReference != null) {
             long now = System.currentTimeMillis();
             if (locationUpdateInterval == 0 || lastLocationUpdate == 0 || lastLocationUpdate + locationUpdateInterval > now) {
-                location = entityReference.getLocation();
+                setLocation(entityReference.getLocation());
             }
         }
 
@@ -207,7 +217,7 @@ public abstract class Effect implements Runnable {
         if (entityReference != null) {
             long now = System.currentTimeMillis();
             if (locationUpdateInterval == 0 || lastTargetUpdate == 0 || lastTargetUpdate + locationUpdateInterval > now) {
-                target = entityReference.getLocation();
+                setTarget(entityReference.getLocation());
             }
         }
 
@@ -233,6 +243,9 @@ public abstract class Effect implements Runnable {
      */
     public void setLocation(Location location) {
         this.location = location == null ? null : location.clone();
+        if (this.offset != null) {
+            this.location = this.location.add(this.offset);
+        }
     }
 
     /**
@@ -240,6 +253,9 @@ public abstract class Effect implements Runnable {
      */
     public void setTarget(Location location) {
         this.target = location == null ? null : location.clone();
+        if (this.targetOffset != null) {
+            this.target = this.target.add(this.targetOffset);
+        }
     }
 }
 

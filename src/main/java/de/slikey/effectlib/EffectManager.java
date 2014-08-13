@@ -3,9 +3,15 @@ package de.slikey.effectlib;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 import de.slikey.effectlib.util.ParticleEffect;
+import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
@@ -15,6 +21,7 @@ import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.scheduler.BukkitTask;
 
 import de.slikey.effectlib.util.Disposable;
+import org.bukkit.util.Vector;
 
 /**
  * Dispose the EffectManager if you don't need him anymore.
@@ -152,6 +159,19 @@ public final class EffectManager implements Disposable {
                 String typeName = section.getString(key);
                 ParticleEffect particleType = ParticleEffect.valueOf(typeName.toUpperCase());
                 field.set(effect, particleType);
+            } else if (field.getType().equals(Vector.class)) {
+                double x = 0;
+                double y = 0;
+                double z = 0;
+                try {
+                    String[] pieces = StringUtils.split(section.getString(key), ',');
+                    x = pieces.length > 0 ? Double.parseDouble(pieces[0]) : 0;
+                    y = pieces.length > 1 ? Double.parseDouble(pieces[1]) : 0;
+                    z = pieces.length > 2 ? Double.parseDouble(pieces[2]) : 0;
+                } catch (Exception ex) {
+
+                }
+                field.set(effect, new Vector(x, y, z));
             } else {
                 return false;
             }
