@@ -14,6 +14,7 @@ import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Location;
+import org.bukkit.Sound;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Entity;
 import org.bukkit.plugin.Plugin;
@@ -159,6 +160,14 @@ public final class EffectManager implements Disposable {
                 String typeName = section.getString(key);
                 ParticleEffect particleType = ParticleEffect.valueOf(typeName.toUpperCase());
                 field.set(effect, particleType);
+            } else if (field.getType().equals(Sound.class)) {
+                String soundName = section.getString(key);
+                try {
+                    Sound sound = Sound.valueOf(soundName.toUpperCase());
+                    field.set(effect, sound);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
             } else if (field.getType().equals(Color.class)) {
                 String hexColor = section.getString(key);
                 try {

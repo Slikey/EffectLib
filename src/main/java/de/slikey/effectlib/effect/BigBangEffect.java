@@ -25,6 +25,7 @@ public class BigBangEffect extends Effect {
     public float radius = 2;
     public int explosions = 10;
     public int soundInterval = 5;
+    public Sound sound = Sound.EXPLODE;
     protected int step = 0;
 
     protected FireworkEffect firework;
@@ -49,8 +50,8 @@ public class BigBangEffect extends Effect {
         for (int i = 0; i < explosions; i++) {
             Vector v = RandomUtils.getRandomVector().multiply(radius);
             detonate(location, v);
-            if (step % soundInterval == 0)
-                location.getWorld().playSound(location, Sound.EXPLODE, 100, 1);
+            if (soundInterval != 0 && step % soundInterval == 0)
+                location.getWorld().playSound(location, sound, 100, 1);
         }
         step++;
     }
