@@ -263,7 +263,6 @@ public abstract class Effect implements Runnable {
      * Set the Location this Effect is targeting.
      */
     public void setTarget(Location location) {
-        Validate.notNull(location, "Location cannot be null!");
         target = location == null ? null : location.clone();
         if (targetOffset != null && target != null) {
             target.add(targetOffset);

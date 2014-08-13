@@ -20,7 +20,7 @@ public class ConeEffect extends Effect {
     /**
      * Growing per iteration in the lenght (0.05)
      */
-    public float lenghtGrow = .05f;
+    public float lengthGrow = .05f;
 
     /**
      * Radials per iteration to spawn the next particle (PI / 16)
@@ -74,8 +74,8 @@ public class ConeEffect extends Effect {
                 rotation = RandomUtils.getRandomAngle();
             double angle = step * angularVelocity + rotation;
             float radius = step * radiusGrow;
-            float lenght = step * lenghtGrow;
-            Vector v = new Vector(Math.cos(angle) * radius, lenght, Math.sin(angle) * radius);
+            float length = step * lengthGrow;
+            Vector v = new Vector(Math.cos(angle) * radius, length, Math.sin(angle) * radius);
             VectorUtils.rotateAroundAxisX(v, (location.getPitch() + 90) * MathUtils.degreesToRadians);
             VectorUtils.rotateAroundAxisY(v, -location.getYaw() * MathUtils.degreesToRadians);
 
