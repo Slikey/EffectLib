@@ -136,7 +136,7 @@ public abstract class Effect implements Runnable {
 		}
 	}
 
-    protected boolean validate() {
+    protected final boolean validate() {
         // Check for a valid Location
         Location location = getLocation();
         if (location == null) return false;
@@ -193,7 +193,7 @@ public abstract class Effect implements Runnable {
      * This method will not return null when called from onRun. Effects
      * with invalid locations will be cancelled.
      */
-    public Location getLocation()
+    public final Location getLocation()
     {
         Entity entityReference = entity.get();
         if (entityReference != null) {
@@ -216,7 +216,7 @@ public abstract class Effect implements Runnable {
      *
      * Unlike getLocation, this may return null.
      */
-    public Location getTarget()
+    public final Location getTarget()
     {
         Entity entityReference = targetEntity.get();
         if (entityReference != null) {
@@ -251,9 +251,11 @@ public abstract class Effect implements Runnable {
      * Set the Location this Effect is centered on.
      */
     public void setLocation(Location location) {
+        Validate.notNull(location, "Location cannot be null!");
         this.location = location == null ? null : location.clone();
-        if (this.offset != null) {
-            this.location = this.location.add(this.offset);
+        if (offset != null && location != null) {
+            this.location = location.add(offset);
+            lastLocationUpdate = System.currentTimeMillis();
         }
     }
 
@@ -261,9 +263,11 @@ public abstract class Effect implements Runnable {
      * Set the Location this Effect is targeting.
      */
     public void setTarget(Location location) {
-        this.target = location == null ? null : location.clone();
-        if (this.targetOffset != null) {
-            this.target = this.target.add(this.targetOffset);
+        Validate.notNull(location, "Location cannot be null!");
+        target = location == null ? null : location.clone();
+        if (targetOffset != null && target != null) {
+            target.add(targetOffset);
+            lastTargetUpdate = System.currentTimeMillis();
         }
     }
 }
