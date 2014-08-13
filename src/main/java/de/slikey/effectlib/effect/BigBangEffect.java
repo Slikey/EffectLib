@@ -16,28 +16,35 @@ import org.bukkit.util.Vector;
 
 public class BigBangEffect extends Effect {
 
-    public FireworkEffect firework;
+    public FireworkEffect.Type fireworkType = FireworkEffect.Type.BURST;
+    public Color color = Color.RED;
+    public Color color2 = Color.ORANGE;
+    public Color color3 = Color.BLACK;
+    public Color fadeColor = Color.BLACK;
     public int intensity = 2;
     public float radius = 2;
     public int explosions = 10;
     public int soundInterval = 5;
     protected int step = 0;
 
+    protected FireworkEffect firework;
+
     public BigBangEffect(EffectManager effectManager) {
         super(effectManager);
         type = EffectType.REPEATING;
         period = 2;
         iterations = 400;
-
-        Builder b = FireworkEffect.builder();
-        b.withColor(Color.RED).withColor(Color.ORANGE).withColor(Color.BLACK);
-        b.withFade(Color.BLACK);
-        b.trail(true);
-        firework = b.build();
     }
 
     @Override
     public void onRun() {
+        if (firework == null) {
+            Builder b = FireworkEffect.builder().with(fireworkType);
+            b.withColor(color).withColor(color2).withColor(color3);
+            b.withFade(fadeColor);
+            b.trail(true);
+            firework = b.build();
+        }
         Location location = getLocation();
         for (int i = 0; i < explosions; i++) {
             Vector v = RandomUtils.getRandomVector().multiply(radius);

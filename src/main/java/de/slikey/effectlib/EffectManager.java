@@ -2,7 +2,6 @@ package de.slikey.effectlib;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -13,6 +12,7 @@ import java.util.Map;
 import de.slikey.effectlib.util.ParticleEffect;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
+import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Entity;
@@ -94,7 +94,7 @@ public final class EffectManager implements Disposable {
 	}
 
     public Effect start(String effectClass, ConfigurationSection parameters, Location origin, Location target, Entity originEntity, Entity targetEntity, Map<String, String> textMap) {
-        Class<? extends Effect> effectLibClass = null;
+        Class<? extends Effect> effectLibClass;
         try {
             // A shaded manager may provide a fully-qualified path.
             if (!effectClass.contains(".")) {
@@ -159,6 +159,15 @@ public final class EffectManager implements Disposable {
                 String typeName = section.getString(key);
                 ParticleEffect particleType = ParticleEffect.valueOf(typeName.toUpperCase());
                 field.set(effect, particleType);
+            } else if (field.getType().equals(Color.class)) {
+                String hexColor = section.getString(key);
+                try {
+                    Integer rgb = Integer.parseInt(hexColor, 16);
+                    Color color = Color.fromRGB(rgb);
+                    field.set(effect, color);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
             } else if (field.getType().equals(Vector.class)) {
                 double x = 0;
                 double y = 0;
@@ -169,7 +178,7 @@ public final class EffectManager implements Disposable {
                     y = pieces.length > 1 ? Double.parseDouble(pieces[1]) : 0;
                     z = pieces.length > 2 ? Double.parseDouble(pieces[2]) : 0;
                 } catch (Exception ex) {
-
+                    ex.printStackTrace();
                 }
                 field.set(effect, new Vector(x, y, z));
             } else {
@@ -178,6 +187,7 @@ public final class EffectManager implements Disposable {
 
             return true;
         } catch (Exception ex) {
+            ex.printStackTrace();
         }
 
         return false;
