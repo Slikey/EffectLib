@@ -4,6 +4,7 @@ package de.slikey.effectlib;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.util.Vector;
 
 import java.lang.ref.WeakReference;
@@ -198,7 +199,11 @@ public abstract class Effect implements Runnable {
         if (entityReference != null) {
             long now = System.currentTimeMillis();
             if (locationUpdateInterval == 0 || lastLocationUpdate == 0 || lastLocationUpdate + locationUpdateInterval > now) {
-                setLocation(entityReference.getLocation());
+                if (entityReference instanceof LivingEntity) {
+                    setLocation(((LivingEntity)entityReference).getEyeLocation());
+                } else {
+                    setLocation(entityReference.getLocation());
+                }
             }
         }
 
@@ -217,7 +222,11 @@ public abstract class Effect implements Runnable {
         if (entityReference != null) {
             long now = System.currentTimeMillis();
             if (locationUpdateInterval == 0 || lastTargetUpdate == 0 || lastTargetUpdate + locationUpdateInterval > now) {
-                setTarget(entityReference.getLocation());
+                if (entityReference instanceof LivingEntity) {
+                    setTarget(((LivingEntity)entityReference).getEyeLocation());
+                } else {
+                    setTarget(entityReference.getLocation());
+                }
             }
         }
 
