@@ -206,6 +206,30 @@ public enum ParticleEffect {
 	 * @displayed by bone meal and when trading with a villager
 	 */
 	HAPPY_VILLAGER("happyVillager"),
+    /**
+     * @version 1.8
+     * @appearance "No" Sign
+     * @displayed by barrier blocks
+     */
+    BARRIER("barrier"),
+    /**
+     * @version 1.8
+     * @appearance Droplets
+     * @displayed ?
+     */
+    DROPLET("droplet"),
+    /**
+     * @version 1.8
+     * @appearance Take
+     * @displayed ?
+     */
+    TAKE("take"),
+    /**
+     * @version 1.8
+     * @appearance Mob appearance
+     * @displayed The appearance of elder guardians
+     */
+    MOB_APPEARANCE("mobappearance"),
 
     ICON_CRACK("iconcrack_{subtype}"),
     BLOCK_CRACK("blockcrack_{subtype}"),
