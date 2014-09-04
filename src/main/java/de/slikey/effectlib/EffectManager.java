@@ -117,10 +117,6 @@ public final class EffectManager implements Disposable {
         if (effect == null) {
             return null;
         }
-        effect.setLocation(origin);
-        effect.setTarget(target);
-        effect.setTargetEntity(targetEntity);
-        effect.setEntity(originEntity);
 
         Collection<String> keys = parameters.getKeys(false);
         for (String key : keys) {
@@ -130,6 +126,11 @@ public final class EffectManager implements Disposable {
                 owningPlugin.getLogger().warning("Unable to assign EffectLib property " + key + " of class " + effectLibClass.getName());
             }
         }
+
+        effect.setLocation(origin);
+        effect.setTarget(target);
+        effect.setTargetEntity(targetEntity);
+        effect.setEntity(originEntity);
 
         effect.start();
         return effect;

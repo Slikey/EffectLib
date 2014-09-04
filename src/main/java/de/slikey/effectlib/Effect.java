@@ -253,8 +253,8 @@ public abstract class Effect implements Runnable {
     public void setLocation(Location location) {
         Validate.notNull(location, "Location cannot be null!");
         this.location = location == null ? null : location.clone();
-        if (offset != null && location != null) {
-            this.location = location.add(offset);
+        if (offset != null && this.location != null) {
+            this.location = this.location.add(offset);
             lastLocationUpdate = System.currentTimeMillis();
         }
     }
@@ -263,9 +263,9 @@ public abstract class Effect implements Runnable {
      * Set the Location this Effect is targeting.
      */
     public void setTarget(Location location) {
-        target = location == null ? null : location.clone();
-        if (targetOffset != null && target != null) {
-            target.add(targetOffset);
+        this.target = location == null ? null : location.clone();
+        if (targetOffset != null && this.target != null) {
+            this.target = this.target.add(targetOffset);
             lastTargetUpdate = System.currentTimeMillis();
         }
     }
