@@ -20,7 +20,7 @@ public class WaveEffect extends Effect {
      * Velocity of the wave
      * Call velocity.zero() if the wave should be stationary
      */
-    public final Vector velocity = new Vector();
+    public Vector velocity = new Vector();
 
     /**
      * Caches the Vectors used to build the wave
