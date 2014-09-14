@@ -516,7 +516,7 @@ public enum ParticleEffect {
 	 *            Display speed of the particles
 	 * @param amount
 	 *            Amount of particles
-	 * @throws @IllegalArgumentException if the range is higher than 20
+	 * @throws @IllegalArgumentException if providing a parameterized particle
 	 * @see #sendPacket
 	 * @see #instantiatePacket
 	 */
@@ -530,6 +530,71 @@ public enum ParticleEffect {
         }
 		sendPacket(getPlayers(center, range), instantiatePacket(name, center, offsetX, offsetY, offsetZ, speed, amount));
 	}
+
+    /**
+     * Display this effect to a specific player.
+     *
+     * @param player
+     *            The player who will see the effect.
+     * @param location
+     *            Center location of the effect
+     * @param offsetX
+     *            Maximum distance particles can fly away from the center on the
+     *            x-axis
+     * @param offsetY
+     *            Maximum distance particles can fly away from the center on the
+     *            y-axis
+     * @param offsetZ
+     *            Maximum distance particles can fly away from the center on the
+     *            z-axis
+     * @param speed
+     *            Display speed of the particles
+     * @param amount
+     *            Amount of particles
+     * @throws @IllegalArgumentException if providing a parameterized particle
+     */
+    public void displayTo(Player player, Location location, float offsetX, float offsetY, float offsetZ, float speed, int amount) {
+        if (this == BLOCK_CRACK || this == ICON_CRACK || this == TILE_CRACK) {
+            throw new IllegalArgumentException("Missing subtype for parameterized ParticleEffect");
+        }
+        sendPacket(player, instantiatePacket(name, location, offsetX, offsetY, offsetZ, speed, amount));
+    }
+
+    /**
+     * Displays a particle effect to a specific player.
+     *
+     * This can be used with the parameterized particle types.
+     *
+     * @param player
+     *            The player who will see the effect.
+     * @param subtype
+     *            The particle subtype, normally an item id
+     * @param location
+     *            Center location of the effect
+     * @param offsetX
+     *            Maximum distance particles can fly away from the center on the
+     *            x-axis
+     * @param offsetY
+     *            Maximum distance particles can fly away from the center on the
+     *            y-axis
+     * @param offsetZ
+     *            Maximum distance particles can fly away from the center on the
+     *            z-axis
+     * @param speed
+     *            Display speed of the particles
+     * @param amount
+     *            Amount of particles
+     * @throws @IllegalArgumentException if the range is higher than 20
+     * @see #sendPacket
+     * @see #instantiatePacket
+     */
+    public void displayTo(Player player, String subtype, Location location, float offsetX, float offsetY, float offsetZ, float speed, int amount) {
+        String particleName = name;
+        if (this == BLOCK_CRACK || this == ICON_CRACK || this == TILE_CRACK) {
+            particleName = particleName.replace("{subtype}", subtype);
+        }
+        sendPacket(player, instantiatePacket(particleName, location, offsetX, offsetY, offsetZ, speed, amount));
+    }
 
     /**
      * Displays a particle effect which is only visible for all players within a
