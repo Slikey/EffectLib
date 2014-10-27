@@ -6,59 +6,84 @@ import org.bukkit.util.Vector;
 import de.slikey.effectlib.Effect;
 import de.slikey.effectlib.EffectManager;
 import de.slikey.effectlib.EffectType;
+import de.slikey.effectlib.util.ParticleEffect;
 import de.slikey.effectlib.util.VectorUtils;
 import de.slikey.effectlib.util.ParticleEffect;
 
 public class CircleEffect extends Effect{
 	
 
-    /**
+    /*
      * ParticleType of spawned particle
      */
     public ParticleEffect particle = ParticleEffect.HAPPY_VILLAGER;
 
-    /**
+    /*
      * Rotation of the torus.
      */
     public double xRotation, yRotation, zRotation = 0;
     
-    /**
-     * Radials to spawn next note.
+    /*
+     * Turns the cube by this angle each iteration around the x-axis
      */
-    public double radialsPerStep = Math.PI / 8;
+    public double angularVelocityX = Math.PI / 200;
 
-    /**
+    /*
+     * Turns the cube by this angle each iteration around the y-axis
+     */
+    public double angularVelocityY = Math.PI / 170;
+
+    /*
+     * Turns the cube by this angle each iteration around the z-axis
+     */
+    public double angularVelocityZ = Math.PI / 155;
+
+    /*
      * Radius of circle above head
      */
     public float radius = .4f;
 
-    /**
+    /*
      * Current step. Works as a counter
      */
     protected float step = 0;
-    
-    /**
+   
+    /*
      * Subtracts from location if needed
      */
     public double xSubtract, ySubtract, zSubtract;
+    
+    /*
+     * Should it rotate?
+     */
+    public boolean enableRotation = true;
+    
+    /*
+     * Amount of particles per circle
+     */
+    public int particles = 20;
 
     public CircleEffect(EffectManager effectManager) {
         super(effectManager);
         type = EffectType.REPEATING;
-        period = 10;
-        iterations = 20;
+        period = 2;
+        iterations = 50;
     }
     
     @Override
     public void onRun(){
     	Location location = getLocation();
     	location.subtract(xSubtract, ySubtract, zSubtract);
-    	Vector v = new Vector();
-    	v.setX(Math.cos(radialsPerStep * step) * radius);
-    	v.setZ(Math.sin(radialsPerStep * step) * radius);
+    	double inc = (2*Math.PI)/particles;
+    	double angle = step * inc;
+		Vector v = new Vector();
+		v.setX(Math.cos(angle) * radius);
+    	v.setZ(Math.sin(angle) * radius);
     	VectorUtils.rotateVector(v, xRotation, yRotation, zRotation);
-    	particle.display(0, 0, 0, .5f, 1, location.add(v), visibleRange);
-    	step++;
+		if(enableRotation)
+			VectorUtils.rotateVector(v, angularVelocityX * step, angularVelocityY * step, angularVelocityZ * step);
+		particle.display(location.add(v), visibleRange, 0, 0, 0, 0, 30);
+		step++;
     }
 
 }
