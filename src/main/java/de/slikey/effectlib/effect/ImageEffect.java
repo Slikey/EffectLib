@@ -10,10 +10,13 @@ import org.bukkit.Location;
 import org.bukkit.util.Vector;
 
 import javax.imageio.ImageIO;
+import javax.imageio.ImageReader;
+import javax.imageio.stream.ImageInputStream;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class ImageEffect extends Effect {
 
@@ -47,6 +50,21 @@ public class ImageEffect extends Effect {
      */
     protected BufferedImage image = null;
 
+    /**
+     * Is this a gif image?
+     */
+    protected boolean isGif = false;
+
+    /**
+     * File of the gif if needed
+     */
+    protected File gifFile = null;
+
+    /**
+     * Step counter
+     */
+    protected int step = 0;
+
     public ImageEffect(EffectManager effectManager) throws IOException {
         super(effectManager);
         type = EffectType.REPEATING;
@@ -57,6 +75,8 @@ public class ImageEffect extends Effect {
     public void loadFile(File file) {
         try {
             image = ImageIO.read(file);
+            this.isGif = file.getName().endsWith(".gif");
+            this.gifFile = file;
         } catch (Exception ex) {
             ex.printStackTrace();
             image = null;
@@ -68,6 +88,14 @@ public class ImageEffect extends Effect {
         if (image == null) {
             cancel();
             return;
+        }
+        if(isGif){
+            try {
+                image = getImg(step);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            step++;
         }
         Location location = getLocation();
         int clr;
@@ -85,4 +113,21 @@ public class ImageEffect extends Effect {
             }
         }
     }
+
+    private BufferedImage getImg(int s) throws IOException{
+        ArrayList<BufferedImage> images = new ArrayList<BufferedImage>();
+        ImageReader reader = ImageIO.getImageReadersBySuffix("GIF").next();
+        ImageInputStream in = ImageIO.createImageInputStream(gifFile);
+        reader.setInput(in);
+        for (int i = 0, count = reader.getNumImages(true); i < count; i++){
+            BufferedImage image = reader.read(i);
+            images.add(image);
+        }
+        if(step>=reader.getNumImages(true)) {
+            step = 0;
+            return images.get(s-1);
+        }
+        return images.get(s);
+    }
+
 }
