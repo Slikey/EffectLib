@@ -46,6 +46,31 @@ public class ImageEffect extends Effect {
     public float size = (float) 1 / 40;
 
     /**
+     * Should it rotate?
+     */
+    public boolean enableRotation = true;
+
+    /**
+     * What plane should it rotate?
+     */
+    public Plane plane = Plane.XYZ;
+
+    /**
+     * Turns the cube by this angle each iteration around the x-axis
+     */
+    public double angularVelocityX = Math.PI / 200;
+
+    /**
+     * Turns the cube by this angle each iteration around the y-axis
+     */
+    public double angularVelocityY = Math.PI / 170;
+
+    /**
+     * Turns the cube by this angle each iteration around the z-axis
+     */
+    public double angularVelocityZ = Math.PI / 155;
+
+    /**
      * Image as BufferedImage
      */
     protected BufferedImage image = null;
@@ -128,6 +153,10 @@ public class ImageEffect extends Effect {
             return images.get(s-1);
         }
         return images.get(s);
+    }
+
+    public enum Plane{
+        X, Y, Z, XY, XZ, XYZ, YZ;
     }
 
 }
