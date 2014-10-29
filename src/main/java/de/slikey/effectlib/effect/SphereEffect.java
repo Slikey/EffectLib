@@ -6,7 +6,6 @@ import de.slikey.effectlib.EffectType;
 import de.slikey.effectlib.util.ParticleEffect;
 import de.slikey.effectlib.util.RandomUtils;
 import org.bukkit.Location;
-import org.bukkit.entity.Entity;
 import org.bukkit.util.Vector;
 
 public class SphereEffect extends Effect {
@@ -42,9 +41,10 @@ public class SphereEffect extends Effect {
         Location location = getLocation();
         location.add(0, yOffset, 0);
         for (int i = 0; i < particles; i++) {
-            Vector v = RandomUtils.getRandomCircleVector().multiply(RandomUtils.random.nextDouble() * radius);
-            particle.display(location.add(v), visibleRange);
-            location.subtract(v);
+            Vector vector = RandomUtils.getRandomVector().multiply(radius);
+            location.add(vector);
+            particle.display(location, visibleRange);
+            location.subtract(vector);
         }
     }
 
