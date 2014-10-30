@@ -15,9 +15,29 @@ public class LineEffect extends Effect {
     public ParticleEffect particle = ParticleEffect.FLAME;
 
     /**
+     * Should it do a zig zag?
+     */
+    public boolean isZigZag = false;
+
+    /**
+     * Number of zig zags in the line
+     */
+    public int zigZags = 10;
+
+    /**
      * Particles per arc
      */
     public int particles = 100;
+
+    /**
+     * Internal boolean
+     */
+    protected boolean zag = false;
+
+    /**
+     * Internal counter
+     */
+    protected int step = 0;
 
     public LineEffect(EffectManager effectManager) {
         super(effectManager);
@@ -30,6 +50,7 @@ public class LineEffect extends Effect {
     public void onRun() {
         Location location = getLocation();
         Location target = getTarget();
+        double amount = particles / zigZags;
         if (target == null) {
             cancel();
             return;
@@ -42,6 +63,20 @@ public class LineEffect extends Effect {
         Vector v = link.multiply(ratio);
         Location loc = location.clone().subtract(v);
         for (int i = 0; i < particles; i++) {
+            if (isZigZag) {
+                if (zag)
+                    loc.add(0, .1, 0);
+                else
+                    loc.subtract(0, .1, 0);
+            }
+            if (step >= amount) {
+                if (zag)
+                    zag = false;
+                else
+                    zag = true;
+                step = 0;
+            }
+            step++;
             loc.add(v);
             particle.display(loc, visibleRange);
         }
