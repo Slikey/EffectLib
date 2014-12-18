@@ -238,8 +238,10 @@ public enum ParticleEffect {
 	private static final Map<String, ParticleEffect> NAME_MAP = new HashMap<String, ParticleEffect>();
 	private static final double MAX_RANGE = 50;
 	private static Constructor<?> packetPlayOutWorldParticles;
+	private static Class<?> classEnumParticle;
     private static boolean legacy = false;
 	private static Method getHandle;
+	private static Method getEnumParticle;
 	private static Field playerConnection;
 	private static Method sendPacket;
 	private final String name;
@@ -248,6 +250,8 @@ public enum ParticleEffect {
 		for (ParticleEffect p : values())
 			NAME_MAP.put(p.name, p);
 		try {
+			classEnumParticle = ReflectionHandler.getClass("EnumParticle", PackageType.MINECRAFT_SERVER);
+			getEnumParticle = classEnumParticle.getMethod("a", Integer.TYPE);
 			packetPlayOutWorldParticles = ReflectionHandler.getConstructor(PacketType.PLAY_OUT_WORLD_PARTICLES.getPacket(), String.class, float.class, float.class, float.class, float.class, float.class, float.class, float.class, int.class);
 			// 1.6 Backwards compatibility
             if (packetPlayOutWorldParticles == null) {
@@ -312,7 +316,7 @@ public enum ParticleEffect {
 
 	/**
 	 * Instantiates a new @PacketPlayOutWorldParticles object through reflection
-	 * 
+	 *
 	 * @param center
 	 *            Center location of the effect
 	 * @param offsetX
@@ -333,7 +337,7 @@ public enum ParticleEffect {
 	 *         the @PacketPlayOutWorldParticles has changed its name or
 	 *         constructor parameters
 	 */
-	private static Object instantiatePacket(String name, Location center, float offsetX, float offsetY, float offsetZ, float speed, int amount) {
+	private Object instantiatePacket(Location center, float offsetX, float offsetY, float offsetZ, float speed, int amount) {
 		if (amount < 1)
 			amount = 1;
 		try {
@@ -345,7 +349,7 @@ public enum ParticleEffect {
                     field.setAccessible(true);
                     String fieldName = field.getName();
                     if (fieldName.equals("a")) {
-                        field.set(packet, name);
+                        field.set(packet, getEnumParticle.invoke(null, ordinal()));
                     } else if (fieldName.equals("b")) {
                         field.setFloat(packet, (float)center.getX());
                     } else if (fieldName.equals("c")) {
@@ -399,7 +403,9 @@ public enum ParticleEffect {
 	 * @see #instantiatePacket
 	 */
 	private static Object instantiateIconCrackPacket(int id, Location center, float offsetX, float offsetY, float offsetZ, float speed, int amount) {
-		return instantiatePacket("iconcrack_" + id, center, offsetX, offsetY, offsetZ, speed, amount);
+		// TODO: Fix for 1.8!
+		// return instantiatePacket("iconcrack_" + id, center, offsetX, offsetY, offsetZ, speed, amount);
+		return null;
 	}
 
 	/**
@@ -428,7 +434,9 @@ public enum ParticleEffect {
 	 * @see #instantiatePacket
 	 */
 	private static Object instantiateBlockCrackPacket(int id, byte data, Location center, float offsetX, float offsetY, float offsetZ, int amount) {
-		return instantiatePacket("blockcrack_" + id + "_" + data, center, offsetX, offsetY, offsetZ, 0, amount);
+		// TODO: Fix for 1.8!
+		//return instantiatePacket("blockcrack_" + id + "_" + data, center, offsetX, offsetY, offsetZ, 0, amount);
+		return null;
 	}
 
 	/**
@@ -459,7 +467,9 @@ public enum ParticleEffect {
 	 * @see #instantiatePacket
 	 */
 	private static Object instantiateBlockDustPacket(int id, byte data, Location center, float offsetX, float offsetY, float offsetZ, float speed, int amount) {
-		return instantiatePacket("blockdust_" + id + "_" + data, center, offsetX, offsetY, offsetZ, speed, amount);
+		// TODO: Fix for 1.8!
+		//return instantiatePacket("blockdust_" + id + "_" + data, center, offsetX, offsetY, offsetZ, speed, amount);
+		return null;
 	}
 
 	/**
@@ -528,7 +538,7 @@ public enum ParticleEffect {
         if (this == BLOCK_CRACK || this == ICON_CRACK || this == TILE_CRACK) {
             throw new IllegalArgumentException("Missing subtype for parameterized ParticleEffect");
         }
-		sendPacket(getPlayers(center, range), instantiatePacket(name, center, offsetX, offsetY, offsetZ, speed, amount));
+		sendPacket(getPlayers(center, range), instantiatePacket(center, offsetX, offsetY, offsetZ, speed, amount));
 	}
 
     /**
@@ -557,7 +567,7 @@ public enum ParticleEffect {
         if (this == BLOCK_CRACK || this == ICON_CRACK || this == TILE_CRACK) {
             throw new IllegalArgumentException("Missing subtype for parameterized ParticleEffect");
         }
-        sendPacket(player, instantiatePacket(name, location, offsetX, offsetY, offsetZ, speed, amount));
+        sendPacket(player, instantiatePacket(location, offsetX, offsetY, offsetZ, speed, amount));
     }
 
     /**
@@ -593,7 +603,7 @@ public enum ParticleEffect {
         if (this == BLOCK_CRACK || this == ICON_CRACK || this == TILE_CRACK) {
             particleName = particleName.replace("{subtype}", subtype);
         }
-        sendPacket(player, instantiatePacket(particleName, location, offsetX, offsetY, offsetZ, speed, amount));
+        sendPacket(player, instantiatePacket(location, offsetX, offsetY, offsetZ, speed, amount));
     }
 
     /**
@@ -628,11 +638,14 @@ public enum ParticleEffect {
     public void display(String subtype, Location center, double range, float offsetX, float offsetY, float offsetZ, float speed, int amount) {
         if (range > MAX_RANGE)
             range = MAX_RANGE;
+		// Not sure how to handle this in 1.8 yet! I don't think we can use a "subtype" String anymore?
+		/*
         String particleName = name;
         if (this == BLOCK_CRACK || this == ICON_CRACK || this == TILE_CRACK) {
             particleName = particleName.replace("{subtype}", subtype);
         }
-        sendPacket(getPlayers(center, range), instantiatePacket(particleName, center, offsetX, offsetY, offsetZ, speed, amount));
+        */
+        sendPacket(getPlayers(center, range), instantiatePacket(center, offsetX, offsetY, offsetZ, speed, amount));
     }
 
 	public void display(Location center, double range) {
