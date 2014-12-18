@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
@@ -236,22 +237,17 @@ public enum ParticleEffect {
     TILE_CRACK("tilecrack_{subtype}");
 
 	private static final Map<String, ParticleEffect> NAME_MAP = new HashMap<String, ParticleEffect>();
+	private static final Map<String, Object> PARTICLE_ENUM_MAP = new HashMap<String, Object>();
 	private static final double MAX_RANGE = 50;
 	private static Constructor<?> packetPlayOutWorldParticles;
-	private static Class<?> classEnumParticle;
     private static boolean legacy = false;
 	private static Method getHandle;
-	private static Method getEnumParticle;
 	private static Field playerConnection;
 	private static Method sendPacket;
 	private final String name;
 
 	static {
-		for (ParticleEffect p : values())
-			NAME_MAP.put(p.name, p);
 		try {
-			classEnumParticle = ReflectionHandler.getClass("EnumParticle", PackageType.MINECRAFT_SERVER);
-			getEnumParticle = classEnumParticle.getMethod("a", Integer.TYPE);
 			packetPlayOutWorldParticles = ReflectionHandler.getConstructor(PacketType.PLAY_OUT_WORLD_PARTICLES.getPacket(), String.class, float.class, float.class, float.class, float.class, float.class, float.class, float.class, int.class);
 			// 1.6 Backwards compatibility
             if (packetPlayOutWorldParticles == null) {
@@ -261,8 +257,25 @@ public enum ParticleEffect {
             getHandle = ReflectionHandler.getMethod("CraftPlayer", SubPackageType.ENTITY, "getHandle");
 			playerConnection = ReflectionHandler.getField("EntityPlayer", PackageType.MINECRAFT_SERVER, "playerConnection");
 			sendPacket = ReflectionHandler.getMethod(playerConnection.getType(), "sendPacket", ReflectionHandler.getClass("Packet", PackageType.MINECRAFT_SERVER));
+
+			// 1.8 Support with backwards compatibility
+			Class<?> classEnumParticle = ReflectionHandler.getClass("EnumParticle", PackageType.MINECRAFT_SERVER);
+			Method getNameMethod = classEnumParticle.getMethod("b");
+			Object[] particleEnums = classEnumParticle.getEnumConstants();
+			for (Object particle : particleEnums)
+			{
+				String name = (String)getNameMethod.invoke(particle);
+				PARTICLE_ENUM_MAP.put(name, particle);
+			}
+
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+		for (ParticleEffect p : values()) {
+			NAME_MAP.put(p.name, p);
+
+			// Bind to EnumParticle class
+
 		}
 	}
 
@@ -341,6 +354,11 @@ public enum ParticleEffect {
 		if (amount < 1)
 			amount = 1;
 		try {
+			Object particleType = PARTICLE_ENUM_MAP.get(name);
+			if (particleType == null)
+			{
+				particleType = name;
+			}
             if (legacy) {
                 // This is really slow, but only here for backwards compatibility.
                 Object packet = packetPlayOutWorldParticles.newInstance();
@@ -349,7 +367,7 @@ public enum ParticleEffect {
                     field.setAccessible(true);
                     String fieldName = field.getName();
                     if (fieldName.equals("a")) {
-                        field.set(packet, getEnumParticle.invoke(null, ordinal()));
+						field.set(packet, particleType);
                     } else if (fieldName.equals("b")) {
                         field.setFloat(packet, (float)center.getX());
                     } else if (fieldName.equals("c")) {
@@ -371,9 +389,9 @@ public enum ParticleEffect {
 
                 return packet;
             }
-			return packetPlayOutWorldParticles.newInstance(name, (float) center.getX(), (float) center.getY(), (float) center.getZ(), offsetX, offsetY, offsetZ, speed, amount);
+			return packetPlayOutWorldParticles.newInstance(particleType, (float) center.getX(), (float) center.getY(), (float) center.getZ(), offsetX, offsetY, offsetZ, speed, amount);
 		} catch (Exception e) {
-			throw new PacketInstantiationException("Packet instantiation failed", e);
+			throw new PacketInstantiationException("Packet instantiation failed for " + name, e);
 		}
 	}
 
