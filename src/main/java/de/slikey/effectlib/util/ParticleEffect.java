@@ -257,25 +257,26 @@ public enum ParticleEffect {
             getHandle = ReflectionHandler.getMethod("CraftPlayer", SubPackageType.ENTITY, "getHandle");
 			playerConnection = ReflectionHandler.getField("EntityPlayer", PackageType.MINECRAFT_SERVER, "playerConnection");
 			sendPacket = ReflectionHandler.getMethod(playerConnection.getType(), "sendPacket", ReflectionHandler.getClass("Packet", PackageType.MINECRAFT_SERVER));
-
-			// 1.8 Support with backwards compatibility
-			Class<?> classEnumParticle = ReflectionHandler.getClass("EnumParticle", PackageType.MINECRAFT_SERVER);
-			Method getNameMethod = classEnumParticle.getMethod("b");
-			Object[] particleEnums = classEnumParticle.getEnumConstants();
-			for (Object particle : particleEnums)
-			{
-				String name = (String)getNameMethod.invoke(particle);
-				PARTICLE_ENUM_MAP.put(name, particle);
-			}
-
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+
+		// 1.8 Support with backwards compatibility
+		try {
+			Class<?> classEnumParticle = ReflectionHandler.getClass("EnumParticle", PackageType.MINECRAFT_SERVER);
+			Method getNameMethod = classEnumParticle.getMethod("b");
+			Object[] particleEnums = classEnumParticle.getEnumConstants();
+			for (Object particle : particleEnums) {
+				String name = (String) getNameMethod.invoke(particle);
+				PARTICLE_ENUM_MAP.put(name, particle);
+			}
+		} catch (Exception e) {
+			// Silently ignored, since this will throw an exception in 1.7
+		}
+
+		// Map particles by name
 		for (ParticleEffect p : values()) {
 			NAME_MAP.put(p.name, p);
-
-			// Bind to EnumParticle class
-
 		}
 	}
 
