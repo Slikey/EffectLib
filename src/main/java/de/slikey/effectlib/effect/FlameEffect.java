@@ -24,7 +24,7 @@ public class FlameEffect extends Effect {
             Vector v = RandomUtils.getRandomCircleVector().multiply(RandomUtils.random.nextDouble() * 0.6d);
             v.setY(RandomUtils.random.nextFloat() * 1.8);
             location.add(v);
-            ParticleEffect.FLAME.display(location, visibleRange, 0, 0, 0, 0, 0);
+            ParticleEffect.FLAME.display(location, visibleRange);
             location.subtract(v);
         }
     }

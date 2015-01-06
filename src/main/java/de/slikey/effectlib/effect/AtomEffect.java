@@ -74,7 +74,7 @@ public class AtomEffect extends Effect {
         for (int i = 0; i < particlesNucleus; i++) {
             Vector v = RandomUtils.getRandomVector().multiply(radius * radiusNucleus);
             location.add(v);
-            particleNucleus.display(location, visibleRange, 0, 0, 0, 0, 0);
+            particleNucleus.display(location, visibleRange);
             location.subtract(v);
         }
         for (int i = 0; i < particlesOrbital; i++) {
@@ -85,7 +85,7 @@ public class AtomEffect extends Effect {
                 VectorUtils.rotateAroundAxisX(v, xRotation);
                 VectorUtils.rotateAroundAxisY(v, rotation);
                 location.add(v);
-                particleOrbital.display(location, visibleRange, 0, 0, 0, 0, 0);
+                particleOrbital.display(location, visibleRange);
                 location.subtract(v);
             }
             step++;

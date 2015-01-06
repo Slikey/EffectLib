@@ -81,7 +81,7 @@ public class AnimatedBallEffect extends Effect {
 
             VectorUtils.rotateVector(vector, xRotation, yRotation, zRotation);
 
-            particle.display(location.add(vector), visibleRange, 0, 0, 0, 0, 0);
+            particle.display(0, 0, 0, 0, 1, location.add(vector), visibleRange);
             location.subtract(vector);
         }
     }

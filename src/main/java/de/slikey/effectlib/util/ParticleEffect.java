@@ -1304,7 +1304,7 @@ public enum ParticleEffect {
 	 */
 	@Deprecated
 	public void display(Location center, double range) {
-		display(0, 0, 0, 0, 0, center, range);
+		display(0, 0, 0, 0, 1, center, range);
 	}
 
 	/**

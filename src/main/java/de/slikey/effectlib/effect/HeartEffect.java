@@ -74,7 +74,7 @@ public class HeartEffect extends Effect {
 
             VectorUtils.rotateVector(vector, xRotation, yRotation, zRotation);
 
-            particle.display(location.add(vector), visibleRange, 0, 0, 0, 0, 0);
+            particle.display(location.add(vector), visibleRange);
             location.subtract(vector);
         }
     }
