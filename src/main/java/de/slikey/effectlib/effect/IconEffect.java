@@ -12,7 +12,7 @@ public class IconEffect extends Effect {
     /**
      * ParticleType of spawned particle
      */
-    public ParticleEffect particle = ParticleEffect.ANGRY_VILLAGER;
+    public ParticleEffect particle = ParticleEffect.VILLAGER_ANGRY;
 
     public int yOffset = 2;
 

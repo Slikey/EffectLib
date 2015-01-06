@@ -12,7 +12,7 @@ public class SphereEffect extends Effect {
     /**
      * ParticleType of spawned particle
      */
-    public ParticleEffect particle = ParticleEffect.MOB_SPELL;
+    public ParticleEffect particle = ParticleEffect.SPELL_MOB;
 
     /**
      * Radius of the sphere

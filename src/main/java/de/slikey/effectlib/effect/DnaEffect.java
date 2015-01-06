@@ -19,12 +19,12 @@ public class DnaEffect extends Effect {
     /**
      * Particle of base 1
      */
-    public ParticleEffect particleBase1 = ParticleEffect.WAKE;
+    public ParticleEffect particleBase1 = ParticleEffect.WATER_WAKE;
 
     /**
      * Particle of base 2
      */
-    public ParticleEffect particleBase2 = ParticleEffect.RED_DUST;
+    public ParticleEffect particleBase2 = ParticleEffect.REDSTONE;
 
     /**
      * Radials to turn per step

@@ -18,7 +18,7 @@ public class HeartEffect extends Effect {
      * ParticleType of spawned particle
      */
 
-    public ParticleEffect particle = ParticleEffect.MAGIC_CRIT;
+    public ParticleEffect particle = ParticleEffect.CRIT_MAGIC;
 
     /**
      * Heart-particles per interation (100)

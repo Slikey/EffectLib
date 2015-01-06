@@ -16,7 +16,7 @@ public class CircleEffect extends Effect{
     /*
      * ParticleType of spawned particle
      */
-    public ParticleEffect particle = ParticleEffect.HAPPY_VILLAGER;
+    public ParticleEffect particle = ParticleEffect.VILLAGER_HAPPY;
 
     /*
      * Rotation of the torus.

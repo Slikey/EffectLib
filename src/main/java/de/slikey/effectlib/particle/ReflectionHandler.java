@@ -1,4 +1,4 @@
-package de.slikey.effectlib.util;
+package de.slikey.effectlib.particle;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
@@ -7,6 +7,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.bukkit.Bukkit;
+
+// TODO: This is out of date, but still used by ParticlePacket
+// Since this looked experimental I didn't want to mess with it.
+// If ParticlePacket doesn't work out, this file could be removed as it
+// has been replaced by ReflectionUtils.
 
 /**
  * ReflectionHandler v1.0

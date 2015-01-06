@@ -20,7 +20,7 @@ public class AnimatedBallEffect extends Effect {
     /**
      * ParticleType of spawned particle
      */
-    public ParticleEffect particle = ParticleEffect.WITCH_MAGIC;
+    public ParticleEffect particle = ParticleEffect.SPELL_WITCH;
 
     /**
      * Ball particles total (150)

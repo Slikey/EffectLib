@@ -25,7 +25,7 @@ public class DiscoBallEffect extends Effect {
     /**
      * Particle of the sphere and of the lines
      */
-    public ParticleEffect sphereParticle = ParticleEffect.FLAME, lineParticle = ParticleEffect.RED_DUST;
+    public ParticleEffect sphereParticle = ParticleEffect.FLAME, lineParticle = ParticleEffect.REDSTONE;
 
     /**
      * Max number of lines

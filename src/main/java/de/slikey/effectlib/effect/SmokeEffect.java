@@ -13,7 +13,7 @@ public class SmokeEffect extends Effect {
     /**
      * ParticleType of spawned particle
      */
-    public ParticleEffect particle = ParticleEffect.SMOKE;
+    public ParticleEffect particle = ParticleEffect.SMOKE_NORMAL;
 
     public SmokeEffect(EffectManager effectManager) {
         super(effectManager);

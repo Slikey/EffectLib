@@ -9,10 +9,9 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 
-import de.slikey.effectlib.util.ReflectionHandler;
-import de.slikey.effectlib.util.ReflectionHandler.PackageType;
-import de.slikey.effectlib.util.ReflectionHandler.PacketType;
-import de.slikey.effectlib.util.ReflectionHandler.SubPackageType;
+import de.slikey.effectlib.particle.ReflectionHandler.PackageType;
+import de.slikey.effectlib.particle.ReflectionHandler.PacketType;
+import de.slikey.effectlib.particle.ReflectionHandler.SubPackageType;
 
 /**
  * DO NOT USE! It is damn slow and I have to do some theory on this!

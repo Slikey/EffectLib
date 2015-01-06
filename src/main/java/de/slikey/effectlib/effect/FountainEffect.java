@@ -12,7 +12,7 @@ public class FountainEffect extends Effect {
     /**
      * Particle of the fountain
      */
-    public ParticleEffect particle = ParticleEffect.SPLASH;
+    public ParticleEffect particle = ParticleEffect.WATER_SPLASH;
 
     /**
      * Amount of strands (10)
