@@ -29,8 +29,8 @@ MIT
 
 **Free Software, Hell Yeah!**
 
-[dev](http://dev.bukkit.org/bukkit-plugins/effectlib/)
-[forum](http://forums.bukkit.org/threads/effectlib-manage-your-effects-the-nice-way-text-in-particles.259879/)
-[particleeffect](https://gist.github.com/DarkBlade12/5868517)
-[reflectionhandler](https://gist.github.com/DarkBlade12/8832875)
+[dev]:http://dev.bukkit.org/bukkit-plugins/effectlib/
+[forum]:http://forums.bukkit.org/threads/effectlib-manage-your-effects-the-nice-way-text-in-particles.259879/
+[particleeffect]:https://gist.github.com/DarkBlade12/5868517
+[reflectionhandler]:https://gist.github.com/DarkBlade12/8832875
     
