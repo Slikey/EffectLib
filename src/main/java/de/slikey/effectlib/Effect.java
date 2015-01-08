@@ -123,8 +123,12 @@ public abstract class Effect implements Runnable {
         }
 		if (done)
 			return;
-		onRun();
-
+        try {
+            onRun();
+        } catch (Exception ex) {
+            done();
+            effectManager.onError(ex);
+        }
 		if (type == EffectType.REPEATING) {
 			if (iterations == -1)
 				return;

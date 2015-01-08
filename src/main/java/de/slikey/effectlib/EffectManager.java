@@ -11,6 +11,7 @@ import java.util.Map;
 
 import de.slikey.effectlib.util.ParticleEffect;
 import org.apache.commons.lang.StringUtils;
+import java.util.logging.Level;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Location;
@@ -238,4 +239,7 @@ public final class EffectManager implements Disposable {
 			dispose();
 	}
 
+    public void onError(Throwable ex) {
+        owningPlugin.getLogger().log(Level.WARNING, "Particle Effect error", ex);
+    }
 }
