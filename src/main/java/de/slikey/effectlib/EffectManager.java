@@ -38,6 +38,7 @@ public final class EffectManager implements Disposable {
     private static List<EffectManager> effectManagers;
 	private boolean disposed;
 	private boolean disposeOnTermination;
+    private boolean debug = false;
 
     public static void initialize() {
         effectManagers = new ArrayList<EffectManager>();
@@ -239,7 +240,13 @@ public final class EffectManager implements Disposable {
 			dispose();
 	}
 
+    public void enableDebug(boolean enable) {
+        debug = enable;
+    }
+
     public void onError(Throwable ex) {
-        owningPlugin.getLogger().log(Level.WARNING, "Particle Effect error", ex);
+        if (debug) {
+            owningPlugin.getLogger().log(Level.WARNING, "Particle Effect error", ex);
+        }
     }
 }
