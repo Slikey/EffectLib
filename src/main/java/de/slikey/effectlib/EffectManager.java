@@ -169,7 +169,7 @@ public final class EffectManager implements Disposable {
                     Sound sound = Sound.valueOf(soundName.toUpperCase());
                     field.set(effect, sound);
                 } catch (Exception ex) {
-                    ex.printStackTrace();
+                    onError(ex);
                 }
             } else if (field.getType().equals(Color.class)) {
                 String hexColor = section.getString(key);
@@ -178,7 +178,7 @@ public final class EffectManager implements Disposable {
                     Color color = Color.fromRGB(rgb);
                     field.set(effect, color);
                 } catch (Exception ex) {
-                    ex.printStackTrace();
+                    onError(ex);
                 }
             } else if (field.getType().equals(Vector.class)) {
                 double x = 0;
@@ -190,7 +190,7 @@ public final class EffectManager implements Disposable {
                     y = pieces.length > 1 ? Double.parseDouble(pieces[1]) : 0;
                     z = pieces.length > 2 ? Double.parseDouble(pieces[2]) : 0;
                 } catch (Exception ex) {
-                    ex.printStackTrace();
+                    onError(ex);
                 }
                 field.set(effect, new Vector(x, y, z));
             } else {
@@ -199,7 +199,7 @@ public final class EffectManager implements Disposable {
 
             return true;
         } catch (Exception ex) {
-            ex.printStackTrace();
+            this.onError(ex);
         }
 
         return false;
