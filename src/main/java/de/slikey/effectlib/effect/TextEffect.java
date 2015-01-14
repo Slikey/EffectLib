@@ -94,7 +94,7 @@ public class TextEffect extends Effect {
                         continue;
                     Vector v = new Vector((float) image.getWidth() / 2 - x, (float) image.getHeight() / 2 - y, 0).multiply(size);
                     VectorUtils.rotateAroundAxisY(v, -location.getYaw() * MathUtils.degreesToRadians);
-                    particle.display(location.add(v), visibleRange);
+                    display(particle, location.add(v));
                     location.subtract(v);
                 }
             }

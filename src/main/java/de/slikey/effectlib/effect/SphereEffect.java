@@ -43,7 +43,7 @@ public class SphereEffect extends Effect {
         for (int i = 0; i < particles; i++) {
             Vector vector = RandomUtils.getRandomVector().multiply(radius);
             location.add(vector);
-            particle.display(location, visibleRange);
+            display(particle, location);
             location.subtract(vector);
         }
     }

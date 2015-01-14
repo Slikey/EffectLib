@@ -19,6 +19,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
+// TODO: We could probably make this use the colorizeable particle types in 1.8!
 public class ColoredImageEffect extends Effect{
 
     /**

@@ -82,7 +82,7 @@ public class CircleEffect extends Effect{
     	VectorUtils.rotateVector(v, xRotation, yRotation, zRotation);
 		if(enableRotation)
 			VectorUtils.rotateVector(v, angularVelocityX * step, angularVelocityY * step, angularVelocityZ * step);
-		particle.display(location.add(v), visibleRange, 0, 0, 0, 0, 30);
+		display(particle, location.add(v), 0, 30);
 		step++;
     }
 

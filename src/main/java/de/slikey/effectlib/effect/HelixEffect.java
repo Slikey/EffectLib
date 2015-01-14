@@ -54,7 +54,7 @@ public class HelixEffect extends Effect {
                 double x = Math.cos(angle) * ratio * radius;
                 double z = Math.sin(angle) * ratio * radius;
                 location.add(x, 0, z);
-                particle.display(location, visibleRange);
+                display(particle, location);
                 location.subtract(x, 0, z);
             }
         }

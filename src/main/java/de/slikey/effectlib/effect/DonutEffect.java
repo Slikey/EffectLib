@@ -62,7 +62,7 @@ public class DonutEffect extends Effect {
 
                 VectorUtils.rotateVector(v, xRotation, yRotation, zRotation);
 
-                particle.display(location.add(v), visibleRange);
+                display(particle, location.add(v));
                 location.subtract(v);
             }
         }

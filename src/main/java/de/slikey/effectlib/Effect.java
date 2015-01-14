@@ -1,7 +1,9 @@
 package de.slikey.effectlib;
 
 
+import de.slikey.effectlib.util.ParticleEffect;
 import org.apache.commons.lang.Validate;
+import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -17,6 +19,17 @@ public abstract class Effect implements Runnable {
 	 * @see {@link de.slikey.effectlib.EffectType}
 	 */
 	public EffectType type = EffectType.INSTANT;
+
+    /**
+     * Can be used to colorize certain particles. As of 1.8, those
+     * include SPELL_MOB_AMBIENT, SPELL_MOB and REDSTONE.
+     */
+    public Color color = null;
+
+    /** This is only used when colorizing certain particles,
+     * since the speed can't be 0 for the particle to look colored.
+     */
+    public float speed = 1;
 
 	/**
 	 * Delay to wait for delayed effects.
@@ -272,6 +285,43 @@ public abstract class Effect implements Runnable {
             this.target = this.target.add(targetOffset);
             lastTargetUpdate = System.currentTimeMillis();
         }
+    }
+
+    protected void display(ParticleEffect effect, Location location)
+    {
+        display(effect, location, this.color);
+    }
+
+    protected void display(ParticleEffect particle, Location location, Color color)
+    {
+        display(particle, location, color, 0, 1);
+    }
+
+    protected void display(ParticleEffect particle, Location location, float speed, int amount)
+    {
+        display(particle, location, this.color, speed, amount);
+    }
+
+    protected void display(ParticleEffect particle, Location location, Color color, float speed, int amount)
+    {
+        float offsetX = 0;
+        float offsetY = 0;
+        float offsetZ = 0;
+
+        // Colorizeable!
+        org.bukkit.Bukkit.getLogger().info(" COLOR: " + color);
+
+        if (color != null && (particle == ParticleEffect.REDSTONE || particle == ParticleEffect.SPELL_MOB || particle == ParticleEffect.SPELL_MOB_AMBIENT))
+        {
+            amount = 0;
+            // See note at the top about this, colored particles can't have a speed of 0.
+            speed = this.speed;
+            offsetX = (float)color.getRed() / 255;
+            offsetY = (float)color.getGreen() / 255;
+            offsetZ = (float)color.getBlue() / 255;
+        }
+
+        particle.display(offsetX, offsetY, offsetZ, speed, amount, location, visibleRange);
     }
 }
 

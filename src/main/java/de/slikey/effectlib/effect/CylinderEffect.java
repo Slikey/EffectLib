@@ -115,7 +115,7 @@ public class CylinderEffect extends Effect {
             particle.display(location.add(v), visibleRange);
             location.subtract(v);
         }
-        particle.display(location, visibleRange);
+        display(particle, location);
         step++;
     }
 

@@ -83,7 +83,7 @@ public class GridEffect extends Effect {
         v.setZ(0);
         VectorUtils.rotateAroundAxisY(v, rotation);
         location.add(v);
-        particle.display(location, visibleRange);
+        display(particle, location);
         location.subtract(v);
     }
 

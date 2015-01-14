@@ -7,6 +7,7 @@ import de.slikey.effectlib.EffectManager;
 import de.slikey.effectlib.EffectType;
 import de.slikey.effectlib.util.ParticleEffect;
 import de.slikey.effectlib.util.RandomUtils;
+import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
 
@@ -26,6 +27,7 @@ public class DiscoBallEffect extends Effect {
      * Particle of the sphere and of the lines
      */
     public ParticleEffect sphereParticle = ParticleEffect.FLAME, lineParticle = ParticleEffect.REDSTONE;
+    public Color sphereColor = null, lineColor = null;
 
     /**
      * Max number of lines
@@ -75,7 +77,7 @@ public class DiscoBallEffect extends Effect {
             Location loc = location.clone().subtract(v);
             for (int i = 0; i < lineParticles; i++) {
                 loc.add(v);
-                lineParticle.display(loc, visibleRange);
+                display(lineParticle, loc, lineColor);
             }
         }
 
@@ -83,7 +85,7 @@ public class DiscoBallEffect extends Effect {
         for (int i = 0; i < sphereParticles; i++) {
             Vector vector = RandomUtils.getRandomVector().multiply(sphereRadius);
             location.add(vector);
-            sphereParticle.display(location, visibleRange);
+            display(sphereParticle, location, sphereColor);
             location.subtract(vector);
         }
     }

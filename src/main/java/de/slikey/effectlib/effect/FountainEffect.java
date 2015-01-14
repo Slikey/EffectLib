@@ -73,7 +73,7 @@ public class FountainEffect extends Effect {
                 y = Math.sin(Math.PI * j / particlesStrand) * height;
                 z = Math.sin(angle) * radius * ratio;
                 location.add(x, y, z);
-                particle.display(location, visibleRange);
+                display(particle, location);
                 location.subtract(x, y, z);
             }
         }
@@ -81,7 +81,7 @@ public class FountainEffect extends Effect {
             Vector v = RandomUtils.getRandomCircleVector().multiply(RandomUtils.random.nextFloat() * radius * radiusSpout);
             v.setY(RandomUtils.random.nextFloat() * heightSpout);
             location.add(v);
-            particle.display(location, visibleRange);
+            display(particle, location);
             location.subtract(v);
         }
     }

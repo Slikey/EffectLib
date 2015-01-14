@@ -2,6 +2,7 @@ package de.slikey.effectlib.effect;
 
 import java.util.ArrayList;
 
+import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
 
@@ -18,11 +19,13 @@ public class TornadoEffect extends Effect{
 	 * Tornado particle
 	 */
 	public ParticleEffect tornadoParticle = ParticleEffect.FLAME;
+	public Color tornadoColor = null;
 	
 	/*
 	 * Particle of the cloud
 	 */
 	public ParticleEffect cloudParticle = ParticleEffect.CLOUD;
+	public Color cloudColor = null;
 	
 	/*
 	 * Size of the cloud
@@ -77,7 +80,7 @@ public class TornadoEffect extends Effect{
 		for(int i = 0; i < (100 * cloudSize); i++){
 			Vector v = RandomUtils.getRandomCircleVector().multiply(RandomUtils.random.nextDouble() * cloudSize);
 			if(showCloud){
-				cloudParticle.display(l.add(v), visibleRange, 0, 0, 0, 0, 7);
+				display(cloudParticle, l.add(v), cloudColor, 0, 7);
 				l.subtract(v);
 			}
 		}
@@ -89,7 +92,7 @@ public class TornadoEffect extends Effect{
 				fr = maxTornadoRadius;
 			for(Vector v : createCircle(y, fr)){
 				if(showTornado){
-					tornadoParticle.display(t.add(v), visibleRange);
+					display(tornadoParticle, t.add(v), tornadoColor);
 					t.subtract(v);
 					step++;
 				}

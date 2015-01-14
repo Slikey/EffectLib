@@ -1,5 +1,6 @@
 package de.slikey.effectlib.effect;
 
+import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
 
@@ -15,12 +16,13 @@ public class CloudEffect extends Effect{
 	 * Particle of the cloud
 	 */
 	public ParticleEffect cloudParticle = ParticleEffect.CLOUD;
+	public Color cloudColor = null;
 	
 	/*
 	 * Particle of the rain/snow
 	 */
 	public ParticleEffect mainParticle = ParticleEffect.DRIP_WATER;
-	
+
 	/*
 	 * Size of the cloud
 	 */
@@ -49,7 +51,7 @@ public class CloudEffect extends Effect{
 		location.add(0, yOffset, 0);
 		for(int i = 0; i < 50; i++){
 			Vector v = RandomUtils.getRandomCircleVector().multiply(RandomUtils.random.nextDouble() * cloudSize);
-			cloudParticle.display(location.add(v), visibleRange, 0, 0, 0, 0, 7);
+			display(cloudParticle, location.add(v), cloudColor, 0, 7);
 			location.subtract(v);
 		}
 		Location l = location.add(0, .2, 0);
@@ -59,11 +61,11 @@ public class CloudEffect extends Effect{
 			double z = RandomUtils.random.nextDouble() * particleRadius;
 			l.add(x, 0, z);
 			if(r!=1)
-				mainParticle.display(l, visibleRange);
+				display(mainParticle, l);
 			l.subtract(x, 0, z);
 			l.subtract(x, 0, z);
 			if(r!=1)
-				mainParticle.display(l, visibleRange);
+				display(mainParticle, l);
 			l.add(x, 0, z);
 		}
 	}

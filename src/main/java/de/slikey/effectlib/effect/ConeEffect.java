@@ -80,7 +80,7 @@ public class ConeEffect extends Effect {
             VectorUtils.rotateAroundAxisY(v, -location.getYaw() * MathUtils.degreesToRadians);
 
             location.add(v);
-            particle.display(0, 0, 0, 0, 1, location, visibleRange);
+            display(particle, location);
             location.subtract(v);
             step++;
         }

@@ -133,7 +133,7 @@ public class CubeEffect extends Effect {
                     Vector v = new Vector(posX, posY, posZ);
                     if (enableRotation)
                         VectorUtils.rotateVector(v, xRotation, yRotation, zRotation);
-                    particle.display(location.add(v), visibleRange);
+                    display(particle, location.add(v));
                     location.subtract(v);
                 }
             }

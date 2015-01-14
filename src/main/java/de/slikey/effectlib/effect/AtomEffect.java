@@ -6,6 +6,7 @@ import de.slikey.effectlib.EffectType;
 import de.slikey.effectlib.util.ParticleEffect;
 import de.slikey.effectlib.util.RandomUtils;
 import de.slikey.effectlib.util.VectorUtils;
+import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
 
@@ -15,11 +16,13 @@ public class AtomEffect extends Effect {
      * ParticleType of the nucleus
      */
     public ParticleEffect particleNucleus = ParticleEffect.DRIP_WATER;
+    public Color colorNucleus = null;
 
     /**
      * ParticleType of orbitals
      */
     public ParticleEffect particleOrbital = ParticleEffect.DRIP_LAVA;
+    public Color colorOrbital = null;
 
     /**
      * Radius of the atom
@@ -74,7 +77,7 @@ public class AtomEffect extends Effect {
         for (int i = 0; i < particlesNucleus; i++) {
             Vector v = RandomUtils.getRandomVector().multiply(radius * radiusNucleus);
             location.add(v);
-            particleNucleus.display(location, visibleRange);
+            display(particleNucleus, location, colorNucleus);
             location.subtract(v);
         }
         for (int i = 0; i < particlesOrbital; i++) {
@@ -85,7 +88,7 @@ public class AtomEffect extends Effect {
                 VectorUtils.rotateAroundAxisX(v, xRotation);
                 VectorUtils.rotateAroundAxisY(v, rotation);
                 location.add(v);
-                particleOrbital.display(location, visibleRange);
+                display(particleOrbital, location, colorOrbital);
                 location.subtract(v);
             }
             step++;

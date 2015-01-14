@@ -27,6 +27,6 @@ public class IconEffect extends Effect {
     public void onRun() {
         Location location = getLocation();
         location.add(0, yOffset, 0);
-        particle.display(location, visibleRange);
+        display(particle, location);
     }
 }

@@ -6,6 +6,7 @@ import de.slikey.effectlib.EffectType;
 import de.slikey.effectlib.util.MathUtils;
 import de.slikey.effectlib.util.ParticleEffect;
 import de.slikey.effectlib.util.VectorUtils;
+import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
 
@@ -15,6 +16,7 @@ import java.util.HashSet;
 public class WaveEffect extends Effect {
     public ParticleEffect particle = ParticleEffect.DRIP_WATER;
     public ParticleEffect cloudParticle = ParticleEffect.CLOUD;
+    public Color cloudColor = null;
 
     /**
      * Velocity of the wave
@@ -161,12 +163,12 @@ public class WaveEffect extends Effect {
 
         for (Vector v : cloudCache) {
             location.add(v);
-            cloudParticle.display(location, visibleRange, 0, 0, 0, 0, 1);
+            display(cloudParticle, location, cloudColor, 0, 1);
             location.subtract(v);
         }
         for (Vector v : waterCache) {
             location.add(v);
-            particle.display(location, visibleRange, 0, 0, 0, 0, 1);
+            display(particle, location);
             location.subtract(v);
         }
     }

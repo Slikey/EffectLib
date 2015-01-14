@@ -52,7 +52,7 @@ public class ArcEffect extends Effect {
             float x = ((float) i / particles) * length - length / 2;
             float y = (float) (-pitch * Math.pow(x, 2) + height);
             location.add(v).add(0, y, 0);
-            particle.display(location, visibleRange);
+            display(particle, location);
             location.subtract(0, y, 0).subtract(v);
 
             step++;

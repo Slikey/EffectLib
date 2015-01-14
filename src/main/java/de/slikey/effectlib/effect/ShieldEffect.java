@@ -45,7 +45,7 @@ public class ShieldEffect extends Effect {
             if (!sphere)
                 vector.setY(Math.abs(vector.getY()));
             location.add(vector);
-            particle.display(location, visibleRange);
+            display(particle, location);
             location.subtract(vector);
         }
     }

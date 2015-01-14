@@ -72,7 +72,7 @@ public class TraceEffect extends Effect {
 
         for (Vector position : wayPoints) {
             Location particleLocation = new Location(world, position.getX(), position.getY(), position.getZ());
-            particle.display(particleLocation, visibleRange);
+            display(particle, particleLocation);
         }
     }
 
