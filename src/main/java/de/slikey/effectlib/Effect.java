@@ -317,6 +317,11 @@ public abstract class Effect implements Runnable {
             offsetX = (float)color.getRed() / 255;
             offsetY = (float)color.getGreen() / 255;
             offsetZ = (float)color.getBlue() / 255;
+
+            // The redstone particle reverts to red if R is 0!
+            if (offsetX < Float.MIN_NORMAL) {
+                offsetX = Float.MIN_NORMAL;
+            }
         }
 
         particle.display(offsetX, offsetY, offsetZ, speed, amount, location, visibleRange);
