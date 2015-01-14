@@ -309,8 +309,6 @@ public abstract class Effect implements Runnable {
         float offsetZ = 0;
 
         // Colorizeable!
-        org.bukkit.Bukkit.getLogger().info(" COLOR: " + color);
-
         if (color != null && (particle == ParticleEffect.REDSTONE || particle == ParticleEffect.SPELL_MOB || particle == ParticleEffect.SPELL_MOB_AMBIENT))
         {
             amount = 0;
