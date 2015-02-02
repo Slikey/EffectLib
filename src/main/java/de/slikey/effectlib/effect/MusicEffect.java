@@ -36,7 +36,7 @@ public class MusicEffect extends Effect {
         Location location = getLocation();
         location.add(0, 1.9f, 0);
         location.add(Math.cos(radialsPerStep * step) * radius, 0, Math.sin(radialsPerStep * step) * radius);
-        ParticleEffect.NOTE.display(location, visibleRange, 0, 0, 0, .5f, 1);
+        ParticleEffect.NOTE.display(0, 0, 0, 5f, 1, location, visibleRange);
         step++;
     }
 

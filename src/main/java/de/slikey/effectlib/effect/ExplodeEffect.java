@@ -31,8 +31,8 @@ public class ExplodeEffect extends Effect {
     public void onRun() {
         Location location = getLocation();
         location.getWorld().playSound(location, sound, 4.0F, (1.0F + (RandomUtils.random.nextFloat() - RandomUtils.random.nextFloat()) * 0.2F) * 0.7F);
-        ParticleEffect.EXPLOSION_NORMAL.display(location, visibleRange, 0, 0, 0, speed, amount);
-        ParticleEffect.EXPLOSION_HUGE.display(location, visibleRange, 0, 0, 0, 0, amount);
+        ParticleEffect.EXPLOSION_NORMAL.display(0, 0, 0, speed, amount, location, visibleRange);
+        ParticleEffect.EXPLOSION_HUGE.display(0, 0, 0, 0, amount, location, visibleRange);
     }
 
 }
