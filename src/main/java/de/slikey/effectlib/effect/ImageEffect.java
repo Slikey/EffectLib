@@ -26,6 +26,11 @@ public class ImageEffect extends Effect {
     public ParticleEffect particle = ParticleEffect.FLAME;
 
     /**
+     * For configuration-driven files
+     */
+    public String fileName = null;
+
+    /**
      * Invert the image
      */
     public boolean invert = false;
@@ -110,6 +115,9 @@ public class ImageEffect extends Effect {
 
     @Override
     public void onRun() {
+        if (image == null && fileName != null) {
+            loadFile(new File(fileName));
+        }
         if (image == null) {
             cancel();
             return;

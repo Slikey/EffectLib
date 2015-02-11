@@ -28,6 +28,11 @@ public class ColoredImageEffect extends Effect{
     public ParticleEffect particle = ParticleEffect.FLAME;
 
     /**
+     * For configuration-driven files
+     */
+    public String fileName = null;
+
+    /**
      * Each stepX pixel will be shown. Saves packets for high resolutions.
      */
     public int stepX = 10;
@@ -117,6 +122,9 @@ public class ColoredImageEffect extends Effect{
 
     @Override
     public void onRun() {
+        if (image == null && fileName != null) {
+            loadFile(new File(fileName));
+        }
         if (image == null) {
             cancel();
             return;
