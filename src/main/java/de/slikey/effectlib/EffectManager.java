@@ -249,4 +249,8 @@ public final class EffectManager implements Disposable {
             owningPlugin.getLogger().log(Level.WARNING, "Particle Effect error", ex);
         }
     }
+
+    public Plugin getOwningPlugin() {
+        return owningPlugin;
+    }
 }

@@ -120,8 +120,18 @@ public class ColoredImageEffect extends Effect {
 
     @Override
     public void onRun() {
-        if (image == null && fileName != null) {
-            loadFile(new File(fileName));
+        if (image == null && fileName != null)
+        {
+            File file;
+            if (!fileName.startsWith(File.pathSeparator))
+            {
+                file = new File(effectManager.getOwningPlugin().getDataFolder(), fileName);
+            }
+            else
+            {
+                file = new File(fileName);
+            }
+            loadFile(file);
         }
         if (image == null) {
             cancel();

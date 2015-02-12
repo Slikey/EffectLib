@@ -99,7 +99,7 @@ public abstract class Effect implements Runnable {
     private long lastTargetUpdate = 0;
 
 	private boolean done = false;
-	private final EffectManager effectManager;
+	protected final EffectManager effectManager;
 
 	public Effect(EffectManager effectManager) {
         Validate.notNull(effectManager, "EffectManager cannot be null!");
