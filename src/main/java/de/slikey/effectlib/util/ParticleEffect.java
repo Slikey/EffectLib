@@ -12,6 +12,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -1331,4 +1332,36 @@ public enum ParticleEffect {
 			display(offsetX, offsetY, offsetZ, speed, amount, center, range);
 		}
 	}
+
+    public void display(ParticleData data, Location center, Color color, double range, float offsetX, float offsetY, float offsetZ, float speed, int amount)
+    {
+        // Colorizeable!
+        if (color != null && (this == ParticleEffect.REDSTONE || this == ParticleEffect.SPELL_MOB || this == ParticleEffect.SPELL_MOB_AMBIENT))
+        {
+            amount = 0;
+            // Colored particles can't have a speed of 0.
+            if (speed == 0)
+            {
+                speed = 1;
+            }
+            offsetX = (float)color.getRed() / 255;
+            offsetY = (float)color.getGreen() / 255;
+            offsetZ = (float)color.getBlue() / 255;
+
+            // The redstone particle reverts to red if R is 0!
+            if (offsetX < Float.MIN_NORMAL) {
+                offsetX = Float.MIN_NORMAL;
+            }
+        }
+
+
+        if (this.requiresData)
+        {
+            display(data, offsetX, offsetY, offsetZ, speed, amount, center, range);
+        }
+        else
+        {
+            display(offsetX, offsetY, offsetZ, speed, amount, center, range);
+        }
+    }
 }

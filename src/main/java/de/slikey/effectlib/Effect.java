@@ -304,27 +304,7 @@ public abstract class Effect implements Runnable {
 
     protected void display(ParticleEffect particle, Location location, Color color, float speed, int amount)
     {
-        float offsetX = 0;
-        float offsetY = 0;
-        float offsetZ = 0;
-
-        // Colorizeable!
-        if (color != null && (particle == ParticleEffect.REDSTONE || particle == ParticleEffect.SPELL_MOB || particle == ParticleEffect.SPELL_MOB_AMBIENT))
-        {
-            amount = 0;
-            // See note at the top about this, colored particles can't have a speed of 0.
-            speed = this.speed;
-            offsetX = (float)color.getRed() / 255;
-            offsetY = (float)color.getGreen() / 255;
-            offsetZ = (float)color.getBlue() / 255;
-
-            // The redstone particle reverts to red if R is 0!
-            if (offsetX < Float.MIN_NORMAL) {
-                offsetX = Float.MIN_NORMAL;
-            }
-        }
-
-        particle.display(offsetX, offsetY, offsetZ, speed, amount, location, visibleRange);
+        particle.display(null, location, color, visibleRange, 0, 0, 0, speed, amount);
     }
 }
 
