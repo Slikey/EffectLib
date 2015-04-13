@@ -109,6 +109,7 @@ public abstract class Effect implements Runnable {
 	private void done() {
 		done = true;
 		effectManager.done(this);
+                onDone();
 	}
 
 	public final boolean isDone() {
@@ -116,6 +117,11 @@ public abstract class Effect implements Runnable {
 	}
 
 	public abstract void onRun();
+
+        /**
+         * Called when this effect is done playing (when {@link #done()} is called).
+         */
+        public void onDone() {}
 
 	@Override
 	public final void run() {
