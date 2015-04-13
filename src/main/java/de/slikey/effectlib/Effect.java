@@ -67,15 +67,6 @@ public abstract class Effect implements Runnable {
 	public float visibleRange = 32;
 
     /**
-     * The interval at which we will update the cached Entity Location.
-     * This value is specified in milliseconds.
-     *
-     * A value of 0 indicates no caching should be done- this may be
-     * expensive.
-     */
-    public int locationUpdateInterval = 100;
-
-    /**
      * If true, and a "target" Location or Entity is set, the two Locations
      * will orient to face one another.
      */
@@ -95,8 +86,6 @@ public abstract class Effect implements Runnable {
     private WeakReference<Entity> entity = new WeakReference<Entity>(null);
     private Location target = null;
     private WeakReference<Entity> targetEntity = new WeakReference<Entity>(null);
-    private long lastLocationUpdate = 0;
-    private long lastTargetUpdate = 0;
 
 	private boolean done = false;
 	protected final EffectManager effectManager;
@@ -155,10 +144,10 @@ public abstract class Effect implements Runnable {
 
     protected final boolean validate() {
         // Check for a valid Location
-        Location location = getLocation();
+        updateLocation();
+        updateTarget();
         if (location == null) return false;
         if (autoOrient) {
-            Location target = getTarget();
             if (target != null) {
                 Vector direction = target.toVector().subtract(location.toVector());
                 location.setDirection(direction);
@@ -203,6 +192,18 @@ public abstract class Effect implements Runnable {
         return this.targetEntity.get();
     }
 
+    protected void updateLocation()
+    {
+        Entity entityReference = entity.get();
+        if (entityReference != null) {
+            if (entityReference instanceof LivingEntity) {
+                setLocation(((LivingEntity)entityReference).getEyeLocation());
+            } else {
+                setLocation(entityReference.getLocation());
+            }
+        }
+    }
+
     /**
      * Extending Effect classes should use this method to obtain the
      * current "root" Location of the effect.
@@ -212,19 +213,20 @@ public abstract class Effect implements Runnable {
      */
     public final Location getLocation()
     {
-        Entity entityReference = entity.get();
+        return location;
+    }
+
+    protected void updateTarget()
+    {
+        Entity entityReference = targetEntity.get();
         if (entityReference != null) {
             long now = System.currentTimeMillis();
-            if (locationUpdateInterval == 0 || lastLocationUpdate == 0 || lastLocationUpdate + locationUpdateInterval > now) {
-                if (entityReference instanceof LivingEntity) {
-                    setLocation(((LivingEntity)entityReference).getEyeLocation());
-                } else {
-                    setLocation(entityReference.getLocation());
-                }
+            if (entityReference instanceof LivingEntity) {
+                setTarget(((LivingEntity)entityReference).getEyeLocation());
+            } else {
+                setTarget(entityReference.getLocation());
             }
         }
-
-        return location;
     }
 
     /**
@@ -235,18 +237,6 @@ public abstract class Effect implements Runnable {
      */
     public final Location getTarget()
     {
-        Entity entityReference = targetEntity.get();
-        if (entityReference != null) {
-            long now = System.currentTimeMillis();
-            if (locationUpdateInterval == 0 || lastTargetUpdate == 0 || lastTargetUpdate + locationUpdateInterval > now) {
-                if (entityReference instanceof LivingEntity) {
-                    setTarget(((LivingEntity)entityReference).getEyeLocation());
-                } else {
-                    setTarget(entityReference.getLocation());
-                }
-            }
-        }
-
         return target;
     }
 
@@ -272,7 +262,6 @@ public abstract class Effect implements Runnable {
         this.location = location == null ? null : location.clone();
         if (offset != null && this.location != null) {
             this.location = this.location.add(offset);
-            lastLocationUpdate = System.currentTimeMillis();
         }
     }
 
@@ -283,7 +272,6 @@ public abstract class Effect implements Runnable {
         this.target = location == null ? null : location.clone();
         if (targetOffset != null && this.target != null) {
             this.target = this.target.add(targetOffset);
-            lastTargetUpdate = System.currentTimeMillis();
         }
     }
 
