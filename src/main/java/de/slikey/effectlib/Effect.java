@@ -3,6 +3,7 @@ package de.slikey.effectlib;
 
 import de.slikey.effectlib.util.ParticleEffect;
 import org.apache.commons.lang.Validate;
+import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
@@ -82,6 +83,15 @@ public abstract class Effect implements Runnable {
      */
     public Vector targetOffset = null;
 
+    /**
+     * If set, will run asynchronously.
+     * Some effects don't support this (TurnEffect, JumpEffect)
+     *
+     * Generally this shouldn't be changed, unless you want to
+     * make an async effect synchronous.
+     */
+    public boolean asynchronous = true;
+
     private Location location = null;
     private WeakReference<Entity> entity = new WeakReference<Entity>(null);
     private Location target = null;
@@ -89,6 +99,7 @@ public abstract class Effect implements Runnable {
 
 	private boolean done = false;
 	protected final EffectManager effectManager;
+    protected Runnable asyncRunnableTask;
 
 	public Effect(EffectManager effectManager) {
         Validate.notNull(effectManager, "EffectManager cannot be null!");
@@ -109,7 +120,7 @@ public abstract class Effect implements Runnable {
 	private void done() {
 		done = true;
 		effectManager.done(this);
-                onDone();
+        onDone();
 	}
 
 	public final boolean isDone() {
@@ -131,11 +142,40 @@ public abstract class Effect implements Runnable {
         }
 		if (done)
 			return;
-        try {
-            onRun();
-        } catch (Exception ex) {
-            done();
-            effectManager.onError(ex);
+        if (asynchronous)
+        {
+            if (asyncRunnableTask == null)
+            {
+                final Effect effect = this;
+                asyncRunnableTask = new Runnable() {
+                    @Override
+                    public void run()
+                    {
+                        try {
+                            effect.onRun();
+                        } catch (Exception ex) {
+                            effectManager.onError(ex);
+                            Bukkit.getScheduler().runTask(effectManager.getOwningPlugin(), new Runnable() {
+                               @Override
+                               public void run()
+                               {
+                                   effect.done();
+                               }
+                            });
+                        }
+                    }
+                };
+            }
+            Bukkit.getScheduler().runTaskAsynchronously(effectManager.getOwningPlugin(), asyncRunnableTask);
+        }
+        else
+        {
+            try {
+                onRun();
+            } catch (Exception ex) {
+                done();
+                effectManager.onError(ex);
+            }
         }
 		if (type == EffectType.REPEATING) {
 			if (iterations == -1)

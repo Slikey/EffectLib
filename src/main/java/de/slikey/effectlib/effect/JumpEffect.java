@@ -17,6 +17,7 @@ public class JumpEffect extends Effect {
         type = EffectType.INSTANT;
         period = 20;
         iterations = 1;
+        asynchronous = false;
     }
 
     @Override

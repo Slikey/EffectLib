@@ -19,6 +19,7 @@ public class TurnEffect extends Effect {
         type = EffectType.REPEATING;
         period = 1;
         iterations = (int) (360 * 5 / step);
+        asynchronous = false;
     }
 
     @Override
