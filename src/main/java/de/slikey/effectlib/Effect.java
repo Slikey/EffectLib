@@ -97,6 +97,9 @@ public abstract class Effect implements Runnable {
     private Location target = null;
     private WeakReference<Entity> targetEntity = new WeakReference<Entity>(null);
 
+    private Vector locationEntityOffset = null;
+    private Vector targetEntityOffset = null;
+
 	private boolean done = false;
 	protected final EffectManager effectManager;
     protected Runnable asyncRunnableTask;
@@ -242,11 +245,20 @@ public abstract class Effect implements Runnable {
     {
         Entity entityReference = entity.get();
         if (entityReference != null) {
+            Location currentLocation = null;
             if (entityReference instanceof LivingEntity) {
-                setLocation(((LivingEntity)entityReference).getEyeLocation());
+                currentLocation = ((LivingEntity)entityReference).getEyeLocation();
             } else {
-                setLocation(entityReference.getLocation());
+                currentLocation = entityReference.getLocation();
             }
+            if (locationEntityOffset != null) {
+                currentLocation.add(locationEntityOffset);
+            } else if (location != null) {
+                locationEntityOffset = location.toVector().subtract(currentLocation.toVector());
+                currentLocation = location;
+            }
+
+            setLocation(currentLocation);
         }
     }
 
@@ -266,12 +278,20 @@ public abstract class Effect implements Runnable {
     {
         Entity entityReference = targetEntity.get();
         if (entityReference != null) {
-            long now = System.currentTimeMillis();
+            Location currentLocation = null;
             if (entityReference instanceof LivingEntity) {
-                setTarget(((LivingEntity)entityReference).getEyeLocation());
+                currentLocation = ((LivingEntity)entityReference).getEyeLocation();
             } else {
-                setTarget(entityReference.getLocation());
+                currentLocation = entityReference.getLocation();
             }
+            if (targetEntityOffset != null) {
+                currentLocation.add(targetEntityOffset);
+            } else if (target != null) {
+                targetEntityOffset = target.toVector().subtract(currentLocation.toVector());
+                currentLocation = target;
+            }
+
+            setTarget(currentLocation);
         }
     }
 

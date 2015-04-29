@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 3.4
+
+ - Effects now track an Entity relative to the given starting Location
+
 ## 3.0
 
  - Update particle names to match current ParticleEffect lib- please check code and configs!
