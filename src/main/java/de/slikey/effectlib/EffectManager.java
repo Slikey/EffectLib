@@ -36,7 +36,8 @@ public final class EffectManager implements Disposable {
 	private final Plugin owningPlugin;
 	private final Map<Effect, BukkitTask> effects;
     private static List<EffectManager> effectManagers;
-	private boolean disposed;
+    private static Map<String, Class<? extends Effect>> effectClasses = new HashMap<String, Class<? extends Effect>>();
+    private boolean disposed;
 	private boolean disposeOnTermination;
     private boolean debug = false;
 
@@ -103,7 +104,11 @@ public final class EffectManager implements Disposable {
             if (!effectClass.contains(".")) {
                 effectClass = "de.slikey.effectlib.effect." + effectClass;
             }
-            effectLibClass = (Class<? extends Effect>)Class.forName(effectClass);
+            effectLibClass = effectClasses.get(effectClass);
+            if (effectLibClass == null) {
+                effectLibClass = (Class<? extends Effect>) Class.forName(effectClass);
+                effectClasses.put(effectClass, effectLibClass);
+            }
         } catch (Throwable ex) {
             owningPlugin.getLogger().info("Error loading EffectLib class: " + effectClass + ": " + ex.getMessage());
             return null;
