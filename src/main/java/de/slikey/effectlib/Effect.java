@@ -1,8 +1,6 @@
 package de.slikey.effectlib;
 
-
 import de.slikey.effectlib.util.ParticleEffect;
-import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Location;
@@ -105,7 +103,9 @@ public abstract class Effect implements Runnable {
     protected Runnable asyncRunnableTask;
 
 	public Effect(EffectManager effectManager) {
-        Validate.notNull(effectManager, "EffectManager cannot be null!");
+        if (effectManager == null) {
+            throw new IllegalArgumentException("EffectManager cannot be null!");
+        }
 		this.effectManager = effectManager;
 	}
 
@@ -324,7 +324,9 @@ public abstract class Effect implements Runnable {
      * Set the Location this Effect is centered on.
      */
     public void setLocation(Location location) {
-        Validate.notNull(location, "Location cannot be null!");
+        if (location == null) {
+            throw new IllegalArgumentException("Location cannot be null!");
+        }
         this.location = location == null ? null : location.clone();
         if (offset != null && this.location != null) {
             this.location = this.location.add(offset);

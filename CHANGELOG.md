@@ -4,6 +4,7 @@
 
  - Effects now track an Entity relative to the given starting Location
  - Added some simpler versions of EffectManager.start()
+ - Removed references to Apache Commons classes
 
 ## 3.0
 

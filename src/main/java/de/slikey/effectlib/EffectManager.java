@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.Map;
 
 import de.slikey.effectlib.util.ParticleEffect;
-import org.apache.commons.lang.StringUtils;
 import java.util.logging.Level;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
@@ -202,7 +201,7 @@ public final class EffectManager implements Disposable {
                 double y = 0;
                 double z = 0;
                 try {
-                    String[] pieces = StringUtils.split(section.getString(key), ',');
+                    String[] pieces = section.getString(key).split(",");
                     x = pieces.length > 0 ? Double.parseDouble(pieces[0]) : 0;
                     y = pieces.length > 1 ? Double.parseDouble(pieces[1]) : 0;
                     z = pieces.length > 2 ? Double.parseDouble(pieces[2]) : 0;
