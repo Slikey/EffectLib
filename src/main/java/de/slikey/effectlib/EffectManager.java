@@ -97,6 +97,18 @@ public final class EffectManager implements Disposable {
 		}
 	}
 
+    public Effect start(String effectClass, ConfigurationSection parameters, Location origin, Entity originEntity) {
+        return start(effectClass, parameters, origin, null, originEntity, null, null);
+    }
+
+    public Effect start(String effectClass, ConfigurationSection parameters, Entity originEntity) {
+        return start(effectClass, parameters, originEntity == null ? null : originEntity.getLocation(), null, originEntity, null, null);
+    }
+
+    public Effect start(String effectClass, ConfigurationSection parameters, Location origin) {
+        return start(effectClass, parameters, origin, null, null, null, null);
+    }
+
     public Effect start(String effectClass, ConfigurationSection parameters, Location origin, Location target, Entity originEntity, Entity targetEntity, Map<String, String> textMap) {
         Class<? extends Effect> effectLibClass;
         try {
