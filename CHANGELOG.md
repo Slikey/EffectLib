@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 3.5
+
+ - Add KCauldron support (Thank you, tpnils1!)
+
 ## 3.4
 
  - Effects now track an Entity relative to the given starting Location

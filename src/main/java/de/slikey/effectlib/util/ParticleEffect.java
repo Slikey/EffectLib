@@ -1012,6 +1012,7 @@ public enum ParticleEffect {
 	 */
 	public static final class ParticlePacket {
 		private static int version;
+		private static boolean isKcauldron;
 		private static Class<?> enumParticle;
 		private static Constructor<?> packetConstructor;
 		private static Method getHandle;
@@ -1098,6 +1099,8 @@ public enum ParticleEffect {
 				return;
 			}
 			try {
+				//Try and enable effect lib for bukkit
+				isKcauldron = false;
 				version = Integer.parseInt(Character.toString(PackageType.getServerVersion().charAt(3)));
 				if (version > 7) {
 					enumParticle = PackageType.MINECRAFT_SERVER.getClass("EnumParticle");
@@ -1108,7 +1111,19 @@ public enum ParticleEffect {
 				playerConnection = ReflectionUtils.getField("EntityPlayer", PackageType.MINECRAFT_SERVER, false, "playerConnection");
 				sendPacket = ReflectionUtils.getMethod(playerConnection.getType(), "sendPacket", PackageType.MINECRAFT_SERVER.getClass("Packet"));
 			} catch (Exception exception) {
-				throw new VersionIncompatibleException("Your current bukkit version seems to be incompatible with this library", exception);
+				try{
+					//If an error occurs try and use KCauldron classes
+					isKcauldron = true;
+					version = Integer.parseInt(Character.toString(PackageType.getServerVersion().charAt(3)));
+					Class<?> packetClass = Class.forName("net.minecraft.network.play.server.S2APacketParticles");
+					packetConstructor = ReflectionUtils.getConstructor(packetClass);
+					getHandle = ReflectionUtils.getMethod("CraftPlayer", PackageType.CRAFTBUKKIT_ENTITY, "getHandle");
+					playerConnection = Class.forName("net.minecraft.entity.player.EntityPlayerMP").getDeclaredField("field_71135_a");
+					sendPacket = playerConnection.getType().getDeclaredMethod("func_147359_a", Class.forName("net.minecraft.network.Packet"));
+				}catch (Exception e)
+				{
+					throw new VersionIncompatibleException("Your current bukkit version seems to be incompatible with this library", exception);
+				}
 			}
 			initialized = true;
 		}
@@ -1141,6 +1156,39 @@ public enum ParticleEffect {
 		 * @throws PacketSendingException if sending fails due to an unknown error
 		 */
 		public void sendTo(Location center, Player player) throws PacketInstantiationException, PacketSendingException {
+			if (isKcauldron)
+				sendToWithKCauldron(center, player);
+			else
+				sendToWithBukkit(center, player);
+		}
+
+		private void sendToWithKCauldron(Location center, Player player)
+		{
+			if (packet == null) {
+				try {
+					packet = packetConstructor.newInstance();
+					ReflectionUtils.setValue(packet, true, "field_149236_a", effect.getName());
+					ReflectionUtils.setValue(packet, true, "field_149234_b", (float) center.getX());
+					ReflectionUtils.setValue(packet, true, "field_149235_c", (float) center.getY());
+					ReflectionUtils.setValue(packet, true, "field_149232_d", (float) center.getZ());
+					ReflectionUtils.setValue(packet, true, "field_149233_e", offsetX);
+					ReflectionUtils.setValue(packet, true, "field_149230_f", offsetY);
+					ReflectionUtils.setValue(packet, true, "field_149231_g", offsetZ);
+					ReflectionUtils.setValue(packet, true, "field_149237_h", speed);
+					ReflectionUtils.setValue(packet, true, "field_149238_i", amount);
+				} catch (Exception exception) {
+					throw new PacketInstantiationException("Packet instantiation failed", exception);
+				}
+			}
+			try {
+				sendPacket.invoke(playerConnection.get(getHandle.invoke(player)), packet);
+			} catch (Exception exception) {
+				throw new PacketSendingException("Failed to send the packet to player '" + player.getName() + "'", exception);
+			}
+		}
+
+		private void sendToWithBukkit(Location center, Player player)
+		{
 			if (packet == null) {
 				try {
 					packet = packetConstructor.newInstance();
