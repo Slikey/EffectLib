@@ -30,6 +30,12 @@ public class LineEffect extends Effect {
     public int particles = 100;
 
     /**
+     * Length of arc
+     * A non-zero value here will use a length instead of the target endpoint
+     */
+    public int length = 0;
+
+    /**
      * Internal boolean
      */
     protected boolean zag = false;
@@ -41,15 +47,21 @@ public class LineEffect extends Effect {
 
     public LineEffect(EffectManager effectManager) {
         super(effectManager);
-        type = EffectType.INSTANT;
+        type = EffectType.REPEATING;
         period = 5;
-        iterations = 200;
+        iterations = 1;
     }
 
     @Override
     public void onRun() {
         Location location = getLocation();
-        Location target = getTarget();
+        Location target = null;
+        if (length > 0) {
+            org.bukkit.Bukkit.getLogger().info("Line Direction: " + location.getDirection().normalize());
+            target = location.clone().add(location.getDirection().normalize().multiply(length));
+        } else {
+            getTarget();
+        }
         double amount = particles / zigZags;
         if (target == null) {
             cancel();
