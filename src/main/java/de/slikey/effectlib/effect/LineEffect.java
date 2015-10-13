@@ -57,7 +57,6 @@ public class LineEffect extends Effect {
         Location location = getLocation();
         Location target = null;
         if (length > 0) {
-            org.bukkit.Bukkit.getLogger().info("Line Direction: " + location.getDirection().normalize());
             target = location.clone().add(location.getDirection().normalize().multiply(length));
         } else {
             getTarget();
