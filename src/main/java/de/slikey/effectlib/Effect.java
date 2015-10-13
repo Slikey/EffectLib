@@ -1,5 +1,6 @@
 package de.slikey.effectlib;
 
+import de.slikey.effectlib.util.DynamicLocation;
 import de.slikey.effectlib.util.ParticleEffect;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
@@ -72,7 +73,7 @@ public abstract class Effect implements Runnable {
     public boolean autoOrient = true;
 
     /**
-     * If set, will offset all locations
+     * If set, will offset the origin location
      */
     public Vector offset = null;
 
@@ -90,13 +91,8 @@ public abstract class Effect implements Runnable {
      */
     public boolean asynchronous = true;
 
-    private Location location = null;
-    private WeakReference<Entity> entity = new WeakReference<Entity>(null);
-    private Location target = null;
-    private WeakReference<Entity> targetEntity = new WeakReference<Entity>(null);
-
-    private Vector locationEntityOffset = null;
-    private Vector targetEntityOffset = null;
+    private DynamicLocation origin = null;
+    private DynamicLocation target = null;
 
 	private boolean done = false;
 	protected final EffectManager effectManager;
@@ -195,12 +191,14 @@ public abstract class Effect implements Runnable {
         // Check for a valid Location
         updateLocation();
         updateTarget();
+        Location location = getLocation();
         if (location == null) return false;
         if (autoOrient) {
-            if (target != null) {
-                Vector direction = target.toVector().subtract(location.toVector());
+            Location targetLocation = target == null ? null : target.getLocation();
+            if (targetLocation != null) {
+                Vector direction = targetLocation.toVector().subtract(location.toVector());
                 location.setDirection(direction);
-                target.setDirection(direction.multiply(-1));
+                targetLocation.setDirection(direction.multiply(-1));
             }
         }
 
@@ -225,7 +223,7 @@ public abstract class Effect implements Runnable {
      */
     public Entity getEntity()
     {
-        return this.entity.get();
+        return origin == null ? null : origin.getEntity();
     }
 
     /**
@@ -238,27 +236,13 @@ public abstract class Effect implements Runnable {
      */
     public Entity getTargetEntity()
     {
-        return this.targetEntity.get();
+        return target == null ? null : target.getEntity();
     }
 
     protected void updateLocation()
     {
-        Entity entityReference = entity.get();
-        if (entityReference != null) {
-            Location currentLocation = null;
-            if (entityReference instanceof LivingEntity) {
-                currentLocation = ((LivingEntity)entityReference).getEyeLocation();
-            } else {
-                currentLocation = entityReference.getLocation();
-            }
-            if (locationEntityOffset != null) {
-                currentLocation.add(locationEntityOffset);
-            } else if (location != null) {
-                locationEntityOffset = location.toVector().subtract(currentLocation.toVector());
-                currentLocation = location;
-            }
-
-            setLocation(currentLocation);
+        if (origin != null) {
+            origin.update();
         }
     }
 
@@ -271,27 +255,13 @@ public abstract class Effect implements Runnable {
      */
     public final Location getLocation()
     {
-        return location;
+        return origin == null ? null : origin.getLocation();
     }
 
     protected void updateTarget()
     {
-        Entity entityReference = targetEntity.get();
-        if (entityReference != null) {
-            Location currentLocation = null;
-            if (entityReference instanceof LivingEntity) {
-                currentLocation = ((LivingEntity)entityReference).getEyeLocation();
-            } else {
-                currentLocation = entityReference.getLocation();
-            }
-            if (targetEntityOffset != null) {
-                currentLocation.add(targetEntityOffset);
-            } else if (target != null) {
-                targetEntityOffset = target.toVector().subtract(currentLocation.toVector());
-                currentLocation = target;
-            }
-
-            setTarget(currentLocation);
+        if (target != null) {
+            target.update();
         }
     }
 
@@ -303,43 +273,29 @@ public abstract class Effect implements Runnable {
      */
     public final Location getTarget()
     {
-        return target;
-    }
-
-    /**
-     * Set the Entity this Effect is centered on.
-     */
-    public void setEntity(Entity entity) {
-        this.entity = new WeakReference<Entity>(entity);
-    }
-
-    /**
-     * Set the Entity this Effect is targeting.
-     */
-    public void setTargetEntity(Entity entity) {
-        this.targetEntity = new WeakReference<Entity>(entity);
+        return target == null ? null : target.getLocation();
     }
 
     /**
      * Set the Location this Effect is centered on.
      */
-    public void setLocation(Location location) {
+    public void setDynamicOrigin(DynamicLocation location) {
         if (location == null) {
-            throw new IllegalArgumentException("Location cannot be null!");
+            throw new IllegalArgumentException("Origin Location cannot be null!");
         }
-        this.location = location == null ? null : location.clone();
-        if (offset != null && this.location != null) {
-            this.location = this.location.add(offset);
+        this.origin = location;
+        if (origin != null && offset != null) {
+            origin.setOffset(offset);
         }
     }
 
     /**
      * Set the Location this Effect is targeting.
      */
-    public void setTarget(Location location) {
-        this.target = location == null ? null : location.clone();
-        if (targetOffset != null && this.target != null) {
-            this.target = this.target.add(targetOffset);
+    public void setDynamicTarget(DynamicLocation location) {
+        this.target = location;
+        if (target != null && targetOffset != null) {
+            target.addOffset(targetOffset);
         }
     }
 

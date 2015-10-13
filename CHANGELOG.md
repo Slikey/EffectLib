@@ -7,6 +7,8 @@
    You can put variable names that start with "$" in the configuration, e.g. "$radius"
    Then when starting an effect, you can set $radius to a value in the parameterMap
    to automatically replace the variables in the config.
+ - Add a DynamicLocation class to encapsulate an Entity or Location.
+   This can be used to create a virtual entity, by controlling the location while the effect is runnning.
 
 ## 3.4
 

@@ -9,6 +9,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import de.slikey.effectlib.util.DynamicLocation;
 import de.slikey.effectlib.util.ParticleEffect;
 import java.util.logging.Level;
 import org.bukkit.Bukkit;
@@ -122,6 +123,20 @@ public final class EffectManager implements Disposable {
      * @return
      */
     public Effect start(String effectClass, ConfigurationSection parameters, Location origin, Location target, Entity originEntity, Entity targetEntity, Map<String, String> parameterMap) {
+        return start(effectClass, parameters, new DynamicLocation(origin, originEntity), new DynamicLocation(target, targetEntity), parameterMap);
+    }
+
+    /**
+     * Start an Effect from a Configuration map of parameters.
+     *
+     * @param effectClass The name of the Effect class to instantiate. If unqualified, defaults to the de.slikey.effectlib.effect namespace.
+     * @param parameters A Configuration-driven map of key/value parameters. Each of these will be applied directly to the corresponding field in the Effect instance.
+     * @param origin The origin Location
+     * @param target The target Location, only used in some Effects (like LineEffect)
+     * @param parameterMap A map of parameter values to replace. These must start with the "$" character, values in the parameters map that contain a $key will be replaced with the value in this parameterMap.
+     * @return
+     */
+    public Effect start(String effectClass, ConfigurationSection parameters, DynamicLocation origin, DynamicLocation target, Map<String, String> parameterMap) {
         Class<? extends Effect> effectLibClass;
         try {
             // A shaded manager may provide a fully-qualified path.
@@ -158,10 +173,8 @@ public final class EffectManager implements Disposable {
             }
         }
 
-        effect.setLocation(origin);
-        effect.setTarget(target);
-        effect.setTargetEntity(targetEntity);
-        effect.setEntity(originEntity);
+        effect.setDynamicOrigin(origin);
+        effect.setDynamicTarget(target);
 
         effect.start();
         return effect;
