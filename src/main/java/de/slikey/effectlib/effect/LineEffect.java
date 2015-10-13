@@ -48,7 +48,7 @@ public class LineEffect extends Effect {
     public LineEffect(EffectManager effectManager) {
         super(effectManager);
         type = EffectType.REPEATING;
-        period = 5;
+        period = 1;
         iterations = 1;
     }
 
