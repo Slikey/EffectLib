@@ -81,6 +81,10 @@ public class DynamicLocation {
         return entity.getLocation();
     }
 
+    public void setDirection(Vector direction) {
+        location.setDirection(direction);
+    }
+
     public void updateFrom(Location newLocation) {
         location.setX(newLocation.getX());
         location.setY(newLocation.getY());
