@@ -22,6 +22,7 @@ import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.scheduler.BukkitTask;
 
 import de.slikey.effectlib.util.Disposable;
+import org.bukkit.util.NumberConversions;
 import org.bukkit.util.Vector;
 
 /**
@@ -108,7 +109,19 @@ public final class EffectManager implements Disposable {
         return start(effectClass, parameters, origin, null, null, null, null);
     }
 
-    public Effect start(String effectClass, ConfigurationSection parameters, Location origin, Location target, Entity originEntity, Entity targetEntity, Map<String, String> textMap) {
+    /**
+     * Start an Effect from a Configuration map of parameters.
+     *
+     * @param effectClass The name of the Effect class to instantiate. If unqualified, defaults to the de.slikey.effectlib.effect namespace.
+     * @param parameters A Configuration-driven map of key/value parameters. Each of these will be applied directly to the corresponding field in the Effect instance.
+     * @param origin The origin Location
+     * @param target The target Location, only used in some Effects (like LineEffect)
+     * @param originEntity The origin Entity, the effect will attach to the Entity's Location
+     * @param targetEntity The target Entity, only used in some Effects
+     * @param parameterMap A map of parameter values to replace. These must start with the "$" character, values in the parameters map that contain a $key will be replaced with the value in this parameterMap.
+     * @return
+     */
+    public Effect start(String effectClass, ConfigurationSection parameters, Location origin, Location target, Entity originEntity, Entity targetEntity, Map<String, String> parameterMap) {
         Class<? extends Effect> effectLibClass;
         try {
             // A shaded manager may provide a fully-qualified path.
@@ -140,7 +153,7 @@ public final class EffectManager implements Disposable {
         for (String key : keys) {
             if (key.equals("class")) continue;
 
-            if (!setField(effect, key, parameters, textMap)) {
+            if (!setField(effect, key, parameters, parameterMap)) {
                 owningPlugin.getLogger().warning("Unable to assign EffectLib property " + key + " of class " + effectLibClass.getName());
             }
         }
@@ -154,43 +167,39 @@ public final class EffectManager implements Disposable {
         return effect;
     }
 
-    protected boolean setField(Object effect, String key, ConfigurationSection section, Map<String, String> textMap) {
+    protected boolean setField(Object effect, String key, ConfigurationSection section, Map<String, String> parameterMap) {
         try {
+            String value = section.getString(key);
+            if (parameterMap != null && !parameterMap.isEmpty() && value.startsWith("$")) {
+                String parameterValue = parameterMap.get(value);
+                value = parameterValue == null ? value : parameterValue;
+            }
             Field field = effect.getClass().getField(key);
             if (field.getType().equals(Integer.TYPE)) {
-                field.set(effect, section.getInt(key));
+                field.set(effect, NumberConversions.toInt(value));
             } else if (field.getType().equals(Float.TYPE)) {
-                field.set(effect, (float)section.getDouble(key));
+                field.set(effect, NumberConversions.toFloat(value));
             } else if (field.getType().equals(Double.TYPE)) {
-                field.set(effect, section.getDouble(key));
+                field.set(effect, NumberConversions.toDouble(value));
             } else if (field.getType().equals(Boolean.TYPE)) {
-                field.set(effect, section.getBoolean(key));
+                field.set(effect, value.equalsIgnoreCase("true"));
             } else if (field.getType().equals(Long.TYPE)) {
-                field.set(effect, section.getLong(key));
+                field.set(effect, NumberConversions.toLong(value));
             } else if (field.getType().isAssignableFrom(String.class)) {
-                String value = section.getString(key);
-                if (textMap != null) {
-                    for (Map.Entry<String, String> replaceEntry : textMap.entrySet()) {
-                        value = value.replace(replaceEntry.getKey(), replaceEntry.getValue());
-                    }
-                }
                 field.set(effect, value);
             } else if (field.getType().isAssignableFrom(ParticleEffect.class)) {
-                String typeName = section.getString(key);
-                ParticleEffect particleType = ParticleEffect.valueOf(typeName.toUpperCase());
+                ParticleEffect particleType = ParticleEffect.valueOf(value.toUpperCase());
                 field.set(effect, particleType);
             } else if (field.getType().equals(Sound.class)) {
-                String soundName = section.getString(key);
                 try {
-                    Sound sound = Sound.valueOf(soundName.toUpperCase());
+                    Sound sound = Sound.valueOf(value.toUpperCase());
                     field.set(effect, sound);
                 } catch (Exception ex) {
                     onError(ex);
                 }
             } else if (field.getType().equals(Color.class)) {
-                String hexColor = section.getString(key);
                 try {
-                    Integer rgb = Integer.parseInt(hexColor, 16);
+                    Integer rgb = Integer.parseInt(value, 16);
                     Color color = Color.fromRGB(rgb);
                     field.set(effect, color);
                 } catch (Exception ex) {
@@ -201,7 +210,7 @@ public final class EffectManager implements Disposable {
                 double y = 0;
                 double z = 0;
                 try {
-                    String[] pieces = section.getString(key).split(",");
+                    String[] pieces = value.split(",");
                     x = pieces.length > 0 ? Double.parseDouble(pieces[0]) : 0;
                     y = pieces.length > 1 ? Double.parseDouble(pieces[1]) : 0;
                     z = pieces.length > 2 ? Double.parseDouble(pieces[2]) : 0;

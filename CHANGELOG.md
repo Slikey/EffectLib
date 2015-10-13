@@ -3,6 +3,10 @@
 ## 3.5
 
  - Add KCauldron support (Thank you, tpnils1!)
+ - Add generalized parameter support for Configuration-driven effects
+   You can put variable names that start with "$" in the configuration, e.g. "$radius"
+   Then when starting an effect, you can set $radius to a value in the parameterMap
+   to automatically replace the variables in the config.
 
 ## 3.4
 
