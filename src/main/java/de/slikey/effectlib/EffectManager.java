@@ -41,6 +41,7 @@ public final class EffectManager implements Disposable {
     private boolean disposed;
 	private boolean disposeOnTermination;
     private boolean debug = false;
+    private int visibleRange = 32;
 
     public static void initialize() {
         effectManagers = new ArrayList<EffectManager>();
@@ -286,6 +287,14 @@ public final class EffectManager implements Disposable {
         if (debug) {
             owningPlugin.getLogger().log(Level.WARNING, "Particle Effect error", ex);
         }
+    }
+
+    public int getParticleRange() {
+        return visibleRange;
+    }
+
+    public void setParticleRange(int range) {
+        visibleRange = range;
     }
 
     public Plugin getOwningPlugin() {

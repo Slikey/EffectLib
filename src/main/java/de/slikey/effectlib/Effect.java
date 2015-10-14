@@ -6,7 +6,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.util.Vector;
 
 import java.lang.ref.WeakReference;
@@ -61,8 +60,7 @@ public abstract class Effect implements Runnable {
 	public Runnable callback = null;
 
 	/**
-	 * Display particles to players within this radius. Squared radius for
-	 * performance reasons.
+	 * Display particles to players within this radius.
 	 */
 	public float visibleRange = 32;
 
@@ -103,6 +101,7 @@ public abstract class Effect implements Runnable {
             throw new IllegalArgumentException("EffectManager cannot be null!");
         }
 		this.effectManager = effectManager;
+        this.visibleRange = effectManager.getParticleRange();
 	}
 
     public final void cancel() {

@@ -378,6 +378,8 @@ public enum ParticleEffect {
 	 */
 	MOB_APPEARANCE("mobappearance", 41, 8);
 
+	private static final int LONG_DISTANCE = 16;
+	private static final int LONG_DISTANCE_SQUARED = LONG_DISTANCE * LONG_DISTANCE;
 	private static final Map<String, ParticleEffect> NAME_MAP = new HashMap<String, ParticleEffect>();
 	private static final Map<Integer, ParticleEffect> ID_MAP = new HashMap<Integer, ParticleEffect>();
 	private final String name;
@@ -535,17 +537,16 @@ public enum ParticleEffect {
 	}
 
 	/**
-	 * Determine if the distance between @param location and one of the players exceeds 256
+	 * Determine if the distance between @param location and one of the players exceeds LONG_DISTANCE
 	 *
 	 * @param location Location to check
-	 * @return Whether the distance exceeds 256 or not
+	 * @return Whether the distance exceeds 16 or not
 	 */
 	private static boolean isLongDistance(Location location, List<Player> players) {
 		for (Player player : players) {
-			if (player.getLocation().distanceSquared(location) < 65536) {
-				continue;
+			if (player.getLocation().distanceSquared(location) > LONG_DISTANCE_SQUARED) {
+				return true;
 			}
-			return true;
 		}
 		return false;
 	}
@@ -587,7 +588,7 @@ public enum ParticleEffect {
 		if (requiresWater && !isWater(center)) {
 			throw new IllegalArgumentException("There is no water at the center location");
 		}
-		new ParticlePacket(this, offsetX, offsetY, offsetZ, speed, amount, range > 256, null).sendTo(center, range);
+		new ParticlePacket(this, offsetX, offsetY, offsetZ, speed, amount, range > 16, null).sendTo(center, range);
 	}
 
 	/**
@@ -661,7 +662,7 @@ public enum ParticleEffect {
 		if (requiresWater && !isWater(center)) {
 			throw new IllegalArgumentException("There is no water at the center location");
 		}
-		new ParticlePacket(this, direction, speed, range > 256, null).sendTo(center, range);
+		new ParticlePacket(this, direction, speed, range > LONG_DISTANCE, null).sendTo(center, range);
 	}
 
 	/**
@@ -732,7 +733,7 @@ public enum ParticleEffect {
 		if (!isDataCorrect(this, data)) {
 			throw new ParticleDataException("The particle data type is incorrect");
 		}
-		new ParticlePacket(this, offsetX, offsetY, offsetZ, speed, amount, range > 256, data).sendTo(center, range);
+		new ParticlePacket(this, offsetX, offsetY, offsetZ, speed, amount, range > LONG_DISTANCE, data).sendTo(center, range);
 	}
 
 	/**
@@ -806,7 +807,7 @@ public enum ParticleEffect {
 		if (!isDataCorrect(this, data)) {
 			throw new ParticleDataException("The particle data type is incorrect");
 		}
-		new ParticlePacket(this, direction, speed, range > 256, data).sendTo(center, range);
+		new ParticlePacket(this, direction, speed, range > LONG_DISTANCE, data).sendTo(center, range);
 	}
 
 	/**

@@ -3,6 +3,9 @@
 ## 3.5
 
  - Add KCauldron support (Thank you, tpnils1!)
+ - Add setParticleRange method to set default particle visibility range
+ - Particles now use the "long range" flag when range is greater that 16 blocks
+   - The old range of 256 seemed way too high, particles appear to vanish after 16 blocks if not long-range
  - Add generalized parameter support for Configuration-driven effects
    You can put variable names that start with "$" in the configuration, e.g. "$radius"
    Then when starting an effect, you can set $radius to a value in the parameterMap
