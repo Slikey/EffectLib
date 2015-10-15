@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 3.6
+ 
+ - Fix LineEffect, broken in 3.5
+ - Add "duration" parameter, a value in ms that can convert to period/iterations for you.
+
 ## 3.5
 
  - Add KCauldron support (Thank you, tpnils1!)

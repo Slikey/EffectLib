@@ -45,12 +45,21 @@ public abstract class Effect implements Runnable {
 	public int period = 1;
 
 	/**
-	 * Amount of repititions to do.
+	 * Amount of repetitions to do.
 	 * Set this to -1 for an infinite effect
 	 * 
 	 * @see {@link de.slikey.effectlib.EffectType}
 	 */
 	public int iterations = 0;
+
+    /**
+     * Total duration of this effect in milliseconds.
+     *
+     * If set, this will adjust iterations to match
+     * the defined delay such that the effect lasts
+     * a specific duration.
+     */
+    public Integer duration = null;
 
 	/**
 	 * Callback to run, after effect is done.
@@ -190,6 +199,7 @@ public abstract class Effect implements Runnable {
         // Check for a valid Location
         updateLocation();
         updateTarget();
+        updateDuration();
         Location location = getLocation();
         if (location == null) return false;
         if (autoOrient) {
@@ -212,6 +222,15 @@ public abstract class Effect implements Runnable {
 		type = EffectType.REPEATING;
 		iterations = -1;
 	}
+
+    protected void updateDuration() {
+        if (duration != null) {
+            if (period < 1) {
+                period = 1;
+            }
+            iterations = duration / period / 50;
+        }
+    }
 
     /**
      * Extending Effect classes can use this to determine the Entity this

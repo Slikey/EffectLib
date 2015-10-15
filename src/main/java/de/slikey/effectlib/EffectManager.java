@@ -189,15 +189,15 @@ public final class EffectManager implements Disposable {
                 value = parameterValue == null ? value : parameterValue;
             }
             Field field = effect.getClass().getField(key);
-            if (field.getType().equals(Integer.TYPE)) {
+            if (field.getType().equals(Integer.TYPE) || field.getType().equals(Integer.class)) {
                 field.set(effect, NumberConversions.toInt(value));
-            } else if (field.getType().equals(Float.TYPE)) {
+            } else if (field.getType().equals(Float.TYPE) || field.getType().equals(Float.class)) {
                 field.set(effect, NumberConversions.toFloat(value));
-            } else if (field.getType().equals(Double.TYPE)) {
+            } else if (field.getType().equals(Double.TYPE) || field.getType().equals(Double.class)) {
                 field.set(effect, NumberConversions.toDouble(value));
-            } else if (field.getType().equals(Boolean.TYPE)) {
+            } else if (field.getType().equals(Boolean.TYPE) || field.getType().equals(Boolean.class)) {
                 field.set(effect, value.equalsIgnoreCase("true"));
-            } else if (field.getType().equals(Long.TYPE)) {
+            } else if (field.getType().equals(Long.TYPE) || field.getType().equals(Long.class)) {
                 field.set(effect, NumberConversions.toLong(value));
             } else if (field.getType().isAssignableFrom(String.class)) {
                 field.set(effect, value);
