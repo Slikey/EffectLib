@@ -59,7 +59,7 @@ public class LineEffect extends Effect {
         if (length > 0) {
             target = location.clone().add(location.getDirection().normalize().multiply(length));
         } else {
-            getTarget();
+            target = getTarget();
         }
         double amount = particles / zigZags;
         if (target == null) {
