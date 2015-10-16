@@ -8,16 +8,14 @@ import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.util.Vector;
 
-import java.lang.ref.WeakReference;
-
 public abstract class Effect implements Runnable {
 
-	/**
-	 * Handles the type, the effect is played.
-	 * 
-	 * @see {@link de.slikey.effectlib.EffectType}
-	 */
-	public EffectType type = EffectType.INSTANT;
+    /**
+     * Handles the type, the effect is played.
+     *
+     * @see {@link de.slikey.effectlib.EffectType}
+     */
+    public EffectType type = EffectType.INSTANT;
 
     /**
      * Can be used to colorize certain particles. As of 1.8, those
@@ -25,32 +23,33 @@ public abstract class Effect implements Runnable {
      */
     public Color color = null;
 
-    /** This is only used when colorizing certain particles,
+    /**
+     * This is only used when colorizing certain particles,
      * since the speed can't be 0 for the particle to look colored.
      */
     public float speed = 1;
 
-	/**
-	 * Delay to wait for delayed effects.
-	 * 
-	 * @see {@link de.slikey.effectlib.EffectType}
-	 */
-	public int delay = 0;
+    /**
+     * Delay to wait for delayed effects.
+     *
+     * @see {@link de.slikey.effectlib.EffectType}
+     */
+    public int delay = 0;
 
-	/**
-	 * Interval to wait for repeating effects.
-	 * 
-	 * @see {@link de.slikey.effectlib.EffectType}
-	 */
-	public int period = 1;
+    /**
+     * Interval to wait for repeating effects.
+     *
+     * @see {@link de.slikey.effectlib.EffectType}
+     */
+    public int period = 1;
 
-	/**
-	 * Amount of repetitions to do.
-	 * Set this to -1 for an infinite effect
-	 * 
-	 * @see {@link de.slikey.effectlib.EffectType}
-	 */
-	public int iterations = 0;
+    /**
+     * Amount of repetitions to do.
+     * Set this to -1 for an infinite effect
+     *
+     * @see {@link de.slikey.effectlib.EffectType}
+     */
+    public int iterations = 0;
 
     /**
      * Total duration of this effect in milliseconds.
@@ -61,17 +60,17 @@ public abstract class Effect implements Runnable {
      */
     public Integer duration = null;
 
-	/**
-	 * Callback to run, after effect is done.
-	 * 
-	 * @see {@link java.lang.Runnable}
-	 */
-	public Runnable callback = null;
+    /**
+     * Callback to run, after effect is done.
+     *
+     * @see {@link java.lang.Runnable}
+     */
+    public Runnable callback = null;
 
-	/**
-	 * Display particles to players within this radius.
-	 */
-	public float visibleRange = 32;
+    /**
+     * Display particles to players within this radius.
+     */
+    public float visibleRange = 32;
 
     /**
      * If true, and a "target" Location or Entity is set, the two Locations
@@ -97,86 +96,77 @@ public abstract class Effect implements Runnable {
      * make an async effect synchronous.
      */
     public boolean asynchronous = true;
+    protected final EffectManager effectManager;
+    protected Runnable asyncRunnableTask;
 
     private DynamicLocation origin = null;
     private DynamicLocation target = null;
 
-	private boolean done = false;
-	protected final EffectManager effectManager;
-    protected Runnable asyncRunnableTask;
+    private boolean done = false;
 
-	public Effect(EffectManager effectManager) {
+    public Effect(EffectManager effectManager) {
         if (effectManager == null) {
             throw new IllegalArgumentException("EffectManager cannot be null!");
         }
-		this.effectManager = effectManager;
+        this.effectManager = effectManager;
         this.visibleRange = effectManager.getParticleRange();
-	}
+    }
 
     public final void cancel() {
         cancel(true);
     }
 
-	public final void cancel(boolean callback) {
-		if (callback)
-			done();
-		else
-			done = true;
-	}
+    public final void cancel(boolean callback) {
+        if (callback) {
+            done();
+        } else {
+            done = true;
+        }
+    }
 
-	private void done() {
-		done = true;
-		effectManager.done(this);
-        onDone();
-	}
+    public final boolean isDone() {
+        return done;
+    }
 
-	public final boolean isDone() {
-		return done;
-	}
+    public abstract void onRun();
 
-	public abstract void onRun();
+    /**
+     * Called when this effect is done playing (when {@link #done()} is called).
+     */
+    public void onDone() {
+    }
 
-        /**
-         * Called when this effect is done playing (when {@link #done()} is called).
-         */
-        public void onDone() {}
-
-	@Override
-	public final void run() {
+    @Override
+    public final void run() {
         if (!validate()) {
             cancel();
             return;
         }
-		if (done)
-			return;
-        if (asynchronous)
-        {
-            if (asyncRunnableTask == null)
-            {
+        if (done) {
+            return;
+        }
+        if (asynchronous) {
+            if (asyncRunnableTask == null) {
                 final Effect effect = this;
                 asyncRunnableTask = new Runnable() {
                     @Override
-                    public void run()
-                    {
+                    public void run() {
                         try {
                             effect.onRun();
                         } catch (Exception ex) {
                             effectManager.onError(ex);
                             Bukkit.getScheduler().runTask(effectManager.getOwningPlugin(), new Runnable() {
-                               @Override
-                               public void run()
-                               {
-                                   effect.done();
-                               }
+                                @Override
+                                public void run() {
+                                    effect.done();
+                                }
                             });
                         }
                     }
                 };
             }
             Bukkit.getScheduler().runTaskAsynchronously(effectManager.getOwningPlugin(), asyncRunnableTask);
-        }
-        else
-        {
+        } else {
             try {
                 onRun();
             } catch (Exception ex) {
@@ -184,52 +174,27 @@ public abstract class Effect implements Runnable {
                 effectManager.onError(ex);
             }
         }
-		if (type == EffectType.REPEATING) {
-			if (iterations == -1)
-				return;
-			iterations--;
-			if (iterations < 1)
-				done();
-		} else {
-			done();
-		}
-	}
-
-    protected final boolean validate() {
-        // Check for a valid Location
-        updateLocation();
-        updateTarget();
-        Location location = getLocation();
-        if (location == null) return false;
-        if (autoOrient) {
-            Location targetLocation = target == null ? null : target.getLocation();
-            if (targetLocation != null) {
-                Vector direction = targetLocation.toVector().subtract(location.toVector());
-                location.setDirection(direction);
-                targetLocation.setDirection(direction.multiply(-1));
+        if (type == EffectType.REPEATING) {
+            if (iterations == -1) {
+                return;
             }
+            iterations--;
+            if (iterations < 1) {
+                done();
+            }
+        } else {
+            done();
         }
-
-        return true;
     }
 
-	public final void start() {
+    public final void start() {
         updateDuration();
-		effectManager.start(this);
-	}
+        effectManager.start(this);
+    }
 
-	public final void infinite() {
-		type = EffectType.REPEATING;
-		iterations = -1;
-	}
-
-    protected void updateDuration() {
-        if (duration != null) {
-            if (period < 1) {
-                period = 1;
-            }
-            iterations = duration / period / 50;
-        }
+    public final void infinite() {
+        type = EffectType.REPEATING;
+        iterations = -1;
     }
 
     /**
@@ -239,8 +204,7 @@ public abstract class Effect implements Runnable {
      * This may return null, even for an Effect that was set with an Entity,
      * if the Entity gets GC'd.
      */
-    public Entity getEntity()
-    {
+    public Entity getEntity() {
         return origin == null ? null : origin.getEntity();
     }
 
@@ -252,16 +216,8 @@ public abstract class Effect implements Runnable {
      * This may return null, even for an Effect that was set with a target Entity,
      * if the Entity gets GC'd.
      */
-    public Entity getTargetEntity()
-    {
+    public Entity getTargetEntity() {
         return target == null ? null : target.getEntity();
-    }
-
-    protected void updateLocation()
-    {
-        if (origin != null) {
-            origin.update();
-        }
     }
 
     /**
@@ -271,16 +227,8 @@ public abstract class Effect implements Runnable {
      * This method will not return null when called from onRun. Effects
      * with invalid locations will be cancelled.
      */
-    public final Location getLocation()
-    {
+    public final Location getLocation() {
         return origin == null ? null : origin.getLocation();
-    }
-
-    protected void updateTarget()
-    {
-        if (target != null) {
-            target.update();
-        }
     }
 
     /**
@@ -289,8 +237,7 @@ public abstract class Effect implements Runnable {
      *
      * Unlike getLocation, this may return null.
      */
-    public final Location getTarget()
-    {
+    public final Location getTarget() {
         return target == null ? null : target.getLocation();
     }
 
@@ -317,24 +264,66 @@ public abstract class Effect implements Runnable {
         }
     }
 
-    protected void display(ParticleEffect effect, Location location)
-    {
+    protected final boolean validate() {
+        // Check for a valid Location
+        updateLocation();
+        updateTarget();
+        Location location = getLocation();
+        if (location == null) {
+            return false;
+        }
+        if (autoOrient) {
+            Location targetLocation = target == null ? null : target.getLocation();
+            if (targetLocation != null) {
+                Vector direction = targetLocation.toVector().subtract(location.toVector());
+                location.setDirection(direction);
+                targetLocation.setDirection(direction.multiply(-1));
+            }
+        }
+
+        return true;
+    }
+
+    protected void updateDuration() {
+        if (duration != null) {
+            if (period < 1) {
+                period = 1;
+            }
+            iterations = duration / period / 50;
+        }
+    }
+
+    protected void updateLocation() {
+        if (origin != null) {
+            origin.update();
+        }
+    }
+
+    protected void updateTarget() {
+        if (target != null) {
+            target.update();
+        }
+    }
+
+    protected void display(ParticleEffect effect, Location location) {
         display(effect, location, this.color);
     }
 
-    protected void display(ParticleEffect particle, Location location, Color color)
-    {
+    protected void display(ParticleEffect particle, Location location, Color color) {
         display(particle, location, color, 0, 1);
     }
 
-    protected void display(ParticleEffect particle, Location location, float speed, int amount)
-    {
+    protected void display(ParticleEffect particle, Location location, float speed, int amount) {
         display(particle, location, this.color, speed, amount);
     }
 
-    protected void display(ParticleEffect particle, Location location, Color color, float speed, int amount)
-    {
+    protected void display(ParticleEffect particle, Location location, Color color, float speed, int amount) {
         particle.display(null, location, color, visibleRange, 0, 0, 0, speed, amount);
     }
-}
 
+    private void done() {
+        done = true;
+        effectManager.done(this);
+        onDone();
+    }
+}

@@ -75,16 +75,18 @@ public class LineEffect extends Effect {
         Location loc = location.clone().subtract(v);
         for (int i = 0; i < particles; i++) {
             if (isZigZag) {
-                if (zag)
+                if (zag) {
                     loc.add(0, .1, 0);
-                else
+                } else {
                     loc.subtract(0, .1, 0);
+                }
             }
             if (step >= amount) {
-                if (zag)
+                if (zag) {
                     zag = false;
-                else
+                } else {
                     zag = true;
+                }
                 step = 0;
             }
             step++;

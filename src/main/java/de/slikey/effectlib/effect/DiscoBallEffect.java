@@ -1,7 +1,8 @@
 package de.slikey.effectlib.effect;
 
-/* Idea by coco5843 */
-
+/*
+ * Idea by coco5843
+ */
 import de.slikey.effectlib.Effect;
 import de.slikey.effectlib.EffectManager;
 import de.slikey.effectlib.EffectType;
@@ -44,25 +45,26 @@ public class DiscoBallEffect extends Effect {
      */
     public Direction direction = Direction.DOWN;
 
-    public DiscoBallEffect(EffectManager manager){
+    public DiscoBallEffect(EffectManager manager) {
         super(manager);
         type = EffectType.REPEATING;
         period = 7;
         iterations = 500;
     }
 
-    public void onRun(){
+    public void onRun() {
         Location location = getLocation();
         //Lines
-        int mL = RandomUtils.random.nextInt(maxLines-2)+2;
-        for(int m = 0; m < mL*2; m++) {
-            double x = RandomUtils.random.nextInt(max - max*(-1)) + max*(-1);
-            double y = RandomUtils.random.nextInt(max - max*(-1)) + max*(-1);
-            double z = RandomUtils.random.nextInt(max - max*(-1)) + max*(-1);
-            if(direction == Direction.DOWN)
-                y = RandomUtils.random.nextInt(max*2 - max) + max;
-            else if(direction == Direction.UP)
-                y = RandomUtils.random.nextInt(max*(-1) - max*(-2)) + max*(-2);
+        int mL = RandomUtils.random.nextInt(maxLines - 2) + 2;
+        for (int m = 0; m < mL * 2; m++) {
+            double x = RandomUtils.random.nextInt(max - max * (-1)) + max * (-1);
+            double y = RandomUtils.random.nextInt(max - max * (-1)) + max * (-1);
+            double z = RandomUtils.random.nextInt(max - max * (-1)) + max * (-1);
+            if (direction == Direction.DOWN) {
+                y = RandomUtils.random.nextInt(max * 2 - max) + max;
+            } else if (direction == Direction.UP) {
+                y = RandomUtils.random.nextInt(max * (-1) - max * (-2)) + max * (-2);
+            }
             Location target = location.clone().subtract(x, y, z);
             if (target == null) {
                 cancel();
@@ -90,7 +92,8 @@ public class DiscoBallEffect extends Effect {
         }
     }
 
-    public enum Direction{
+    public enum Direction {
+
         UP, DOWN, BOTH;
     }
 

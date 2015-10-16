@@ -4,13 +4,11 @@ import de.slikey.effectlib.Effect;
 import de.slikey.effectlib.EffectManager;
 import de.slikey.effectlib.EffectType;
 import de.slikey.effectlib.util.ParticleEffect;
-import org.bukkit.Location;
-import org.bukkit.World;
-import org.bukkit.entity.Entity;
-import org.bukkit.util.Vector;
-
 import java.util.ArrayList;
 import java.util.List;
+import org.bukkit.Location;
+import org.bukkit.World;
+import org.bukkit.util.Vector;
 
 public class TraceEffect extends Effect {
 
@@ -62,13 +60,15 @@ public class TraceEffect extends Effect {
             return;
         }
 
-        if (wayPoints.size() >= maxWayPoints)
+        if (wayPoints.size() >= maxWayPoints) {
             wayPoints.remove(0);
+        }
 
         wayPoints.add(location.toVector());
         step++;
-        if (step % refresh != 0)
+        if (step % refresh != 0) {
             return;
+        }
 
         for (Vector position : wayPoints) {
             Location particleLocation = new Location(world, position.getX(), position.getY(), position.getZ());

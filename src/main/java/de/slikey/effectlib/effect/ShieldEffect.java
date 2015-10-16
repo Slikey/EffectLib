@@ -6,10 +6,10 @@ import de.slikey.effectlib.EffectType;
 import de.slikey.effectlib.util.ParticleEffect;
 import de.slikey.effectlib.util.RandomUtils;
 import org.bukkit.Location;
-import org.bukkit.entity.Entity;
 import org.bukkit.util.Vector;
 
 public class ShieldEffect extends Effect {
+
     /**
      * ParticleType of spawned particle
      */
@@ -42,8 +42,9 @@ public class ShieldEffect extends Effect {
         Location location = getLocation();
         for (int i = 0; i < particles; i++) {
             Vector vector = RandomUtils.getRandomVector().multiply(radius);
-            if (!sphere)
+            if (!sphere) {
                 vector.setY(Math.abs(vector.getY()));
+            }
             location.add(vector);
             display(particle, location);
             location.subtract(vector);

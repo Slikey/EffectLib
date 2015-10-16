@@ -5,7 +5,6 @@ import de.slikey.effectlib.EffectManager;
 import de.slikey.effectlib.EffectType;
 import de.slikey.effectlib.util.ParticleEffect;
 import org.bukkit.Location;
-import org.bukkit.entity.Entity;
 
 public class WarpEffect extends Effect {
 
@@ -49,8 +48,9 @@ public class WarpEffect extends Effect {
     @Override
     public void onRun() {
         Location location = getLocation();
-        if (step > rings)
+        if (step > rings) {
             step = 0;
+        }
         double x, y, z;
         y = step * grow;
         location.add(0, y, 0);

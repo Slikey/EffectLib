@@ -7,11 +7,11 @@ import de.slikey.effectlib.util.MathUtils;
 import de.slikey.effectlib.util.ParticleEffect;
 import de.slikey.effectlib.util.StringParser;
 import de.slikey.effectlib.util.VectorUtils;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.image.BufferedImage;
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
-
-import java.awt.*;
-import java.awt.image.BufferedImage;
 
 public class TextEffect extends Effect {
 
@@ -83,15 +83,17 @@ public class TextEffect extends Effect {
         Location location = getLocation();
         int clr = 0;
         try {
-            if (image == null || realtime)
+            if (image == null || realtime) {
                 image = StringParser.stringToBufferedImage(font, text);
+            }
             for (int y = 0; y < image.getHeight(); y += stepY) {
                 for (int x = 0; x < image.getWidth(); x += stepX) {
                     clr = image.getRGB(x, y);
-                    if (!invert && Color.black.getRGB() != clr)
+                    if (!invert && Color.black.getRGB() != clr) {
                         continue;
-                    else if (invert && Color.black.getRGB() == clr)
+                    } else if (invert && Color.black.getRGB() == clr) {
                         continue;
+                    }
                     Vector v = new Vector((float) image.getWidth() / 2 - x, (float) image.getHeight() / 2 - y, 0).multiply(size);
                     VectorUtils.rotateAroundAxisY(v, -location.getYaw() * MathUtils.degreesToRadians);
                     display(particle, location.add(v));

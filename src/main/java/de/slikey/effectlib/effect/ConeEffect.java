@@ -68,10 +68,12 @@ public class ConeEffect extends Effect {
     public void onRun() {
         Location location = getLocation();
         for (int x = 0; x < particles; x++) {
-            if (step > particlesCone)
+            if (step > particlesCone) {
                 step = 0;
-            if (randomize && step == 0)
+            }
+            if (randomize && step == 0) {
                 rotation = RandomUtils.getRandomAngle();
+            }
             double angle = step * angularVelocity + rotation;
             float radius = step * radiusGrow;
             float length = step * lengthGrow;

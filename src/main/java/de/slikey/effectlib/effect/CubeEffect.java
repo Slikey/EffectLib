@@ -94,8 +94,9 @@ public class CubeEffect extends Effect {
                     VectorUtils.rotateAroundAxisX(v, angleX);
                     VectorUtils.rotateAroundAxisY(v, angleY);
 
-                    if (enableRotation)
+                    if (enableRotation) {
                         VectorUtils.rotateVector(v, xRotation, yRotation, zRotation);
+                    }
                     particle.display(location.add(v), visibleRange);
                     location.subtract(v);
                 }
@@ -106,8 +107,9 @@ public class CubeEffect extends Effect {
                 v.setY(edgeLength * p / particles - a);
                 VectorUtils.rotateAroundAxisY(v, angleY);
 
-                if (enableRotation)
+                if (enableRotation) {
                     VectorUtils.rotateVector(v, xRotation, yRotation, zRotation);
+                }
                 particle.display(location.add(v), visibleRange);
                 location.subtract(v);
             }
@@ -127,12 +129,14 @@ public class CubeEffect extends Effect {
             for (int y = 0; y <= particles; y++) {
                 float posY = edgeLength * ((float) y / particles) - a;
                 for (int z = 0; z <= particles; z++) {
-                    if (x != 0 && x != particles && y != 0 && y != particles && z != 0 && z != particles)
+                    if (x != 0 && x != particles && y != 0 && y != particles && z != 0 && z != particles) {
                         continue;
+                    }
                     float posZ = edgeLength * ((float) z / particles) - a;
                     Vector v = new Vector(posX, posY, posZ);
-                    if (enableRotation)
+                    if (enableRotation) {
                         VectorUtils.rotateVector(v, xRotation, yRotation, zRotation);
+                    }
                     display(particle, location.add(v));
                     location.subtract(v);
                 }

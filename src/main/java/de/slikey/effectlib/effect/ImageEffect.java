@@ -6,17 +6,16 @@ import de.slikey.effectlib.EffectType;
 import de.slikey.effectlib.util.MathUtils;
 import de.slikey.effectlib.util.ParticleEffect;
 import de.slikey.effectlib.util.VectorUtils;
-import org.bukkit.Location;
-import org.bukkit.util.Vector;
-
-import javax.imageio.ImageIO;
-import javax.imageio.ImageReader;
-import javax.imageio.stream.ImageInputStream;
-import java.awt.*;
+import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import javax.imageio.ImageIO;
+import javax.imageio.ImageReader;
+import javax.imageio.stream.ImageInputStream;
+import org.bukkit.Location;
+import org.bukkit.util.Vector;
 
 public class ImageEffect extends Effect {
 
@@ -122,7 +121,7 @@ public class ImageEffect extends Effect {
             cancel();
             return;
         }
-        if(isGif){
+        if (isGif) {
             try {
                 image = getImg(step);
             } catch (IOException e) {
@@ -135,10 +134,11 @@ public class ImageEffect extends Effect {
         for (int y = 0; y < image.getHeight(); y += stepY) {
             for (int x = 0; x < image.getWidth(); x += stepX) {
                 clr = image.getRGB(x, y);
-                if (!invert && Color.black.getRGB() != clr)
+                if (!invert && Color.black.getRGB() != clr) {
                     continue;
-                else if (invert && Color.black.getRGB() == clr)
+                } else if (invert && Color.black.getRGB() == clr) {
                     continue;
+                }
                 Vector v = new Vector((float) image.getWidth() / 2 - x, (float) image.getHeight() / 2 - y, 0).multiply(size);
                 VectorUtils.rotateAroundAxisY(v, -location.getYaw() * MathUtils.degreesToRadians);
                 display(particle, location.add(v));
@@ -147,23 +147,24 @@ public class ImageEffect extends Effect {
         }
     }
 
-    private BufferedImage getImg(int s) throws IOException{
+    private BufferedImage getImg(int s) throws IOException {
         ArrayList<BufferedImage> images = new ArrayList<BufferedImage>();
         ImageReader reader = ImageIO.getImageReadersBySuffix("GIF").next();
         ImageInputStream in = ImageIO.createImageInputStream(gifFile);
         reader.setInput(in);
-        for (int i = 0, count = reader.getNumImages(true); i < count; i++){
+        for (int i = 0, count = reader.getNumImages(true); i < count; i++) {
             BufferedImage image = reader.read(i);
             images.add(image);
         }
-        if(step>=reader.getNumImages(true)) {
+        if (step >= reader.getNumImages(true)) {
             step = 0;
-            return images.get(s-1);
+            return images.get(s - 1);
         }
         return images.get(s);
     }
 
-    public enum Plane{
+    public enum Plane {
+
         X, Y, Z, XY, XZ, XYZ, YZ;
     }
 

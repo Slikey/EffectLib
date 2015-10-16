@@ -1,5 +1,8 @@
 package de.slikey.effectlib;
 
+import de.slikey.effectlib.util.Disposable;
+import de.slikey.effectlib.util.DynamicLocation;
+import de.slikey.effectlib.util.ParticleEffect;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -8,9 +11,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-
-import de.slikey.effectlib.util.DynamicLocation;
-import de.slikey.effectlib.util.ParticleEffect;
 import java.util.logging.Level;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
@@ -21,83 +21,62 @@ import org.bukkit.entity.Entity;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.scheduler.BukkitTask;
-
-import de.slikey.effectlib.util.Disposable;
 import org.bukkit.util.NumberConversions;
 import org.bukkit.util.Vector;
 
 /**
  * Dispose the EffectManager if you don't need him anymore.
- * 
+ *
  * @author Kevin
- * 
+ *
  */
 public final class EffectManager implements Disposable {
 
-	private final Plugin owningPlugin;
-	private final Map<Effect, BukkitTask> effects;
     private static List<EffectManager> effectManagers;
     private static Map<String, Class<? extends Effect>> effectClasses = new HashMap<String, Class<? extends Effect>>();
+    private final Plugin owningPlugin;
+    private final Map<Effect, BukkitTask> effects;
     private boolean disposed;
-	private boolean disposeOnTermination;
+    private boolean disposeOnTermination;
     private boolean debug = false;
     private int visibleRange = 32;
 
-    public static void initialize() {
-        effectManagers = new ArrayList<EffectManager>();
+    public EffectManager(Plugin owningPlugin) {
+        this.owningPlugin = owningPlugin;
+        effects = new HashMap<Effect, BukkitTask>();
+        disposed = false;
+        disposeOnTermination = false;
     }
 
-    public static List<EffectManager> getManagers() {
-        if (effectManagers == null) {
-            initialize();
+    public void start(Effect effect) {
+        if (disposed) {
+            throw new IllegalStateException("EffectManager is disposed and not able to accept any effects.");
         }
-        return effectManagers;
-    }
-
-    public static void disposeAll() {
-        if (effectManagers != null) {
-            for (Iterator<EffectManager> i = effectManagers.iterator(); i.hasNext(); ) {
-                EffectManager em = i.next();
-                i.remove();
-                em.dispose();
-            }
+        if (disposeOnTermination) {
+            throw new IllegalStateException("EffectManager is awaiting termination to dispose and not able to accept any effects.");
         }
-    }
-
-	public EffectManager(Plugin owningPlugin) {
-		this.owningPlugin = owningPlugin;
-		effects = new HashMap<Effect, BukkitTask>();
-		disposed = false;
-		disposeOnTermination = false;
-	}
-
-	public void start(Effect effect) {
-		if (disposed)
-			throw new IllegalStateException("EffectManager is disposed and not able to accept any effects.");
-		if (disposeOnTermination)
-			throw new IllegalStateException("EffectManager is awaiting termination to dispose and not able to accept any effects.");
 
         if (effects.containsKey(effect)) {
             effect.cancel(false);
         }
 
-		BukkitScheduler s = Bukkit.getScheduler();
-		BukkitTask task = null;
-		switch (effect.type) {
-			case INSTANT:
-				task = s.runTask(owningPlugin, effect);
-				break;
-			case DELAYED:
-				task = s.runTaskLater(owningPlugin, effect, effect.delay);
-				break;
-			case REPEATING:
-				task = s.runTaskTimer(owningPlugin, effect, effect.delay, effect.period);
-				break;
-		}
-		synchronized (this) {
-			effects.put(effect, task);
-		}
-	}
+        BukkitScheduler s = Bukkit.getScheduler();
+        BukkitTask task = null;
+        switch (effect.type) {
+            case INSTANT:
+                task = s.runTask(owningPlugin, effect);
+                break;
+            case DELAYED:
+                task = s.runTaskLater(owningPlugin, effect, effect.delay);
+                break;
+            case REPEATING:
+                task = s.runTaskTimer(owningPlugin, effect, effect.delay, effect.period);
+                break;
+        }
+        synchronized (this) {
+            effects.put(effect, task);
+        }
+    }
 
     public Effect start(String effectClass, ConfigurationSection parameters, Location origin, Entity originEntity) {
         return start(effectClass, parameters, origin, null, originEntity, null, null);
@@ -167,7 +146,9 @@ public final class EffectManager implements Disposable {
 
         Collection<String> keys = parameters.getKeys(false);
         for (String key : keys) {
-            if (key.equals("class")) continue;
+            if (key.equals("class")) {
+                continue;
+            }
 
             if (!setField(effect, key, parameters, parameterMap)) {
                 owningPlugin.getLogger().warning("Unable to assign EffectLib property " + key + " of class " + effectLibClass.getName());
@@ -179,6 +160,69 @@ public final class EffectManager implements Disposable {
 
         effect.start();
         return effect;
+    }
+    
+    public void cancel(boolean callback) {
+        for (Map.Entry<Effect, BukkitTask> entry : effects.entrySet()) {
+            entry.getKey().cancel(callback);
+        }
+    }
+    
+    public void done(Effect effect) {
+        synchronized (this) {
+            BukkitTask existingTask = effects.get(effect);
+            if (existingTask != null) {
+                existingTask.cancel();
+            }
+            effects.remove(effect);
+        }
+        if (effect.callback != null) {
+            Bukkit.getScheduler().runTask(owningPlugin, effect.callback);
+        }
+        if (disposeOnTermination && effects.isEmpty()) {
+            dispose();
+        }
+    }
+    
+    @Override
+    public void dispose() {
+        if (disposed) {
+            return;
+        }
+        disposed = true;
+        cancel(false);
+        if (effectManagers != null) {
+            effectManagers.remove(this);
+        }
+    }
+    
+    public void disposeOnTermination() {
+        disposeOnTermination = true;
+        if (effects.isEmpty()) {
+            dispose();
+        }
+    }
+
+    public void enableDebug(boolean enable) {
+        debug = enable;
+    }
+    
+    public void onError(Throwable ex) {
+        if (debug) {
+            owningPlugin.getLogger().log(Level.WARNING, "Particle Effect error", ex);
+        }
+    }
+
+    public int getParticleRange() {
+        return visibleRange;
+    }
+    
+    public void setParticleRange(int range) {
+        visibleRange = range;
+    }
+
+    public Plugin getOwningPlugin() {
+        return owningPlugin;
     }
 
     protected boolean setField(Object effect, String key, ConfigurationSection section, Map<String, String> parameterMap) {
@@ -243,61 +287,25 @@ public final class EffectManager implements Disposable {
 
         return false;
     }
-
-	public void cancel(boolean callback) {
-		for (Map.Entry<Effect, BukkitTask> entry : effects.entrySet())
-			entry.getKey().cancel(callback);
-	}
-
-	public void done(Effect effect) {
-		synchronized (this) {
-            BukkitTask existingTask = effects.get(effect);
-            if (existingTask != null) {
-                existingTask.cancel();
-            }
-			effects.remove(effect);
-		}
-		if (effect.callback != null)
-			Bukkit.getScheduler().runTask(owningPlugin, effect.callback);
-		if (disposeOnTermination && effects.size() == 0)
-			dispose();
-	}
-
-	public void dispose() {
-		if (disposed)
-			return;
-		disposed = true;
-		cancel(false);
+    
+    public static void initialize() {
+        effectManagers = new ArrayList<EffectManager>();
+    }
+    
+    public static List<EffectManager> getManagers() {
+        if (effectManagers == null) {
+            initialize();
+        }
+        return effectManagers;
+    }
+    
+    public static void disposeAll() {
         if (effectManagers != null) {
-            effectManagers.remove(this);
+            for (Iterator<EffectManager> i = effectManagers.iterator(); i.hasNext();) {
+                EffectManager em = i.next();
+                i.remove();
+                em.dispose();
+            }
         }
-	}
-
-	public void disposeOnTermination() {
-		disposeOnTermination = true;
-		if (effects.size() == 0)
-			dispose();
-	}
-
-    public void enableDebug(boolean enable) {
-        debug = enable;
-    }
-
-    public void onError(Throwable ex) {
-        if (debug) {
-            owningPlugin.getLogger().log(Level.WARNING, "Particle Effect error", ex);
-        }
-    }
-
-    public int getParticleRange() {
-        return visibleRange;
-    }
-
-    public void setParticleRange(int range) {
-        visibleRange = range;
-    }
-
-    public Plugin getOwningPlugin() {
-        return owningPlugin;
     }
 }

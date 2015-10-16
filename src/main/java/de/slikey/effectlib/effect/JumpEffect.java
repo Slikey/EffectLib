@@ -7,6 +7,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.util.Vector;
 
 public class JumpEffect extends Effect {
+
     /**
      * Power of jump. (0.5f)
      */

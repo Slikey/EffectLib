@@ -7,6 +7,7 @@ import de.slikey.effectlib.util.ParticleEffect;
 import org.bukkit.Location;
 
 public class HelixEffect extends Effect {
+
     /**
      * Particle to form the helix
      */
