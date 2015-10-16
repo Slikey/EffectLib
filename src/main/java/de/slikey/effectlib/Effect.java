@@ -199,7 +199,6 @@ public abstract class Effect implements Runnable {
         // Check for a valid Location
         updateLocation();
         updateTarget();
-        updateDuration();
         Location location = getLocation();
         if (location == null) return false;
         if (autoOrient) {
@@ -215,6 +214,7 @@ public abstract class Effect implements Runnable {
     }
 
 	public final void start() {
+        updateDuration();
 		effectManager.start(this);
 	}
 
