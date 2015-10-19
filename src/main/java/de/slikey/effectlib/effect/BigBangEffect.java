@@ -52,8 +52,9 @@ public class BigBangEffect extends Effect {
         for (int i = 0; i < explosions; i++) {
             Vector v = RandomUtils.getRandomVector().multiply(radius);
             detonate(location, v);
-            if (soundInterval != 0 && step % soundInterval == 0)
+            if (soundInterval != 0 && step % soundInterval == 0) {
                 location.getWorld().playSound(location, sound, soundVolume, soundPitch);
+            }
         }
         step++;
     }

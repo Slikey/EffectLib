@@ -2,11 +2,9 @@ package de.slikey.effectlib;
 
 import de.slikey.effectlib.entity.EntityManager;
 import de.slikey.effectlib.listener.ItemListener;
-import org.bukkit.event.HandlerList;
-import org.bukkit.plugin.Plugin;
-import org.bukkit.plugin.java.JavaPlugin;
-
 import java.util.List;
+import org.bukkit.event.HandlerList;
+import org.bukkit.plugin.java.JavaPlugin;
 
 /*! \mainpage EffectLib Plugin API
 *
@@ -120,47 +118,46 @@ import java.util.List;
 *           return (EffectLib)effectLib;
 *       }
 * </pre>
-*
+* 
 */
 public final class EffectLib extends JavaPlugin {
 
-	private static EffectLib instance;
-	private EntityManager entityManager;
+    private static EffectLib instance;
+    private EntityManager entityManager;
 
-	public EffectLib() {
-		super();
-		instance = this;
-	}
+    public EffectLib() {
+        instance = this;
+    }
 
-	public static EffectLib instance() {
-		return instance;
-	}
-
-	@Override
-	public void onEnable() {
-		entityManager = new EntityManager(this);
+    @Override
+    public void onEnable() {
+        entityManager = new EntityManager(this);
         EffectManager.initialize();
 
-		loadListeners();
-	}
+        loadListeners();
+    }
 
-	@Override
-	public void onDisable() {
-		entityManager.dispose();
+    @Override
+    public void onDisable() {
+        entityManager.dispose();
         EffectManager.disposeAll();
-		HandlerList.unregisterAll((Plugin) this);
-	}
+        HandlerList.unregisterAll(this);
+    }
 
-	private void loadListeners() {
-		getServer().getPluginManager().registerEvents(new ItemListener(), this);
-	}
+    public EntityManager getEntityManager() {
+        return entityManager;
+    }
 
-	public EntityManager getEntityManager() {
-		return entityManager;
-	}
+    public List<EffectManager> getEffectManagers() {
+        return EffectManager.getManagers();
+    }
 
-	public List<EffectManager> getEffectManagers() {
-		return EffectManager.getManagers();
-	}
+    private void loadListeners() {
+        getServer().getPluginManager().registerEvents(new ItemListener(), this);
+    }
+
+    public static EffectLib instance() {
+        return instance;
+    }
 
 }

@@ -7,12 +7,12 @@ import de.slikey.effectlib.util.MathUtils;
 import de.slikey.effectlib.util.ParticleEffect;
 import de.slikey.effectlib.util.VectorUtils;
 import org.bukkit.Location;
-import org.bukkit.entity.Entity;
 import org.bukkit.util.Vector;
 
 /**
  * Creates an animated Sphere.. Thanks to the author for sharing it!
  * https://www.youtube.com/watch?feature=player_embedded&v=RUjIw_RprRw
+ *
  * @author <a href="http://forums.bukkit.org/members/qukie.90952701/">Qukie</a>
  */
 public class AnimatedBallEffect extends Effect {

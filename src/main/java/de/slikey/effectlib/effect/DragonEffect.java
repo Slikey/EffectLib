@@ -7,11 +7,10 @@ import de.slikey.effectlib.util.MathUtils;
 import de.slikey.effectlib.util.ParticleEffect;
 import de.slikey.effectlib.util.RandomUtils;
 import de.slikey.effectlib.util.VectorUtils;
-import org.bukkit.Location;
-import org.bukkit.util.Vector;
-
 import java.util.ArrayList;
 import java.util.List;
+import org.bukkit.Location;
+import org.bukkit.util.Vector;
 
 public class DragonEffect extends Effect {
 
@@ -63,8 +62,12 @@ public class DragonEffect extends Effect {
                 rndF.clear();
                 rndAngle.clear();
             }
-            while (rndF.size() < arcs) rndF.add(RandomUtils.random.nextFloat());
-            while (rndAngle.size() < arcs) rndAngle.add(RandomUtils.getRandomAngle());
+            while (rndF.size() < arcs) {
+                rndF.add(RandomUtils.random.nextFloat());
+            }
+            while (rndAngle.size() < arcs) {
+                rndAngle.add(RandomUtils.getRandomAngle());
+            }
             for (int i = 0; i < arcs; i++) {
                 float pitch = rndF.get(i) * 2 * this.pitch - this.pitch;
                 float x = (step % particles) * length / particles;

@@ -6,14 +6,14 @@ import de.slikey.effectlib.EffectType;
 import de.slikey.effectlib.util.MathUtils;
 import de.slikey.effectlib.util.ParticleEffect;
 import de.slikey.effectlib.util.VectorUtils;
+import java.util.Collection;
+import java.util.HashSet;
 import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
 
-import java.util.Collection;
-import java.util.HashSet;
-
 public class WaveEffect extends Effect {
+
     public ParticleEffect particle = ParticleEffect.DRIP_WATER;
     public ParticleEffect cloudParticle = ParticleEffect.CLOUD;
     public Color cloudColor = null;
@@ -109,14 +109,18 @@ public class WaveEffect extends Effect {
         len_s1ToH = (float) s1ToH.length();
         n_s1ToH = s1ToH.clone().multiply(1f / len_s1ToH);
         n1 = new Vector(s1ToH.getY(), -s1ToH.getX(), 0).normalize();
-        if (n1.getX() < 0) n1.multiply(-1);
+        if (n1.getX() < 0) {
+            n1.multiply(-1);
+        }
 
         s2ToH = h.clone().subtract(s2);
         c2 = s2.clone().add(s2ToH.clone().multiply(0.5));
         len_s2ToH = (float) s2ToH.length();
         n_s2ToH = s2ToH.clone().multiply(1f / len_s2ToH);
         n2 = new Vector(s2ToH.getY(), -s2ToH.getX(), 0).normalize();
-        if (n2.getX() < 0) n2.multiply(-1);
+        if (n2.getX() < 0) {
+            n2.multiply(-1);
+        }
 
         yaw = (-location.getYaw() + 90) * MathUtils.degreesToRadians;
 
@@ -131,8 +135,11 @@ public class WaveEffect extends Effect {
                 float z = ((float) j / rows - .5f) * width;
                 Vector vec = v.clone().setZ(v.getZ() + z);
                 VectorUtils.rotateAroundAxisY(vec, yaw);
-                if (i == 0 || i == particlesFront - 1) cloudCache.add(vec);
-                else waterCache.add(vec);
+                if (i == 0 || i == particlesFront - 1) {
+                    cloudCache.add(vec);
+                } else {
+                    waterCache.add(vec);
+                }
             }
         }
         for (int i = 0; i < particlesBack; i++) {
@@ -146,8 +153,11 @@ public class WaveEffect extends Effect {
                 float z = ((float) j / rows - .5f) * width;
                 Vector vec = v.clone().setZ(v.getZ() + z);
                 VectorUtils.rotateAroundAxisY(vec, yaw);
-                if (i == particlesFront - 1) cloudCache.add(vec);
-                else waterCache.add(vec);
+                if (i == particlesFront - 1) {
+                    cloudCache.add(vec);
+                } else {
+                    waterCache.add(vec);
+                }
             }
         }
     }

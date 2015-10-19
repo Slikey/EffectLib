@@ -1,16 +1,16 @@
 package de.slikey.effectlib.util;
 
+import java.lang.ref.WeakReference;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.util.Vector;
 
-import java.lang.ref.WeakReference;
-
 /**
  * Represents a Location that can move, possibly bound to an Entity.
  */
 public class DynamicLocation {
+
     protected final Location location;
     protected final WeakReference<Entity> entity;
     protected Vector offset;
@@ -39,12 +39,9 @@ public class DynamicLocation {
     public DynamicLocation(Location location, Entity entity) {
         if (location != null) {
             this.location = location.clone();
-        }
-        else if (entity != null)  {
+        } else if (entity != null) {
             this.location = getEntityLocation(entity);
-        }
-        else
-        {
+        } else {
             this.location = null;
         }
         if (entity != null) {
@@ -76,7 +73,7 @@ public class DynamicLocation {
 
     protected Location getEntityLocation(Entity entity) {
         if (entity instanceof LivingEntity) {
-            return ((LivingEntity)entity).getEyeLocation();
+            return ((LivingEntity) entity).getEyeLocation();
         }
         return entity.getLocation();
     }
@@ -95,7 +92,9 @@ public class DynamicLocation {
     }
 
     public void update() {
-        if (location == null) return;
+        if (location == null) {
+            return;
+        }
 
         Entity entityReference = entity == null ? null : entity.get();
         if (entityReference != null) {

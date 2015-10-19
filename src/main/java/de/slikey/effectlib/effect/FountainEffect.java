@@ -9,6 +9,7 @@ import org.bukkit.Location;
 import org.bukkit.util.Vector;
 
 public class FountainEffect extends Effect {
+
     /**
      * Particle of the fountain
      */

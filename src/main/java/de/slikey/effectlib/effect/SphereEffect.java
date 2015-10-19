@@ -9,6 +9,7 @@ import org.bukkit.Location;
 import org.bukkit.util.Vector;
 
 public class SphereEffect extends Effect {
+
     /**
      * ParticleType of spawned particle
      */

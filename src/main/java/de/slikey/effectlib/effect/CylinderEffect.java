@@ -7,10 +7,9 @@ import de.slikey.effectlib.util.MathUtils;
 import de.slikey.effectlib.util.ParticleEffect;
 import de.slikey.effectlib.util.RandomUtils;
 import de.slikey.effectlib.util.VectorUtils;
+import java.util.Random;
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
-
-import java.util.Random;
 
 public class CylinderEffect extends Effect {
 
@@ -84,7 +83,9 @@ public class CylinderEffect extends Effect {
     @Override
     public void onRun() {
         Location location = getLocation();
-        if (sideRatio == 0) calculateSideRatio();
+        if (sideRatio == 0) {
+            calculateSideRatio();
+        }
         Random r = RandomUtils.random;
         double xRotation = rotationX, yRotation = rotationY, zRotation = rotationZ;
         if (enableRotation) {
@@ -110,8 +111,9 @@ public class CylinderEffect extends Effect {
                     v.setY(-multi * (height / 2));
                 }
             }
-            if (enableRotation)
+            if (enableRotation) {
                 VectorUtils.rotateVector(v, xRotation, yRotation, zRotation);
+            }
             particle.display(location.add(v), visibleRange);
             location.subtract(v);
         }

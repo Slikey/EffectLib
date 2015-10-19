@@ -6,17 +6,16 @@ import de.slikey.effectlib.EffectType;
 import de.slikey.effectlib.util.MathUtils;
 import de.slikey.effectlib.util.ParticleEffect;
 import de.slikey.effectlib.util.VectorUtils;
-import org.bukkit.Location;
-import org.bukkit.util.Vector;
-
-import javax.imageio.ImageIO;
-import javax.imageio.ImageReader;
-import javax.imageio.stream.ImageInputStream;
-import java.awt.*;
+import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import javax.imageio.ImageIO;
+import javax.imageio.ImageReader;
+import javax.imageio.stream.ImageInputStream;
+import org.bukkit.Location;
+import org.bukkit.util.Vector;
 
 public class ColoredImageEffect extends Effect {
 
@@ -120,15 +119,11 @@ public class ColoredImageEffect extends Effect {
 
     @Override
     public void onRun() {
-        if (image == null && fileName != null)
-        {
+        if (image == null && fileName != null) {
             File file;
-            if (!fileName.startsWith(File.pathSeparator))
-            {
+            if (!fileName.startsWith(File.pathSeparator)) {
                 file = new File(effectManager.getOwningPlugin().getDataFolder(), fileName);
-            }
-            else
-            {
+            } else {
                 file = new File(fileName);
             }
             loadFile(file);
@@ -137,7 +132,7 @@ public class ColoredImageEffect extends Effect {
             cancel();
             return;
         }
-        if(isGif) {
+        if (isGif) {
             try {
                 image = getImg(step);
             } catch (IOException e) {
@@ -154,19 +149,37 @@ public class ColoredImageEffect extends Effect {
             for (int x = 0; x < image.getWidth(); x += stepX) {
                 Vector v = new Vector((float) image.getWidth() / 2 - x, (float) image.getHeight() / 2 - y, 0).multiply(size);
                 VectorUtils.rotateAroundAxisY(v, -location.getYaw() * MathUtils.degreesToRadians);
-                if(enableRotation) {
+                if (enableRotation) {
                     double rotX = 0;
                     double rotY = 0;
                     double rotZ = 0;
-                    switch(plane){
-                        case X: rotX = angularVelocityX * rotationStep; break;
-                        case Y: rotY = angularVelocityY * rotationStep; break;
-                        case Z: rotZ = angularVelocityZ * rotationStep; break;
-                        case XY: rotX = angularVelocityX * rotationStep; rotY = angularVelocityY * rotationStep; break;
-                        case XZ: rotX = angularVelocityX * rotationStep; rotZ = angularVelocityZ * rotationStep; break;
-                        case XYZ: rotX = angularVelocityX * rotationStep; rotY = angularVelocityY * rotationStep;
-                            rotZ = angularVelocityZ * rotationStep; break;
-                        case YZ: rotY = angularVelocityY * rotationStep; rotZ = angularVelocityZ * step; break;
+                    switch (plane) {
+                        case X:
+                            rotX = angularVelocityX * rotationStep;
+                            break;
+                        case Y:
+                            rotY = angularVelocityY * rotationStep;
+                            break;
+                        case Z:
+                            rotZ = angularVelocityZ * rotationStep;
+                            break;
+                        case XY:
+                            rotX = angularVelocityX * rotationStep;
+                            rotY = angularVelocityY * rotationStep;
+                            break;
+                        case XZ:
+                            rotX = angularVelocityX * rotationStep;
+                            rotZ = angularVelocityZ * rotationStep;
+                            break;
+                        case XYZ:
+                            rotX = angularVelocityX * rotationStep;
+                            rotY = angularVelocityY * rotationStep;
+                            rotZ = angularVelocityZ * rotationStep;
+                            break;
+                        case YZ:
+                            rotY = angularVelocityY * rotationStep;
+                            rotZ = angularVelocityZ * step;
+                            break;
                     }
                     VectorUtils.rotateVector(v, rotX, rotY, rotZ);
                 }
@@ -181,23 +194,25 @@ public class ColoredImageEffect extends Effect {
     }
 
     //Reads gifs
-    private BufferedImage getImg(int s) throws IOException{
+    private BufferedImage getImg(int s) throws IOException {
         ArrayList<BufferedImage> images = new ArrayList<BufferedImage>();
         ImageReader reader = ImageIO.getImageReadersBySuffix("GIF").next();
         ImageInputStream in = ImageIO.createImageInputStream(gifFile);
         reader.setInput(in);
-        for (int i = 0, count = reader.getNumImages(true); i < count; i++){
+        for (int i = 0, count = reader.getNumImages(true); i < count; i++) {
             BufferedImage image = reader.read(i);
             images.add(image);
         }
-        if(step>=reader.getNumImages(true)) {
+        if (step >= reader.getNumImages(true)) {
             step = 0;
-            return images.get(s-1);
+            return images.get(s - 1);
         }
         return images.get(s);
     }
 
     public enum Plane {
+
         X, Y, Z, XY, XZ, XYZ, YZ;
     }
+
 }

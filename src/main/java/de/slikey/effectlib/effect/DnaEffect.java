@@ -81,8 +81,9 @@ public class DnaEffect extends Effect {
     public void onRun() {
         Location location = getLocation();
         for (int j = 0; j < particlesHelix; j++) {
-            if (step * grow > length)
+            if (step * grow > length) {
                 step = 0;
+            }
             for (int i = 0; i < 2; i++) {
                 double angle = step * radials + Math.PI * i;
                 Vector v = new Vector(Math.cos(angle) * radius, step * grow, Math.sin(angle) * radius);
@@ -90,8 +91,9 @@ public class DnaEffect extends Effect {
             }
             if (step % baseInterval == 0) {
                 for (int i = -particlesBase; i <= particlesBase; i++) {
-                    if (i == 0)
+                    if (i == 0) {
                         continue;
+                    }
                     ParticleEffect particle = particleBase1;
                     Color color = colorBase1;
                     if (i < 0) {

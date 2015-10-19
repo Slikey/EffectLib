@@ -7,11 +7,10 @@ import de.slikey.effectlib.util.MathUtils;
 import de.slikey.effectlib.util.ParticleEffect;
 import de.slikey.effectlib.util.RandomUtils;
 import de.slikey.effectlib.util.VectorUtils;
-import org.bukkit.Location;
-import org.bukkit.util.Vector;
-
 import java.util.HashSet;
 import java.util.Set;
+import org.bukkit.Location;
+import org.bukkit.util.Vector;
 
 public class EarthEffect extends Effect {
 
@@ -88,33 +87,41 @@ public class EarthEffect extends Effect {
                 } else {
                     v.setY(v.getY() - increase);
                 }
-                if (i != precision - 1)
+                if (i != precision - 1) {
                     VectorUtils.rotateVector(v, r1, r2, r3);
+                }
             }
         }
 
         float minSquared = Float.POSITIVE_INFINITY, maxSquared = Float.NEGATIVE_INFINITY;
         for (Vector current : cache) {
             float lengthSquared = (float) current.lengthSquared();
-            if (minSquared > lengthSquared)
+            if (minSquared > lengthSquared) {
                 minSquared = lengthSquared;
-            if (maxSquared < lengthSquared)
+            }
+            if (maxSquared < lengthSquared) {
                 maxSquared = lengthSquared;
+            }
         }
 
         // COLOR PARTICLES
         float average = (minSquared + maxSquared) / 2;
         for (Vector v : cache) {
             float lengthSquared = (float) v.lengthSquared();
-            if (lengthSquared >= average) cacheGreen.add(v);
-            else cacheBlue.add(v);
+            if (lengthSquared >= average) {
+                cacheGreen.add(v);
+            } else {
+                cacheBlue.add(v);
+            }
         }
     }
 
     @Override
     public void onRun() {
         Location location = getLocation();
-        if (firstStep) invalidate();
+        if (firstStep) {
+            invalidate();
+        }
         for (Vector v : cacheGreen) {
             ParticleEffect.VILLAGER_HAPPY.display(location.add(v), visibleRange, 0, 0, 0, 0, 3);
             location.subtract(v);
