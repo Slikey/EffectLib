@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 3.7
+
+ - Turn Effect.autoOrient off by default
+ - Add updateLocations parameter, can be used to turn off Entity location tracking
+
 ## 3.6
  
  - Fix LineEffect, broken in 3.5

@@ -89,6 +89,11 @@ public abstract class Effect implements Runnable {
     public Vector targetOffset = null;
 
     /**
+     * If set to false, Entity-bound locations will not update during the Effect
+     */
+    public boolean updateLocations = true;
+
+    /**
      * If set, will run asynchronously.
      * Some effects don't support this (TurnEffect, JumpEffect)
      *
@@ -248,9 +253,12 @@ public abstract class Effect implements Runnable {
         if (location == null) {
             throw new IllegalArgumentException("Origin Location cannot be null!");
         }
-        this.origin = location;
+        origin = location;
         if (origin != null && offset != null) {
             origin.setOffset(offset);
+        }
+        if (!updateLocations && origin != null) {
+            origin.setUpdateLocation(false);
         }
     }
 
@@ -258,9 +266,12 @@ public abstract class Effect implements Runnable {
      * Set the Location this Effect is targeting.
      */
     public void setDynamicTarget(DynamicLocation location) {
-        this.target = location;
+        target = location;
         if (target != null && targetOffset != null) {
             target.addOffset(targetOffset);
+        }
+        if (!updateLocations && target != null) {
+            target.setUpdateLocation(false);
         }
     }
 

@@ -16,6 +16,7 @@ public class DynamicLocation {
     protected Vector offset;
     protected Vector entityOffset;
     protected boolean appliedOffset = false;
+    protected boolean updateLocation = true;
 
     public DynamicLocation(Location location) {
         if (location != null) {
@@ -91,8 +92,12 @@ public class DynamicLocation {
         }
     }
 
+    public void setUpdateLocation(boolean update) {
+        updateLocation = update;
+    }
+
     public void update() {
-        if (location == null) {
+        if (location == null || !updateLocation) {
             return;
         }
 
