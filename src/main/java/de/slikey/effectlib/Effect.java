@@ -76,7 +76,7 @@ public abstract class Effect implements Runnable {
      * If true, and a "target" Location or Entity is set, the two Locations
      * will orient to face one another.
      */
-    public boolean autoOrient = false;
+    public boolean autoOrient = true;
 
     /**
      * If set, will offset the origin location
