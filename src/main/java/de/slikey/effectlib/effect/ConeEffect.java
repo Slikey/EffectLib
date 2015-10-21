@@ -56,6 +56,7 @@ public class ConeEffect extends Effect {
      * Current step. Works as counter
      */
     protected int step = 0;
+    protected Location location;
 
     public ConeEffect(EffectManager effectManager) {
         super(effectManager);
@@ -66,7 +67,10 @@ public class ConeEffect extends Effect {
 
     @Override
     public void onRun() {
-        Location location = getLocation();
+        if (location == null) {
+            location = getLocation();
+        }
+        Vector direction = getLocation().getDirection().multiply(lengthGrow);
         for (int x = 0; x < particles; x++) {
             if (step > particlesCone) {
                 step = 0;
@@ -76,8 +80,9 @@ public class ConeEffect extends Effect {
             }
             double angle = step * angularVelocity + rotation;
             float radius = step * radiusGrow;
-            float length = step * lengthGrow;
-            Vector v = new Vector(Math.cos(angle) * radius, length, Math.sin(angle) * radius);
+            location.add(direction);
+
+            Vector v = new Vector(Math.cos(angle) * radius, 0, Math.sin(angle) * radius);
             VectorUtils.rotateAroundAxisX(v, (location.getPitch() + 90) * MathUtils.degreesToRadians);
             VectorUtils.rotateAroundAxisY(v, -location.getYaw() * MathUtils.degreesToRadians);
 

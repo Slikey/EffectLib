@@ -46,6 +46,7 @@ public class VortexEffect extends Effect {
      * Current step. Works as counter
      */
     protected int step = 0;
+    protected Location location;
 
     public VortexEffect(EffectManager effectManager) {
         super(effectManager);
@@ -56,11 +57,15 @@ public class VortexEffect extends Effect {
 
     @Override
     public void onRun() {
-        Location location = getLocation();
+        if (location == null) {
+            location = getLocation();
+        }
+        Vector direction = getLocation().getDirection().multiply(grow);
         for (int x = 0; x < circles; x++) {
             for (int i = 0; i < helixes; i++) {
+                location.add(direction);
                 double angle = step * radials + (2 * Math.PI * i / helixes);
-                Vector v = new Vector(Math.cos(angle) * radius, step * grow, Math.sin(angle) * radius);
+                Vector v = new Vector(Math.cos(angle) * radius, 0, Math.sin(angle) * radius);
                 VectorUtils.rotateAroundAxisX(v, (location.getPitch() + 90) * MathUtils.degreesToRadians);
                 VectorUtils.rotateAroundAxisY(v, -location.getYaw() * MathUtils.degreesToRadians);
 
