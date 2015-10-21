@@ -2,8 +2,9 @@
 
 ## 3.7
 
- - Add updateLocations parameter, can be used to turn off Entity location tracking
-
+ - Add updateLocations and updateDirections parameters, can be used to turn off Entity location tracking
+ - Changed Cone and Vortex effects to better react to changes in direction
+ 
 ## 3.6
  
  - Fix LineEffect, broken in 3.5
