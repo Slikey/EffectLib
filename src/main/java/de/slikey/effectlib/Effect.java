@@ -94,6 +94,11 @@ public abstract class Effect implements Runnable {
     public boolean updateLocations = true;
 
     /**
+     * If set to false, Entity-bound directions will not update during the Effect
+     */
+    public boolean updateDirections = true;
+
+    /**
      * If set, will run asynchronously.
      * Some effects don't support this (TurnEffect, JumpEffect)
      *
@@ -257,8 +262,9 @@ public abstract class Effect implements Runnable {
         if (origin != null && offset != null) {
             origin.setOffset(offset);
         }
-        if (!updateLocations && origin != null) {
-            origin.setUpdateLocation(false);
+        if (origin != null) {
+            origin.setUpdateLocation(updateLocations);
+            origin.setUpdateDirection(updateDirections);
         }
     }
 
@@ -270,8 +276,9 @@ public abstract class Effect implements Runnable {
         if (target != null && targetOffset != null) {
             target.addOffset(targetOffset);
         }
-        if (!updateLocations && target != null) {
-            target.setUpdateLocation(false);
+        if (target != null) {
+            target.setUpdateLocation(updateLocations);
+            target.setUpdateDirection(updateDirections);
         }
     }
 

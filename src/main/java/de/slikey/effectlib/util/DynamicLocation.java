@@ -10,13 +10,13 @@ import org.bukkit.util.Vector;
  * Represents a Location that can move, possibly bound to an Entity.
  */
 public class DynamicLocation {
-
-    protected final Location location;
-    protected final WeakReference<Entity> entity;
-    protected Vector offset;
-    protected Vector entityOffset;
-    protected boolean appliedOffset = false;
-    protected boolean updateLocation = true;
+    private final Location location;
+    private final WeakReference<Entity> entity;
+    private Vector offset;
+    private Vector entityOffset;
+    private boolean appliedOffset = false;
+    private boolean updateLocation = true;
+    private boolean updateDirection = true;
 
     public DynamicLocation(Location location) {
         if (location != null) {
@@ -97,32 +97,43 @@ public class DynamicLocation {
     }
 
     public void update() {
-        if (location == null || !updateLocation) {
+        if (location == null || (!updateLocation && !updateDirection)) {
             return;
         }
 
         Entity entityReference = entity == null ? null : entity.get();
         if (entityReference != null) {
             Location currentLocation = getEntityLocation(entityReference);
-            if (entityOffset != null) {
-                currentLocation.add(entityOffset);
-            } else {
-                entityOffset = location.toVector().subtract(currentLocation.toVector());
-                currentLocation = location;
+            if (updateDirection)
+            {
+                location.setDirection(currentLocation.getDirection());
             }
-            if (offset != null && !appliedOffset) {
-                // Apply the offset once initially, fold it into the entityOffset after that.
-                currentLocation.add(offset);
-                entityOffset.add(offset);
-                appliedOffset = true;
+            if (updateLocation)
+            {
+                if (entityOffset != null) {
+                    currentLocation.add(entityOffset);
+                } else {
+                    entityOffset = location.toVector().subtract(currentLocation.toVector());
+                    currentLocation = location;
+                }
+                if (offset != null && !appliedOffset) {
+                    // Apply the offset once initially, fold it into the entityOffset after that.
+                    currentLocation.add(offset);
+                    entityOffset.add(offset);
+                    appliedOffset = true;
+                }
+                location.setX(currentLocation.getX());
+                location.setY(currentLocation.getY());
+                location.setZ(currentLocation.getZ());
             }
-            location.setX(currentLocation.getX());
-            location.setY(currentLocation.getY());
-            location.setZ(currentLocation.getZ());
         } else if (!appliedOffset && offset != null) {
             // Only offset a fixed location once!
             location.add(offset);
             appliedOffset = true;
         }
+    }
+
+    public void setUpdateDirection(boolean updateDirection) {
+        this.updateDirection = updateDirection;
     }
 }
