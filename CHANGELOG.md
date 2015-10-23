@@ -2,6 +2,7 @@
 
 ## 3.7
 
+ - Turn Effect.autoOrient off by default
  - Add updateLocations and updateDirections parameters, can be used to turn off Entity location tracking
  - Changed Cone and Vortex effects to better react to changes in direction
  
