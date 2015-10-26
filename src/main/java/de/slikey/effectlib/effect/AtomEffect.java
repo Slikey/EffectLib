@@ -27,7 +27,7 @@ public class AtomEffect extends Effect {
     /**
      * Radius of the atom
      */
-    public int radius = 3;
+    public double radius = 3;
 
     /**
      * Radius of the nucleus as a fraction of the atom-radius
