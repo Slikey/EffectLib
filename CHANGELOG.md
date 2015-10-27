@@ -5,6 +5,9 @@
  - Turn Effect.autoOrient off by default
  - Add updateLocations and updateDirections parameters, can be used to turn off Entity location tracking
  - Changed Cone and Vortex effects to better react to changes in direction
+ - Fix BigBang (can't spawn Fireworks async!)
+ - Config-driven effect classes may omit the "Effect" portion of the class name when using builtin effects
+ - Effect "type" (instant, repeating, delayed) can now be set via configs
  
 ## 3.6
  

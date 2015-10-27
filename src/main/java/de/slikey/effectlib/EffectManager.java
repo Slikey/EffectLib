@@ -122,6 +122,9 @@ public final class EffectManager implements Disposable {
             // A shaded manager may provide a fully-qualified path.
             if (!effectClass.contains(".")) {
                 effectClass = "de.slikey.effectlib.effect." + effectClass;
+                if (!effectClass.endsWith("Effect")) {
+                    effectClass = effectClass + "Effect";
+                }
             }
             effectLibClass = effectClasses.get(effectClass);
             if (effectLibClass == null) {
@@ -150,7 +153,7 @@ public final class EffectManager implements Disposable {
                 continue;
             }
 
-            if (!setField(effect, key, parameters, parameterMap)) {
+            if (!setField(effect, key, parameters, parameterMap) && debug) {
                 owningPlugin.getLogger().warning("Unable to assign EffectLib property " + key + " of class " + effectLibClass.getName());
             }
         }
@@ -248,6 +251,9 @@ public final class EffectManager implements Disposable {
             } else if (field.getType().isAssignableFrom(ParticleEffect.class)) {
                 ParticleEffect particleType = ParticleEffect.valueOf(value.toUpperCase());
                 field.set(effect, particleType);
+            } else if (field.getType().isAssignableFrom(EffectType.class)) {
+                EffectType effectType = EffectType.valueOf(value.toUpperCase());
+                field.set(effect, effectType);
             } else if (field.getType().equals(Sound.class)) {
                 try {
                     Sound sound = Sound.valueOf(value.toUpperCase());
