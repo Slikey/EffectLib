@@ -37,6 +37,7 @@ public class BigBangEffect extends Effect {
         type = EffectType.REPEATING;
         period = 2;
         iterations = 400;
+        asynchronous = false;
     }
 
     @Override
