@@ -1,5 +1,7 @@
 # CHANGELOG
 
+## 3.8
+
 ## 3.7
 
  - Turn Effect.autoOrient off by default
