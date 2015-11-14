@@ -30,7 +30,7 @@ public class TraceEffect extends Effect {
     /**
      * Waypoints of the trace
      */
-    protected List<Vector> wayPoints;
+    protected final List<Vector> wayPoints = new ArrayList<Vector>();
 
     /**
      * Internal counter
@@ -47,7 +47,6 @@ public class TraceEffect extends Effect {
         type = EffectType.REPEATING;
         period = 1;
         iterations = 600;
-        wayPoints = new ArrayList<Vector>();
     }
 
     @Override
@@ -60,8 +59,11 @@ public class TraceEffect extends Effect {
             return;
         }
 
-        if (wayPoints.size() >= maxWayPoints) {
-            wayPoints.remove(0);
+        synchronized(wayPoints)
+        {
+            if (wayPoints.size() >= maxWayPoints) {
+                wayPoints.remove(0);
+            }
         }
 
         wayPoints.add(location.toVector());
@@ -70,9 +72,12 @@ public class TraceEffect extends Effect {
             return;
         }
 
-        for (Vector position : wayPoints) {
-            Location particleLocation = new Location(world, position.getX(), position.getY(), position.getZ());
-            display(particle, particleLocation);
+        synchronized(wayPoints)
+        {
+            for (Vector position : wayPoints) {
+                Location particleLocation = new Location(world, position.getX(), position.getY(), position.getZ());
+                display(particle, particleLocation);
+            }
         }
     }
 
