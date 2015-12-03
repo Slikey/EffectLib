@@ -15,6 +15,7 @@ import java.util.logging.Level;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Entity;
@@ -250,6 +251,10 @@ public final class EffectManager implements Disposable {
                 field.set(effect, value.equalsIgnoreCase("true"));
             } else if (field.getType().equals(Long.TYPE) || field.getType().equals(Long.class)) {
                 field.set(effect, NumberConversions.toLong(value));
+            } else if (field.getType().equals(Short.TYPE) || field.getType().equals(Short.class)) {
+                field.set(effect, NumberConversions.toShort(value));
+            } else if (field.getType().equals(Byte.TYPE) || field.getType().equals(Byte.class)) {
+                field.set(effect, NumberConversions.toByte(value));
             } else if (field.getType().isAssignableFrom(String.class)) {
                 field.set(effect, value);
             } else if (field.getType().isAssignableFrom(ParticleEffect.class)) {
@@ -262,6 +267,13 @@ public final class EffectManager implements Disposable {
                 try {
                     Sound sound = Sound.valueOf(value.toUpperCase());
                     field.set(effect, sound);
+                } catch (Exception ex) {
+                    onError(ex);
+                }
+            } else if (field.getType().equals(Material.class)) {
+                try {
+                    Material material = Material.valueOf(value.toUpperCase());
+                    field.set(effect, material);
                 } catch (Exception ex) {
                     onError(ex);
                 }

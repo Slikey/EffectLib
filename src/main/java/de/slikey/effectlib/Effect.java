@@ -5,6 +5,7 @@ import de.slikey.effectlib.util.ParticleEffect;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.util.Vector;
 
@@ -97,6 +98,12 @@ public abstract class Effect implements Runnable {
      * If set to false, Entity-bound directions will not update during the Effect
      */
     public boolean updateDirections = true;
+
+    /**
+     * The Material and data to use for block and item break particles
+     */
+    public Material material;
+    public Byte materialData;
 
     /**
      * If set, will run asynchronously.
@@ -336,7 +343,7 @@ public abstract class Effect implements Runnable {
     }
 
     protected void display(ParticleEffect particle, Location location, Color color, float speed, int amount) {
-        particle.display(null, location, color, visibleRange, 0, 0, 0, speed, amount);
+        particle.display(particle.getData(material, materialData), location, color, visibleRange, 0, 0, 0, speed, amount);
     }
 
     private void done() {

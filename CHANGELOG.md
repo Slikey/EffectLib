@@ -2,6 +2,9 @@
 
 ## 3.8
 
+ - Add material and materialData parameters to all effects, for customizing
+   block_crack and item_crack particle types
+
 ## 3.7
 
  - Turn Effect.autoOrient off by default
