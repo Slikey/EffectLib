@@ -1412,6 +1412,9 @@ public enum ParticleEffect {
 
     public ParticleData getData(Material material, Byte blockData) {
         ParticleData data = null;
+        if (blockData == null) {
+            blockData = 0;
+        }
         if (this == ParticleEffect.BLOCK_CRACK || this == ParticleEffect.ITEM_CRACK || this == ParticleEffect.BLOCK_DUST) {
             if (material != null && material != Material.AIR) {
                 if (this == ParticleEffect.ITEM_CRACK) {
