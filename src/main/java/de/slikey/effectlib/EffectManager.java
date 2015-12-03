@@ -209,6 +209,10 @@ public final class EffectManager implements Disposable {
     public void enableDebug(boolean enable) {
         debug = enable;
     }
+
+    public boolean isDebugEnabled() {
+        return debug;
+    }
     
     public void onError(Throwable ex) {
         if (debug) {
