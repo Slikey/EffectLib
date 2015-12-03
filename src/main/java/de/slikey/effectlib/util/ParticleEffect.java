@@ -579,10 +579,10 @@ public enum ParticleEffect {
      */
     public void display(float offsetX, float offsetY, float offsetZ, float speed, int amount, Location center, double range) throws ParticleVersionException, ParticleDataException, IllegalArgumentException {
         if (!isSupported()) {
-            throw new ParticleVersionException("This particle effect is not supported by your server version");
+            throw new ParticleVersionException("The " + this + " particle effect is not supported by your server version");
         }
         if (requiresData) {
-            throw new ParticleDataException("This particle effect requires additional data");
+            throw new ParticleDataException("The " + this + " particle effect requires additional data");
         }
         if (requiresWater && !isWater(center)) {
             throw new IllegalArgumentException("There is no water at the center location");
@@ -608,10 +608,10 @@ public enum ParticleEffect {
      */
     public void display(float offsetX, float offsetY, float offsetZ, float speed, int amount, Location center, List<Player> players) throws ParticleVersionException, ParticleDataException, IllegalArgumentException {
         if (!isSupported()) {
-            throw new ParticleVersionException("This particle effect is not supported by your server version");
+            throw new ParticleVersionException("The " + this + " particle effect is not supported by your server version");
         }
         if (requiresData) {
-            throw new ParticleDataException("This particle effect requires additional data");
+            throw new ParticleDataException("The " + this + " particle effect requires additional data");
         }
         if (requiresWater && !isWater(center)) {
             throw new IllegalArgumentException("There is no water at the center location");
@@ -653,10 +653,10 @@ public enum ParticleEffect {
      */
     public void display(Vector direction, float speed, Location center, double range) throws ParticleVersionException, ParticleDataException, IllegalArgumentException {
         if (!isSupported()) {
-            throw new ParticleVersionException("This particle effect is not supported by your server version");
+            throw new ParticleVersionException("The " + this + " particle effect is not supported by your server version");
         }
         if (requiresData) {
-            throw new ParticleDataException("This particle effect requires additional data");
+            throw new ParticleDataException("The " + this + " particle effect requires additional data");
         }
         if (requiresWater && !isWater(center)) {
             throw new IllegalArgumentException("There is no water at the center location");
@@ -679,10 +679,10 @@ public enum ParticleEffect {
      */
     public void display(Vector direction, float speed, Location center, List<Player> players) throws ParticleVersionException, ParticleDataException, IllegalArgumentException {
         if (!isSupported()) {
-            throw new ParticleVersionException("This particle effect is not supported by your server version");
+            throw new ParticleVersionException("The " + this + " particle effect is not supported by your server version");
         }
         if (requiresData) {
-            throw new ParticleDataException("This particle effect requires additional data");
+            throw new ParticleDataException("The " + this + " particle effect requires additional data");
         }
         if (requiresWater && !isWater(center)) {
             throw new IllegalArgumentException("There is no water at the center location");
@@ -724,13 +724,13 @@ public enum ParticleEffect {
      */
     public void display(ParticleData data, float offsetX, float offsetY, float offsetZ, float speed, int amount, Location center, double range) throws ParticleVersionException, ParticleDataException {
         if (!isSupported()) {
-            throw new ParticleVersionException("This particle effect is not supported by your server version");
+            throw new ParticleVersionException("The " + this + " particle effect is not supported by your server version");
         }
         if (!requiresData) {
-            throw new ParticleDataException("This particle effect does not require additional data");
+            throw new ParticleDataException("The " + this + " particle effect does not require additional data");
         }
         if (!isDataCorrect(this, data)) {
-            throw new ParticleDataException("The particle data type is incorrect");
+            throw new ParticleDataException("The particle data type is incorrect: " + data + " for " + this);
         }
         new ParticlePacket(this, offsetX, offsetY, offsetZ, speed, amount, range > LONG_DISTANCE, data).sendTo(center, range);
     }
@@ -753,13 +753,13 @@ public enum ParticleEffect {
      */
     public void display(ParticleData data, float offsetX, float offsetY, float offsetZ, float speed, int amount, Location center, List<Player> players) throws ParticleVersionException, ParticleDataException {
         if (!isSupported()) {
-            throw new ParticleVersionException("This particle effect is not supported by your server version");
+            throw new ParticleVersionException("The " + this + " particle effect is not supported by your server version");
         }
         if (!requiresData) {
-            throw new ParticleDataException("This particle effect does not require additional data");
+            throw new ParticleDataException("The " + this + " particle effect does not require additional data");
         }
         if (!isDataCorrect(this, data)) {
-            throw new ParticleDataException("The particle data type is incorrect");
+            throw new ParticleDataException("The particle data type is incorrect: " + data + " for " + this);
         }
         new ParticlePacket(this, offsetX, offsetY, offsetZ, speed, amount, isLongDistance(center, players), data).sendTo(center, players);
     }
@@ -798,13 +798,13 @@ public enum ParticleEffect {
      */
     public void display(ParticleData data, Vector direction, float speed, Location center, double range) throws ParticleVersionException, ParticleDataException {
         if (!isSupported()) {
-            throw new ParticleVersionException("This particle effect is not supported by your server version");
+            throw new ParticleVersionException("The " + this + " particle effect is not supported by your server version");
         }
         if (!requiresData) {
-            throw new ParticleDataException("This particle effect does not require additional data");
+            throw new ParticleDataException("The " + this + " particle effect does not require additional data");
         }
         if (!isDataCorrect(this, data)) {
-            throw new ParticleDataException("The particle data type is incorrect");
+            throw new ParticleDataException("The particle data type is incorrect: " + data + " for " + this);
         }
         new ParticlePacket(this, direction, speed, range > LONG_DISTANCE, data).sendTo(center, range);
     }
@@ -824,13 +824,13 @@ public enum ParticleEffect {
      */
     public void display(ParticleData data, Vector direction, float speed, Location center, List<Player> players) throws ParticleVersionException, ParticleDataException {
         if (!isSupported()) {
-            throw new ParticleVersionException("This particle effect is not supported by your server version");
+            throw new ParticleVersionException("The " + this + " particle effect is not supported by your server version");
         }
         if (!requiresData) {
-            throw new ParticleDataException("This particle effect does not require additional data");
+            throw new ParticleDataException("The " + this + " particle effect does not require additional data");
         }
         if (!isDataCorrect(this, data)) {
-            throw new ParticleDataException("The particle data type is incorrect");
+            throw new ParticleDataException("The particle data type is incorrect: " + data + " for " + this);
         }
         new ParticlePacket(this, direction, speed, isLongDistance(center, players), data).sendTo(center, players);
     }
