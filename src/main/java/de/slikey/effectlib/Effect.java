@@ -25,10 +25,10 @@ public abstract class Effect implements Runnable {
     public Color color = null;
 
     /**
-     * This is only used when colorizing certain particles,
-     * since the speed can't be 0 for the particle to look colored.
+     * This can be used to give particles a set speed when spawned.
+     * This will not work with colored particles.
      */
-    public float speed = 1;
+    public float speed = 0;
 
     /**
      * Delay to wait for delayed effects.
@@ -104,6 +104,20 @@ public abstract class Effect implements Runnable {
      */
     public Material material;
     public Byte materialData;
+
+    /**
+     * These can be used to spawn multiple particles per packet.
+     * It will not work with colored particles, however.
+     */
+    public int particleCount = 1;
+
+    /**
+     * These can be used to apply an offset to spawned particles, particularly
+     * useful when spawning multiples.
+     */
+    public int particleOffsetX = 0;
+    public int particleOffsetY = 0;
+    public int particleOffsetZ = 0;
 
     /**
      * If set, will run asynchronously.
@@ -335,7 +349,7 @@ public abstract class Effect implements Runnable {
     }
 
     protected void display(ParticleEffect particle, Location location, Color color) {
-        display(particle, location, color, 0, 1);
+        display(particle, location, color, speed, particleCount);
     }
 
     protected void display(ParticleEffect particle, Location location, float speed, int amount) {
@@ -343,7 +357,7 @@ public abstract class Effect implements Runnable {
     }
 
     protected void display(ParticleEffect particle, Location location, Color color, float speed, int amount) {
-        particle.display(particle.getData(material, materialData), location, color, visibleRange, 0, 0, 0, speed, amount);
+        particle.display(particle.getData(material, materialData), location, color, visibleRange, particleOffsetX, particleOffsetY, particleOffsetZ, speed, amount);
     }
 
     private void done() {

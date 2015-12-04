@@ -4,6 +4,7 @@
 
  - Add material and materialData parameters to all effects, for customizing
    block_crack and item_crack particle types
+ - Add support for particle counts and offsets
 
 ## 3.7
 
