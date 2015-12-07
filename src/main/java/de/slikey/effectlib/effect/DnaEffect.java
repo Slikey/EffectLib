@@ -110,9 +110,17 @@ public class DnaEffect extends Effect {
     }
 
     protected void drawParticle(Location location, Vector v, ParticleEffect particle, Color color) {
-        VectorUtils.rotateAroundAxisX(v, (location.getPitch() + 90) * MathUtils.degreesToRadians);
-        VectorUtils.rotateAroundAxisY(v, -location.getYaw() * MathUtils.degreesToRadians);
-
+    	
+    	
+    	//This adds the relative offsets
+    	v = addRelativeOffset(v);
+    	
+    	//This adjusts the effect to the player eyes and adds any relative angles
+    	double angleX = (location.getPitch() + 90 + relativePitch) * MathUtils.degreesToRadians;
+    	double angleY = (-location.getYaw() + relativeYaw) * MathUtils.degreesToRadians;
+    	double angleZ = relativeRoll * MathUtils.degreesToRadians;
+    	VectorUtils.rotateVector(v, angleX, angleY, angleZ);
+    	
         location.add(v);
         display(particle, location, color);
         location.subtract(v);

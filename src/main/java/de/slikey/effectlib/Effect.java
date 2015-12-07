@@ -118,7 +118,25 @@ public abstract class Effect implements Runnable {
     public int particleOffsetX = 0;
     public int particleOffsetY = 0;
     public int particleOffsetZ = 0;
-
+    
+    /**
+     * These are used to add relative offset relative to the player's direction
+     * Useful for Effects :D
+     * -SexyToad
+     */
+    
+    public double relativeParticleOffsetX = 0;
+    public double relativeParticleOffsetY = 0;
+    public double relativeParticleOffsetZ = 0;
+    
+    /**
+     * These are used to rotate an effect around the x, y, or z axis.
+     * Which translates to Roll, Yaw, and Pitch.
+     */
+    public double relativeRoll = 0;
+    public double relativeYaw = 0;
+    public double relativePitch = 0;
+    
     /**
      * If set, will run asynchronously.
      * Some effects don't support this (TurnEffect, JumpEffect)
@@ -358,6 +376,12 @@ public abstract class Effect implements Runnable {
 
     protected void display(ParticleEffect particle, Location location, Color color, float speed, int amount) {
         particle.display(particle.getData(material, materialData), location, color, visibleRange, particleOffsetX, particleOffsetY, particleOffsetZ, speed, amount);
+    }
+    
+    protected Vector addRelativeOffset(Vector particlePoint) {
+    	Vector offsets = new Vector(relativeParticleOffsetX, relativeParticleOffsetY, relativeParticleOffsetZ);
+    	particlePoint = particlePoint.add(offsets);
+    	return particlePoint;
     }
 
     private void done() {
