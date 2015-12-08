@@ -85,6 +85,11 @@ public abstract class Effect implements Runnable {
     public Vector offset = null;
 
     /**
+     * If set, will offset the origin location, relative to the origin direction
+     */
+    public Vector relativeOffset = null;
+
+    /**
      * If set, will offset the target location
      */
     public Vector targetOffset = null;
@@ -280,13 +285,16 @@ public abstract class Effect implements Runnable {
             throw new IllegalArgumentException("Origin Location cannot be null!");
         }
         origin = location;
-        if (origin != null && offset != null) {
+        if (origin == null) return;
+
+        if (offset != null) {
             origin.addOffset(offset);
         }
-        if (origin != null) {
-            origin.setUpdateLocation(updateLocations);
-            origin.setUpdateDirection(updateDirections);
+        if (relativeOffset != null) {
+            origin.addRelativeOffset(relativeOffset);
         }
+        origin.setUpdateLocation(updateLocations);
+        origin.setUpdateDirection(updateDirections);
     }
 
     /**

@@ -1,5 +1,6 @@
 package de.slikey.effectlib.util;
 
+import org.bukkit.Location;
 import org.bukkit.util.Vector;
 
 public final class VectorUtils {
@@ -52,36 +53,51 @@ public final class VectorUtils {
     }
 
     /**
+     * Rotate a vector about a location using that location's direction
+     *
+     * @param v
+     * @param location
+     * @return
+     */
+    public static final Vector rotateVector(Vector v, Location location) {
+        return rotateVector(v, location.getYaw(), location.getPitch());
+    }
+
+    /**
      * This handles non-unit vectors, with yaw and pitch instead of X,Y,Z angles.
      *
      * Thanks to SexyToad!
      *
      * @param v
-     * @param yaw
-     * @param pitch
+     * @param yawDegrees
+     * @param pitchDegrees
      * @return
      */
-    public static final Vector rotateVector(Vector v, double yaw, double pitch) {
-        double length;
-        yaw = Math.toRadians(-1 * (yaw + 90));
-        pitch = Math.toRadians(-pitch);
-        double x;
-        double y;
-        double z;
+    public static final Vector rotateVector(Vector v, float yawDegrees, float pitchDegrees) {
+        double yaw = Math.toRadians(yawDegrees + 90);
+        double pitch = Math.toRadians(pitchDegrees);
 
         double cosYaw = Math.cos(yaw);
-        double cosPitch = Math.sin(yaw);
-        double sinYaw = Math.cos(pitch);
-        double sinPitch = Math.cos(pitch);
+        double cosPitch = Math.cos(pitch);
+        double sinYaw = Math.sin(yaw);
+        double sinPitch = Math.sin(pitch);
 
-        length = v.length();
-        x = length * cosYaw * sinPitch;
-        y = length * sinYaw * sinPitch;
-        z = length * cosPitch;
+        double initialX, initialY, initialZ;
+        double x, y, z;
 
-        Vector adjustedVector = new Vector(x, y, z);
+        // Z_Axis rotation (Pitch)
+        initialX = v.getX();
+        initialY = v.getY();
+        x = initialX * cosPitch - initialY * sinPitch;
+        y = initialX * sinPitch + initialY * cosPitch;
 
-        return adjustedVector;
+        // Y_Axis rotation (Yaw)
+        initialZ = v.getZ();
+        initialX = x;
+        z = initialZ * cosYaw - initialX * sinYaw;
+        x = initialZ * sinYaw + initialX * cosYaw;
+
+        return new Vector(x, y, z);
     }
 
     public static final double angleToXAxis(Vector vector) {

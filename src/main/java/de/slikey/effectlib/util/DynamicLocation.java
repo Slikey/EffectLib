@@ -14,6 +14,7 @@ public class DynamicLocation {
     private final Location originalLocation;
     private final WeakReference<Entity> entity;
     private Vector offset;
+    private Vector relativeOffset;
     private Vector entityOffset;
     private boolean updateLocation = true;
     private boolean updateDirection = true;
@@ -65,6 +66,15 @@ public class DynamicLocation {
         this.updateOffsets();
     }
 
+    public void addRelativeOffset(Vector offset) {
+        if (this.relativeOffset == null) {
+            this.relativeOffset = offset.clone();
+        } else {
+            this.relativeOffset.add(offset);
+        }
+        this.updateOffsets();
+    }
+
     public Entity getEntity() {
         return entity == null ? null : entity.get();
     }
@@ -101,6 +111,12 @@ public class DynamicLocation {
         if (offset != null) {
             location.add(offset);
         }
+        if (relativeOffset != null) {
+            location.add(VectorUtils.rotateVector(relativeOffset, location));
+        }
+        if (entityOffset != null) {
+            location.add(entityOffset);
+        }
     }
 
     public void setUpdateLocation(boolean update) {
@@ -121,15 +137,7 @@ public class DynamicLocation {
             }
             if (updateLocation)
             {
-                if (entityOffset != null) {
-                    currentLocation.add(entityOffset);
-                }
-                if (offset != null) {
-                    currentLocation.add(offset);
-                }
-                location.setX(currentLocation.getX());
-                location.setY(currentLocation.getY());
-                location.setZ(currentLocation.getZ());
+                updateFrom(currentLocation);
             }
         }
     }

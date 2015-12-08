@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 3.9
+
+ - Add relativeOffset parameter (thanks, SexyToad!)
+
 ## 3.8
 
  - Add material and materialData parameters to all effects, for customizing
