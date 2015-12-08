@@ -51,8 +51,40 @@ public final class VectorUtils {
         return v;
     }
 
+    /**
+     * This handles non-unit vectors, with yaw and pitch instead of X,Y,Z angles.
+     *
+     * Thanks to SexyToad!
+     *
+     * @param v
+     * @param yaw
+     * @param pitch
+     * @return
+     */
+    public static final Vector rotateVector(Vector v, double yaw, double pitch) {
+        double length;
+        yaw = Math.toRadians(-1 * (yaw + 90));
+        pitch = Math.toRadians(-pitch);
+        double x;
+        double y;
+        double z;
+
+        double cosYaw = Math.cos(yaw);
+        double cosPitch = Math.sin(yaw);
+        double sinYaw = Math.cos(pitch);
+        double sinPitch = Math.cos(pitch);
+
+        length = v.length();
+        x = length * cosYaw * sinPitch;
+        y = length * sinYaw * sinPitch;
+        z = length * cosPitch;
+
+        Vector adjustedVector = new Vector(x, y, z);
+
+        return adjustedVector;
+    }
+
     public static final double angleToXAxis(Vector vector) {
         return Math.atan2(vector.getX(), vector.getY());
     }
-
 }
