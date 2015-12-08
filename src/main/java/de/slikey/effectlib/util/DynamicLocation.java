@@ -11,10 +11,10 @@ import org.bukkit.util.Vector;
  */
 public class DynamicLocation {
     private final Location location;
+    private final Location originalLocation;
     private final WeakReference<Entity> entity;
     private Vector offset;
     private Vector entityOffset;
-    private boolean appliedOffset = false;
     private boolean updateLocation = true;
     private boolean updateDirection = true;
 
@@ -24,6 +24,7 @@ public class DynamicLocation {
         } else {
             this.location = null;
         }
+        this.originalLocation = location;
         this.entity = null;
     }
 
@@ -35,6 +36,7 @@ public class DynamicLocation {
             this.entity = null;
             this.location = null;
         }
+        this.originalLocation = location;
     }
 
     public DynamicLocation(Location location, Entity entity) {
@@ -47,13 +49,11 @@ public class DynamicLocation {
         }
         if (entity != null) {
             this.entity = new WeakReference<Entity>(entity);
+            this.entityOffset = this.location.toVector().subtract(getEntityLocation(entity).toVector());
         } else {
             this.entity = null;
         }
-    }
-
-    public void setOffset(Vector offset) {
-        this.offset = offset;
+        this.originalLocation = location;
     }
 
     public void addOffset(Vector offset) {
@@ -62,6 +62,7 @@ public class DynamicLocation {
         } else {
             this.offset.add(offset);
         }
+        this.updateOffsets();
     }
 
     public Entity getEntity() {
@@ -84,9 +85,19 @@ public class DynamicLocation {
     }
 
     public void updateFrom(Location newLocation) {
-        location.setX(newLocation.getX());
-        location.setY(newLocation.getY());
-        location.setZ(newLocation.getZ());
+        if (originalLocation != null) {
+            originalLocation.setX(newLocation.getX());
+            originalLocation.setY(newLocation.getY());
+            originalLocation.setZ(newLocation.getZ());
+        }
+        updateOffsets();
+    }
+
+    public void updateOffsets() {
+        if (originalLocation == null || location == null) return;
+        location.setX(originalLocation.getX());
+        location.setY(originalLocation.getY());
+        location.setZ(originalLocation.getZ());
         if (offset != null) {
             location.add(offset);
         }
@@ -112,24 +123,14 @@ public class DynamicLocation {
             {
                 if (entityOffset != null) {
                     currentLocation.add(entityOffset);
-                } else {
-                    entityOffset = location.toVector().subtract(currentLocation.toVector());
-                    currentLocation = location;
                 }
-                if (offset != null && !appliedOffset) {
-                    // Apply the offset once initially, fold it into the entityOffset after that.
+                if (offset != null) {
                     currentLocation.add(offset);
-                    entityOffset.add(offset);
-                    appliedOffset = true;
                 }
                 location.setX(currentLocation.getX());
                 location.setY(currentLocation.getY());
                 location.setZ(currentLocation.getZ());
             }
-        } else if (!appliedOffset && offset != null) {
-            // Only offset a fixed location once!
-            location.add(offset);
-            appliedOffset = true;
         }
     }
 

@@ -281,7 +281,7 @@ public abstract class Effect implements Runnable {
         }
         origin = location;
         if (origin != null && offset != null) {
-            origin.setOffset(offset);
+            origin.addOffset(offset);
         }
         if (origin != null) {
             origin.setUpdateLocation(updateLocations);
