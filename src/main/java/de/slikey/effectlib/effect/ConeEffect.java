@@ -78,9 +78,16 @@ public class ConeEffect extends Effect {
             float radius = step * radiusGrow;
             float length = step * lengthGrow;
             Vector v = new Vector(Math.cos(angle) * radius, length, Math.sin(angle) * radius);
-            VectorUtils.rotateAroundAxisX(v, (location.getPitch() + 90) * MathUtils.degreesToRadians);
-            VectorUtils.rotateAroundAxisY(v, -location.getYaw() * MathUtils.degreesToRadians);
-
+            
+        	//This adds the relative offsets
+        	v = addRelativeOffset(v);
+        	
+        	//This adjusts the effect to the player eyes and adds any relative angles
+        	double angleX = (location.getPitch() + 90 + relativePitch) * MathUtils.degreesToRadians;
+        	double angleY = (-location.getYaw() + relativeYaw) * MathUtils.degreesToRadians;
+        	double angleZ = relativeRoll * MathUtils.degreesToRadians;
+        	VectorUtils.rotateVector(v, angleX, angleY, angleZ);
+            
             location.add(v);
             display(particle, location);
             location.subtract(v);

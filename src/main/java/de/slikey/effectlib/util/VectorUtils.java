@@ -24,7 +24,7 @@ public final class VectorUtils {
         z = v.getX() * -sin + v.getZ() * cos;
         return v.setX(x).setZ(z);
     }
-
+    
     public static final Vector rotateAroundAxisZ(Vector v, double angle) {
         double x, y, cos, sin;
         cos = Math.cos(angle);
@@ -53,6 +53,32 @@ public final class VectorUtils {
 
     public static final double angleToXAxis(Vector vector) {
         return Math.atan2(vector.getX(), vector.getY());
+    }
+    
+    public static final Vector rotateLongVector(Vector v, double yaw, double pitch) {
+    	double length;
+    	yaw = Math.toRadians(-1*(yaw+90));
+    	pitch = Math.toRadians(-pitch);
+    	double x;
+    	double y;
+    	double z;
+    	
+    	double cosYaw = Math.cos(yaw);
+    	double cosPitch = Math.sin(yaw);
+    	double sinYaw = Math.cos(pitch);
+    	double sinPitch = Math.cos(pitch);
+    	
+    	
+    	length = v.length();
+    			
+    	x = length*cosYaw*sinPitch;
+    	y = length*sinYaw*sinPitch;
+    	z = length*cosPitch;
+    	
+    	
+    	Vector adjustedVector = new Vector(x, y, z);
+    	
+    	return adjustedVector;
     }
 
 }
