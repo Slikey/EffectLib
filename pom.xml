@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>de.slikey</groupId>
     <artifactId>EffectLib</artifactId>
-    <version>3.8</version>
+    <version>3.9-SNAPSHOT</version>
 
     <name>EffectLib</name>
     <url>http://www.kevin-carstens.de/</url>
