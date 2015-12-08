@@ -95,6 +95,12 @@ public abstract class Effect implements Runnable {
     public Vector targetOffset = null;
 
     /**
+     * These are used to modify the direction of the origin Location.
+     */
+    public float yawOffset = 0;
+    public float pitchOffset = 0;
+
+    /**
      * If set to false, Entity-bound locations will not update during the Effect
      */
     public boolean updateLocations = true;
@@ -293,6 +299,7 @@ public abstract class Effect implements Runnable {
         if (relativeOffset != null) {
             origin.addRelativeOffset(relativeOffset);
         }
+        origin.setDirectionOffset(yawOffset, pitchOffset);
         origin.setUpdateLocation(updateLocations);
         origin.setUpdateDirection(updateDirections);
     }

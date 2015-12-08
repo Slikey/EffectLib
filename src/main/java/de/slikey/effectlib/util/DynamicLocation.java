@@ -13,6 +13,8 @@ public class DynamicLocation {
     private final Location location;
     private final Location originalLocation;
     private final WeakReference<Entity> entity;
+    private float yawOffset;
+    private float pitchOffset;
     private Vector offset;
     private Vector relativeOffset;
     private Vector entityOffset;
@@ -92,6 +94,16 @@ public class DynamicLocation {
 
     public void setDirection(Vector direction) {
         location.setDirection(direction);
+        updateDirectionOffsets();
+    }
+
+    protected void updateDirectionOffsets() {
+        if (yawOffset != 0) {
+            location.setYaw(location.getYaw() + yawOffset);
+        }
+        if (pitchOffset != 0) {
+            location.setPitch(location.getPitch() + pitchOffset);
+        }
     }
 
     public void updateFrom(Location newLocation) {
@@ -133,7 +145,7 @@ public class DynamicLocation {
             Location currentLocation = getEntityLocation(entityReference);
             if (updateDirection)
             {
-                location.setDirection(currentLocation.getDirection());
+                setDirection(currentLocation.getDirection());
             }
             if (updateLocation)
             {
@@ -144,5 +156,11 @@ public class DynamicLocation {
 
     public void setUpdateDirection(boolean updateDirection) {
         this.updateDirection = updateDirection;
+    }
+
+    public void setDirectionOffset(float yawOffset, float pitchOffset) {
+        this.pitchOffset = pitchOffset;
+        this.yawOffset = yawOffset;
+        updateDirectionOffsets();
     }
 }
