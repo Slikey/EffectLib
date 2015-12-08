@@ -1,5 +1,6 @@
 package de.slikey.effectlib.util;
 
+import org.bukkit.Location;
 import org.bukkit.util.Vector;
 
 public final class VectorUtils {
@@ -55,30 +56,30 @@ public final class VectorUtils {
         return Math.atan2(vector.getX(), vector.getY());
     }
     
-    public static final Vector rotateLongVector(Vector v, double yaw, double pitch) {
-    	double length;
-    	yaw = Math.toRadians(-1*(yaw+90));
-    	pitch = Math.toRadians(-pitch);
-    	double x;
-    	double y;
-    	double z;
+    public static final Vector rotateLongVector(Vector v, Location loc) {
+    	double yaw = Math.toRadians(-(loc.getYaw()+90));
+    	double pitch = Math.toRadians(-loc.getPitch());
     	
     	double cosYaw = Math.cos(yaw);
-    	double cosPitch = Math.sin(yaw);
-    	double sinYaw = Math.cos(pitch);
-    	double sinPitch = Math.cos(pitch);
+    	double cosPitch = Math.cos(pitch);
+    	double sinYaw = Math.sin(yaw);
+    	double sinPitch = Math.sin(pitch);
     	
+    	double intialX, intialY, intialZ;
+    	double x, y, z;
     	
-    	length = v.length();
-    			
-    	x = length*cosYaw*sinPitch;
-    	y = length*sinYaw*sinPitch;
-    	z = length*cosPitch;
+    	//Z_Axis rotation (Pitch)
+    	intialX = v.getX();
+    	intialY = v.getY();
+    	x = intialX*cosPitch - intialY*sinPitch;
+    	y = intialX*sinPitch + intialY*cosPitch;
     	
-    	
-    	Vector adjustedVector = new Vector(x, y, z);
-    	
-    	return adjustedVector;
+    	//Y_Axis rotation (Yaw)
+    	intialZ = v.getZ();
+    	intialX = x;
+    	z = intialZ*cosYaw - intialX*sinYaw;
+    	x = intialZ*sinYaw + intialX*cosYaw;
+    	 
+    	return new Vector(x, y, z);
     }
-
 }
