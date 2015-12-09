@@ -74,8 +74,8 @@ public final class VectorUtils {
      * @return
      */
     public static final Vector rotateVector(Vector v, float yawDegrees, float pitchDegrees) {
-        double yaw = Math.toRadians(yawDegrees + 90);
-        double pitch = Math.toRadians(pitchDegrees);
+        double yaw = Math.toRadians(-1 * (yawDegrees + 90));
+        double pitch = Math.toRadians(-pitchDegrees);
 
         double cosYaw = Math.cos(yaw);
         double cosPitch = Math.cos(pitch);
