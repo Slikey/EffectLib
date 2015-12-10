@@ -1410,6 +1410,14 @@ public enum ParticleEffect {
         }
     }
 
+    public boolean requiresData() {
+        return requiresData;
+    }
+
+    public boolean requiresWater() {
+        return requiresWater;
+    }
+
     public ParticleData getData(Material material, Byte blockData) {
         ParticleData data = null;
         if (blockData == null) {
