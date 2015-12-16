@@ -729,6 +729,9 @@ public enum ParticleEffect {
         if (!requiresData) {
             throw new ParticleDataException("The " + this + " particle effect does not require additional data");
         }
+        // Just skip it if there's no data, rather than throwing an exception
+        if (data == null) return;
+
         if (!isDataCorrect(this, data)) {
             throw new ParticleDataException("The particle data type is incorrect: " + data + " for " + this);
         }
@@ -875,7 +878,7 @@ public enum ParticleEffect {
         public ParticleData(Material material, byte data) {
             this.material = material;
             this.data = data;
-            this.packetData = new int[]{material.getId(), data};
+            this.packetData = new int[]{(data << 12) | (material.getId() & 4095)};
         }
 
         /**
