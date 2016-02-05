@@ -25,6 +25,11 @@ public class LineEffect extends Effect {
     public int zigZags = 10;
 
     /**
+     * Direction of zig-zags
+     */
+    public Vector zigZagOffset = new Vector(0,0.1,0);
+
+    /**
      * Particles per arc
      */
     public int particles = 100;
@@ -33,7 +38,7 @@ public class LineEffect extends Effect {
      * Length of arc
      * A non-zero value here will use a length instead of the target endpoint
      */
-    public int length = 0;
+    public double length = 0;
 
     /**
      * Internal boolean
@@ -76,9 +81,9 @@ public class LineEffect extends Effect {
         for (int i = 0; i < particles; i++) {
             if (isZigZag) {
                 if (zag) {
-                    loc.add(0, .1, 0);
+                    loc.add(zigZagOffset);
                 } else {
-                    loc.subtract(0, .1, 0);
+                    loc.subtract(zigZagOffset);
                 }
             }
             if (step >= amount) {
