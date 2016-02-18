@@ -30,6 +30,10 @@ public class ConfigUtils {
 
     public static void set(ConfigurationSection node, String path, Object value)
     {
+        if (value == null) {
+            node.set(path, value);
+            return;
+        }
         // This is a bunch of hackery... I suppose I ought to change the NBT
         // types to match and make this smarter?
         boolean isTrue = value.equals("true");
