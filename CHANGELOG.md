@@ -3,6 +3,8 @@
 ## 3.9
 
  - Add relativeOffset parameter (thanks, SexyToad!)
+ - Dropped support for 1.7. It's no longer easy/possible to have backwards compatibility
+   due to 1.9 dropping the old signature of getOnlinePlayers.
 
 ## 3.8
 
