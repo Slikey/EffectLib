@@ -375,7 +375,12 @@ public enum ParticleEffect {
      * <li>The speed value has no influence on this particle effect
      * </ul>
      */
-    MOB_APPEARANCE("mobappearance", 41, 8);
+    MOB_APPEARANCE("mobappearance", 41, 8),
+    DRAGON_BREATH("dragonbreath", 42, 9),
+    END_ROD("endRod", 43, 9),
+    DAMAGE_INDICATOR("damageIndicator", 44, 9),
+    SWEEP_ATTACK("sweepAttack", 45, 9);
+    ;
 
     private static final int LONG_DISTANCE = 16;
     private static final int LONG_DISTANCE_SQUARED = LONG_DISTANCE * LONG_DISTANCE;
