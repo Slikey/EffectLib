@@ -43,6 +43,7 @@ public final class EffectManager implements Disposable {
     private int visibleRange = 32;
 
     public EffectManager(Plugin owningPlugin) {
+        ParticleEffect.ParticlePacket.initialize();
         this.owningPlugin = owningPlugin;
         effects = new HashMap<Effect, BukkitTask>();
         disposed = false;

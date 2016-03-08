@@ -584,7 +584,7 @@ public enum ParticleEffect {
      */
     public void display(float offsetX, float offsetY, float offsetZ, float speed, int amount, Location center, double range) throws ParticleVersionException, ParticleDataException, IllegalArgumentException {
         if (!isSupported()) {
-            throw new ParticleVersionException("The " + this + " particle effect is not supported by your server version");
+            throw new ParticleVersionException("The " + this + " particle effect is not supported by your server version " + ParticlePacket.getVersion());
         }
         if (requiresData) {
             throw new ParticleDataException("The " + this + " particle effect requires additional data");
@@ -613,7 +613,7 @@ public enum ParticleEffect {
      */
     public void display(float offsetX, float offsetY, float offsetZ, float speed, int amount, Location center, List<Player> players) throws ParticleVersionException, ParticleDataException, IllegalArgumentException {
         if (!isSupported()) {
-            throw new ParticleVersionException("The " + this + " particle effect is not supported by your server version");
+            throw new ParticleVersionException("The " + this + " particle effect is not supported by your server version " + ParticlePacket.getVersion());
         }
         if (requiresData) {
             throw new ParticleDataException("The " + this + " particle effect requires additional data");
@@ -658,7 +658,7 @@ public enum ParticleEffect {
      */
     public void display(Vector direction, float speed, Location center, double range) throws ParticleVersionException, ParticleDataException, IllegalArgumentException {
         if (!isSupported()) {
-            throw new ParticleVersionException("The " + this + " particle effect is not supported by your server version");
+            throw new ParticleVersionException("The " + this + " particle effect is not supported by your server version " + ParticlePacket.getVersion());
         }
         if (requiresData) {
             throw new ParticleDataException("The " + this + " particle effect requires additional data");
@@ -684,7 +684,7 @@ public enum ParticleEffect {
      */
     public void display(Vector direction, float speed, Location center, List<Player> players) throws ParticleVersionException, ParticleDataException, IllegalArgumentException {
         if (!isSupported()) {
-            throw new ParticleVersionException("The " + this + " particle effect is not supported by your server version");
+            throw new ParticleVersionException("The " + this + " particle effect is not supported by your server version " + ParticlePacket.getVersion());
         }
         if (requiresData) {
             throw new ParticleDataException("The " + this + " particle effect requires additional data");
@@ -729,7 +729,7 @@ public enum ParticleEffect {
      */
     public void display(ParticleData data, float offsetX, float offsetY, float offsetZ, float speed, int amount, Location center, double range) throws ParticleVersionException, ParticleDataException {
         if (!isSupported()) {
-            throw new ParticleVersionException("The " + this + " particle effect is not supported by your server version");
+            throw new ParticleVersionException("The " + this + " particle effect is not supported by your server version " + ParticlePacket.getVersion());
         }
         if (!requiresData) {
             throw new ParticleDataException("The " + this + " particle effect does not require additional data");
@@ -761,7 +761,7 @@ public enum ParticleEffect {
      */
     public void display(ParticleData data, float offsetX, float offsetY, float offsetZ, float speed, int amount, Location center, List<Player> players) throws ParticleVersionException, ParticleDataException {
         if (!isSupported()) {
-            throw new ParticleVersionException("The " + this + " particle effect is not supported by your server version");
+            throw new ParticleVersionException("The " + this + " particle effect is not supported by your server version " + ParticlePacket.getVersion());
         }
         if (!requiresData) {
             throw new ParticleDataException("The " + this + " particle effect does not require additional data");
@@ -806,7 +806,7 @@ public enum ParticleEffect {
      */
     public void display(ParticleData data, Vector direction, float speed, Location center, double range) throws ParticleVersionException, ParticleDataException {
         if (!isSupported()) {
-            throw new ParticleVersionException("The " + this + " particle effect is not supported by your server version");
+            throw new ParticleVersionException("The " + this + " particle effect is not supported by your server version " + ParticlePacket.getVersion());
         }
         if (!requiresData) {
             throw new ParticleDataException("The " + this + " particle effect does not require additional data");
@@ -832,7 +832,7 @@ public enum ParticleEffect {
      */
     public void display(ParticleData data, Vector direction, float speed, Location center, List<Player> players) throws ParticleVersionException, ParticleDataException {
         if (!isSupported()) {
-            throw new ParticleVersionException("The " + this + " particle effect is not supported by your server version");
+            throw new ParticleVersionException("The " + this + " particle effect is not supported by your server version " + ParticlePacket.getVersion());
         }
         if (!requiresData) {
             throw new ParticleDataException("The " + this + " particle effect does not require additional data");
