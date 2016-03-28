@@ -4,6 +4,7 @@
 
  - Fix API, add back Effect.setLocation, setEntity, 
    setTargetLocation, setTargetEntity
+ - Add EquationEffect, for making custom effects using math equations
 
 ## 4.1
 
