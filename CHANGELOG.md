@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 4.2
+
+ - Fix API, add back Effect.setLocation, setEntity, 
+   setTargetLocation, setTargetEntity
+
 ## 4.1
 
  - Add new particles from 1.9

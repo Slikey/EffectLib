@@ -380,4 +380,20 @@ public abstract class Effect implements Runnable {
         effectManager.done(this);
         onDone();
     }
+    
+    public void setEntity(Entity entity) {
+        origin = new DynamicLocation(entity);
+    }
+
+    public void setLocation(Location location) {
+        origin = new DynamicLocation(location);
+    }
+
+    public void setTargetEntity(Entity entity) {
+        target = new DynamicLocation(entity);
+    }
+
+    public void setTargetLocation(Location location) {
+        target = new DynamicLocation(location);
+    }
 }
