@@ -44,6 +44,12 @@ public class EquationEffect extends Effect {
      */
     public boolean orient = true;
 
+    /**
+     * Set this to true to have the effect repeat from
+     * t = 0 at each iteration.
+     */
+    public boolean cycle = false;
+
     private EquationTransform xTransform;
     private EquationTransform yTransform;
     private EquationTransform zTransform;
@@ -60,7 +66,7 @@ public class EquationEffect extends Effect {
 
     @Override
     public void onRun() {
-        if (step == 0) {
+        if (xTransform == null) {
             xTransform = new EquationTransform(xEquation);
             yTransform = new EquationTransform(yEquation);
             zTransform = new EquationTransform(zEquation);
@@ -81,6 +87,10 @@ public class EquationEffect extends Effect {
             targetLocation.add(result);
             display(particle, targetLocation);
             step++;
+        }
+        
+        if (cycle) {
+            step = 0;
         }
     }
 }
