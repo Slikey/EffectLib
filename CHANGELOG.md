@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 4.3
+
+ - Add cycle parameter to EquationEffect
+
 ## 4.2
 
  - Fix API, add back Effect.setLocation, setEntity, 
