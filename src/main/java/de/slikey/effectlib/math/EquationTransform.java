@@ -11,6 +11,7 @@ import java.util.logging.Level;
 public class EquationTransform implements Transform {
     private Expression expression;
     private static Function randFunction;
+    private final String inputVariable;
 
     @Override
     public void load(ConfigurationSection parameters) {
@@ -18,10 +19,16 @@ public class EquationTransform implements Transform {
     }
 
     public EquationTransform() {
-
+        inputVariable = "t";
     }
 
     public EquationTransform(String equation) {
+        this();
+        setEquation(equation);
+    }
+
+    public EquationTransform(String equation, String inputVariable) {
+        this.inputVariable = inputVariable;
         setEquation(equation);
     }
 
@@ -39,7 +46,7 @@ public class EquationTransform implements Transform {
             }
             expression = new ExpressionBuilder(equation)
                 .function(randFunction)
-                .variables("t")
+                .variables(inputVariable)
                 .build();
         } catch (Exception ex) {
             expression = null;
@@ -52,7 +59,7 @@ public class EquationTransform implements Transform {
         if (expression == null) {
             return 0;
         }
-        expression.setVariable("t", t);
+        expression.setVariable(inputVariable, t);
         return expression.evaluate();
     }
 }
