@@ -106,6 +106,7 @@ public class EquationEffect extends Effect {
         }
         Location location = getLocation();
 
+        boolean hasInnerEquation = (x2Transform != null && y2Transform != null && z2Transform != null);
         for (int i = 0; i < particles; i++) {
             Double xValue = xTransform.get(step);
             Double yValue = yTransform.get(step);
@@ -118,9 +119,9 @@ public class EquationEffect extends Effect {
 
             Location targetLocation = location.clone();
             targetLocation.add(result);
-            display(particle, targetLocation);
-            
-            if (x2Transform != null && y2Transform != null && z2Transform != null) {
+            if (!hasInnerEquation) {
+                display(particle, targetLocation);
+            } else {
                 for (int j = 0; j < particles2; j++) {
                     Double x2Value = x2Transform.get(step, j);
                     Double y2Value = y2Transform.get(step, j);
