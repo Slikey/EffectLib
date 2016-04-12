@@ -94,23 +94,23 @@ public class EquationEffect extends Effect {
     @Override
     public void onRun() {
         if (xTransform == null) {
-            xTransform = new EquationTransform(xEquation, variable);
-            yTransform = new EquationTransform(yEquation, variable);
-            zTransform = new EquationTransform(zEquation, variable);
+            xTransform = new EquationTransform(xEquation, variable, "p", "p2");
+            yTransform = new EquationTransform(yEquation, variable, "p", "p2");
+            zTransform = new EquationTransform(zEquation, variable, "p", "p2");
             
             if (x2Equation != null && y2Equation != null && z2Equation != null && particles2 > 0) {
-                x2Transform = new EquationTransform(x2Equation, variable, variable2);
-                y2Transform = new EquationTransform(y2Equation, variable, variable2);
-                z2Transform = new EquationTransform(z2Equation, variable, variable2);
+                x2Transform = new EquationTransform(x2Equation, variable, variable2, "p", "p2");
+                y2Transform = new EquationTransform(y2Equation, variable, variable2, "p", "p2");
+                z2Transform = new EquationTransform(z2Equation, variable, variable2, "p", "p2");
             }
         }
         Location location = getLocation();
 
         boolean hasInnerEquation = (x2Transform != null && y2Transform != null && z2Transform != null);
         for (int i = 0; i < particles; i++) {
-            Double xValue = xTransform.get(step);
-            Double yValue = yTransform.get(step);
-            Double zValue = zTransform.get(step);
+            Double xValue = xTransform.get(step, particles);
+            Double yValue = yTransform.get(step, particles);
+            Double zValue = zTransform.get(step, particles);
             
             Vector result = new Vector(xValue, yValue, zValue);
             if (orient) {
@@ -123,9 +123,9 @@ public class EquationEffect extends Effect {
                 display(particle, targetLocation);
             } else {
                 for (int j = 0; j < particles2; j++) {
-                    Double x2Value = x2Transform.get(step, j);
-                    Double y2Value = y2Transform.get(step, j);
-                    Double z2Value = z2Transform.get(step, j);
+                    Double x2Value = x2Transform.get(step, j, particles, particles2);
+                    Double y2Value = y2Transform.get(step, j, particles, particles2);
+                    Double z2Value = z2Transform.get(step, j, particles, particles2);
 
                     Location target2Location = targetLocation.clone();
                     target2Location.setX(target2Location.getX() + x2Value);
