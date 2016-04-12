@@ -52,7 +52,7 @@ public class EquationEffect extends Effect {
     /**
      * The variable name used in sub-equations to represent minor ticks
      */
-    public String variable2 = "y";
+    public String variable2 = "t2";
 
     /**
      * How many steps to take per sub-iteration
