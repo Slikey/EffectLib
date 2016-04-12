@@ -5,30 +5,36 @@ import net.objecthunter.exp4j.ExpressionBuilder;
 import net.objecthunter.exp4j.function.Function;
 import org.bukkit.configuration.ConfigurationSection;
 
+import java.util.HashSet;
 import java.util.Random;
+import java.util.Set;
 import java.util.logging.Level;
 
 public class EquationTransform implements Transform {
     private Expression expression;
     private static Function randFunction;
-    private final String inputVariable;
+    private final Set<String> inputVariables;
 
     @Override
     public void load(ConfigurationSection parameters) {
         setEquation(parameters.getString("equation", ""));
     }
 
-    public EquationTransform() {
-        inputVariable = "t";
-    }
-
     public EquationTransform(String equation) {
-        this();
-        setEquation(equation);
+        this(equation, "t");
     }
 
     public EquationTransform(String equation, String inputVariable) {
-        this.inputVariable = inputVariable;
+        inputVariables = new HashSet<String>();
+        inputVariables.add(inputVariable);
+        setEquation(equation);
+    }
+
+    public EquationTransform(String equation, String... inputVariables) {
+        this.inputVariables = new HashSet<String>();
+        for (String inputVariable : inputVariables) {
+            this.inputVariables.add(inputVariable);
+        }
         setEquation(equation);
     }
 
@@ -46,7 +52,7 @@ public class EquationTransform implements Transform {
             }
             expression = new ExpressionBuilder(equation)
                 .function(randFunction)
-                .variables(inputVariable)
+                .variables(inputVariables)
                 .build();
         } catch (Exception ex) {
             expression = null;
@@ -59,7 +65,21 @@ public class EquationTransform implements Transform {
         if (expression == null) {
             return 0;
         }
-        expression.setVariable(inputVariable, t);
+        for (String inputVariable : inputVariables) {
+            expression.setVariable(inputVariable, t);
+        }
+        return expression.evaluate();
+    }
+    
+    public double get(double... t) {
+        if (expression == null) {
+            return 0;
+        }
+        int index = 0;
+        for (String inputVariable : inputVariables) {
+            expression.setVariable(inputVariable, t[index]);
+            if (index < t.length - 1) index++;
+        }
         return expression.evaluate();
     }
 }

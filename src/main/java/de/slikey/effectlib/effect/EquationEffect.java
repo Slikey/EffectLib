@@ -32,9 +32,32 @@ public class EquationEffect extends Effect {
     public String zEquation = "0";
 
     /**
+     * The variable name used in equations to represent major ticks
+     */
+    public String variable = "t";
+
+    /**
      * How many steps to take per iteration
      */
     public int particles = 1;
+    
+    /**
+     * A set of equations that, if set, will be performed in a sub-iteration
+     * for each major iteration.
+     */
+    public String x2Equation = null;
+    public String y2Equation = null;
+    public String z2Equation = null;
+    
+    /**
+     * The variable name used in sub-equations to represent minor ticks
+     */
+    public String variable2 = "y";
+
+    /**
+     * How many steps to take per sub-iteration
+     */
+    public int particles2 = 0;
 
     /**
      * Whether or not to orient the effect in the direction
@@ -53,6 +76,10 @@ public class EquationEffect extends Effect {
     private EquationTransform xTransform;
     private EquationTransform yTransform;
     private EquationTransform zTransform;
+
+    private EquationTransform x2Transform;
+    private EquationTransform y2Transform;
+    private EquationTransform z2Transform;
     
     private int step;
     
@@ -67,9 +94,15 @@ public class EquationEffect extends Effect {
     @Override
     public void onRun() {
         if (xTransform == null) {
-            xTransform = new EquationTransform(xEquation);
-            yTransform = new EquationTransform(yEquation);
-            zTransform = new EquationTransform(zEquation);
+            xTransform = new EquationTransform(xEquation, variable);
+            yTransform = new EquationTransform(yEquation, variable);
+            zTransform = new EquationTransform(zEquation, variable);
+            
+            if (x2Equation != null && y2Equation != null && z2Equation != null && particles2 > 0) {
+                x2Transform = new EquationTransform(x2Equation, variable, variable2);
+                y2Transform = new EquationTransform(y2Equation, variable, variable2);
+                z2Transform = new EquationTransform(z2Equation, variable, variable2);
+            }
         }
         Location location = getLocation();
 
@@ -86,6 +119,21 @@ public class EquationEffect extends Effect {
             Location targetLocation = location.clone();
             targetLocation.add(result);
             display(particle, targetLocation);
+            
+            if (x2Transform != null && y2Transform != null && z2Transform != null) {
+                for (int j = 0; j < particles2; j++) {
+                    Double x2Value = x2Transform.get(step, j);
+                    Double y2Value = y2Transform.get(step, j);
+                    Double z2Value = z2Transform.get(step, j);
+
+                    Location target2Location = targetLocation.clone();
+                    target2Location.setX(target2Location.getX() + x2Value);
+                    target2Location.setY(target2Location.getY() + y2Value);
+                    target2Location.setZ(target2Location.getZ() + z2Value);
+                    display(particle, target2Location);
+                }
+            }
+            
             step++;
         }
         
