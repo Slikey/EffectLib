@@ -13,13 +13,18 @@ public class ConfigUtils {
         Collection<ConfigurationSection> results = new ArrayList<ConfigurationSection>();
         List<Map<?, ?>> mapList = node.getMapList(path);
         for (Map<?, ?> map : mapList) {
-            results.add(toNodeList(map));
+            results.add(toConfigurationSection(map));
         }
 
         return results;
     }
 
+    @Deprecated
     public static ConfigurationSection toNodeList(Map<?, ?> nodeMap) {
+        return toConfigurationSection(nodeMap);
+    }
+
+    public static ConfigurationSection toConfigurationSection(Map<?, ?> nodeMap) {
         ConfigurationSection newSection = new MemoryConfiguration();
         for (Map.Entry<?, ?> entry : nodeMap.entrySet()) {
             set(newSection, entry.getKey().toString(), entry.getValue());
