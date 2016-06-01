@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 5.0
+
+ - Update to 1.9 sound names, now only fully compatible with 1.9
+
 ## 4.3
 
  - Add cycle parameter to EquationEffect

@@ -20,7 +20,7 @@ public class ExplodeEffect extends Effect {
      */
     public float speed = .5f;
 
-    public Sound sound = Sound.EXPLODE;
+    public Sound sound = Sound.ENTITY_GENERIC_EXPLODE;
 
     public ExplodeEffect(EffectManager effectManager) {
         super(effectManager);
