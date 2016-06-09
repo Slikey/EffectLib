@@ -9,6 +9,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+
+import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Location;
@@ -1113,9 +1115,11 @@ public enum ParticleEffect {
                 return;
             }
             try {
+                
                 //Try and enable effect lib for bukkit
                 isKcauldron = false;
-                version = Integer.parseInt(Character.toString(PackageType.getServerVersion().charAt(3)));
+                String[] pieces = StringUtils.split(PackageType.getServerVersion(), "_");
+                version = Integer.parseInt(pieces[1]);
                 if (version > 7) {
                     enumParticle = PackageType.MINECRAFT_SERVER.getClass("EnumParticle");
                 }
@@ -1128,7 +1132,6 @@ public enum ParticleEffect {
                 try {
                     //If an error occurs try and use KCauldron classes
                     isKcauldron = true;
-                    version = Integer.parseInt(Character.toString(PackageType.getServerVersion().charAt(3)));
                     Class<?> packetClass = Class.forName("net.minecraft.network.play.server.S2APacketParticles");
                     packetConstructor = ReflectionUtils.getConstructor(packetClass);
                     getHandle = ReflectionUtils.getMethod("CraftPlayer", PackageType.CRAFTBUKKIT_ENTITY, "getHandle");

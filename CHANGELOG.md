@@ -2,7 +2,8 @@
 
 ## 5.0
 
- - Update to 1.9 sound names, now only fully compatible with 1.9
+ - Add support for 1.10
+ - Update to 1.9 sound names, now only fully compatible with 1.9 and up
 
 ## 4.3
 
