@@ -354,4 +354,11 @@ public final class MathUtils {
     static public boolean isEqual(float a, float b, float tolerance) {
         return Math.abs(a - b) <= tolerance;
     }
+
+    /**
+     * Compatiblity method for Double.isFinite from Java 1.7 and up
+     */
+    static public boolean isFinite(double value) {
+        return !Double.isNaN(value) && !Double.isInfinite(value);
+    }
 }
