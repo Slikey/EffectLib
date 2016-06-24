@@ -144,12 +144,10 @@ public class EquationEffect extends Effect {
                     miniStep++;
                 }
             }
-            System.out.println("Step: " + step);
             step++;
         }
         
         if (step > maxSteps) {
-        	System.out.println(step + " is bigger than " + maxSteps);
         	step = 0;
         }
     }
