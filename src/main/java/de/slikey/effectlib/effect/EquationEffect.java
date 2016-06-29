@@ -123,12 +123,10 @@ public class EquationEffect extends Effect {
             Double zValue = zTransform.get(step);
             
             Vector result = new Vector(xValue, yValue, zValue);
-            if (orient) {
-            	if (orientPitch) {
-            		result = VectorUtils.rotateVector(result, location);
-            	} else {
-            		result = VectorUtils.rotateVector(result, location.getYaw(), 0);
-            	}
+            if (orient && orientPitch) {
+            	result = VectorUtils.rotateVector(result, location);
+        	} else if (orient) {
+        		result = VectorUtils.rotateVector(result, location.getYaw(), 0);
             }
 
             Location targetLocation = location.clone();
@@ -140,11 +138,16 @@ public class EquationEffect extends Effect {
                     Double x2Value = x2Transform.get(step, miniStep);
                     Double y2Value = y2Transform.get(step, miniStep);
                     Double z2Value = z2Transform.get(step, miniStep);
-
-                    Location target2Location = targetLocation.clone();
-                    target2Location.setX(target2Location.getX() + x2Value);
-                    target2Location.setY(target2Location.getY() + y2Value);
-                    target2Location.setZ(target2Location.getZ() + z2Value);
+                    
+                    Vector result2 = new Vector(x2Value, y2Value, z2Value);
+                    if (orient && orientPitch) {
+                    	result2 = VectorUtils.rotateVector(result2, location);
+                	} else if (orient) {
+                		result2 = VectorUtils.rotateVector(result2, location.getYaw(), 0);
+                    }
+                    
+                    
+                    Location target2Location = targetLocation.clone().add(result2);
                     display(particle, target2Location);
                     
                     miniStep++;
