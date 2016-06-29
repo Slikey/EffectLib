@@ -75,7 +75,13 @@ public class EquationEffect extends Effect {
     /**
      * These is the limit for the steps until it starts over.
      */
-    public int maxSteps;
+    public int maxSteps = 0;
+    
+    /**
+     * If this is true, after cycling the inner equation, it'll be set to 0.
+     * Set this to false if you want the miniStep to be saved between major steps.
+     */
+    public boolean cycleMiniStep = true;
 
     private EquationTransform xTransform;
     private EquationTransform yTransform;
@@ -86,7 +92,7 @@ public class EquationEffect extends Effect {
     private EquationTransform z2Transform;
     
     private int step = 0;
-    private int miniStep;
+    private int miniStep = 0;
     
     public EquationEffect(EffectManager effectManager) {
         super(effectManager);
@@ -143,12 +149,17 @@ public class EquationEffect extends Effect {
                     
                     miniStep++;
                 }
+                
+                if (cycleMiniStep) {
+                	miniStep = 0;
+                }
             }
-            step++;
-        }
-        
-        if (step > maxSteps) {
-        	step = 0;
+            if (maxSteps != 0 && step > maxSteps) {
+            	step = 0;
+            	break;
+            } else {
+            	step++;
+            }
         }
     }
 }
