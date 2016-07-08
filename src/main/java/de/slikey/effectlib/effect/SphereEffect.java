@@ -29,6 +29,11 @@ public class SphereEffect extends Effect {
      * Particles to display
      */
     public int particles = 50;
+    
+    /**
+     * Amount to increase the radius per tick
+     */
+    public double radiusIncrease = 0;
 
     public SphereEffect(EffectManager effectManager) {
         super(effectManager);
@@ -39,6 +44,10 @@ public class SphereEffect extends Effect {
 
     @Override
     public void onRun() {
+    	if (radiusIncrease != 0) {
+    		radius += radiusIncrease;
+    	}
+    	
         Location location = getLocation();
         location.add(0, yOffset, 0);
         for (int i = 0; i < particles; i++) {
