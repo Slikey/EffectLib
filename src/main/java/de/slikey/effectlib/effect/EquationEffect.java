@@ -66,12 +66,22 @@ public class EquationEffect extends Effect {
      * If this is set to true, the X axis will represent "forward".
      */
     public boolean orient = true;
+    
+    /**
+     * Similar to orient, however this is specific to pitch.
+     */
+    public boolean orientPitch = true;
 
     /**
-     * Set this to true to have the effect repeat from
-     * t = 0 at each iteration.
+     * These is the limit for the steps until it starts over.
      */
-    public boolean cycle = false;
+    public int maxSteps = 0;
+    
+    /**
+     * If this is true, after cycling the inner equation, it'll be set to 0.
+     * Set this to false if you want the miniStep to be saved between major steps.
+     */
+    public boolean cycleMiniStep = true;
 
     private EquationTransform xTransform;
     private EquationTransform yTransform;
@@ -81,40 +91,42 @@ public class EquationEffect extends Effect {
     private EquationTransform y2Transform;
     private EquationTransform z2Transform;
     
-    private int step;
+    private int step = 0;
+    private int miniStep = 0;
     
     public EquationEffect(EffectManager effectManager) {
         super(effectManager);
         type = EffectType.REPEATING;
         period = 1;
         iterations = 100;
-        step = 0;
     }
 
     @Override
     public void onRun() {
         if (xTransform == null) {
-            xTransform = new EquationTransform(xEquation, variable, "p", "p2");
-            yTransform = new EquationTransform(yEquation, variable, "p", "p2");
-            zTransform = new EquationTransform(zEquation, variable, "p", "p2");
+            xTransform = new EquationTransform(xEquation, variable);
+            yTransform = new EquationTransform(yEquation, variable);
+            zTransform = new EquationTransform(zEquation, variable);
             
             if (x2Equation != null && y2Equation != null && z2Equation != null && particles2 > 0) {
-                x2Transform = new EquationTransform(x2Equation, variable, variable2, "p", "p2");
-                y2Transform = new EquationTransform(y2Equation, variable, variable2, "p", "p2");
-                z2Transform = new EquationTransform(z2Equation, variable, variable2, "p", "p2");
+                x2Transform = new EquationTransform(x2Equation, variable, variable2);
+                y2Transform = new EquationTransform(y2Equation, variable, variable2);
+                z2Transform = new EquationTransform(z2Equation, variable, variable2);
             }
         }
         Location location = getLocation();
 
         boolean hasInnerEquation = (x2Transform != null && y2Transform != null && z2Transform != null);
         for (int i = 0; i < particles; i++) {
-            Double xValue = xTransform.get(step, particles);
-            Double yValue = yTransform.get(step, particles);
-            Double zValue = zTransform.get(step, particles);
+            Double xValue = xTransform.get(step);
+            Double yValue = yTransform.get(step);
+            Double zValue = zTransform.get(step);
             
             Vector result = new Vector(xValue, yValue, zValue);
-            if (orient) {
-                result = VectorUtils.rotateVector(result, location);
+            if (orient && orientPitch) {
+            	result = VectorUtils.rotateVector(result, location);
+        	} else if (orient) {
+        		result = VectorUtils.rotateVector(result, location.getYaw(), 0);
             }
 
             Location targetLocation = location.clone();
@@ -123,23 +135,34 @@ public class EquationEffect extends Effect {
                 display(particle, targetLocation);
             } else {
                 for (int j = 0; j < particles2; j++) {
-                    Double x2Value = x2Transform.get(step, j, particles, particles2);
-                    Double y2Value = y2Transform.get(step, j, particles, particles2);
-                    Double z2Value = z2Transform.get(step, j, particles, particles2);
-
-                    Location target2Location = targetLocation.clone();
-                    target2Location.setX(target2Location.getX() + x2Value);
-                    target2Location.setY(target2Location.getY() + y2Value);
-                    target2Location.setZ(target2Location.getZ() + z2Value);
+                    Double x2Value = x2Transform.get(step, miniStep);
+                    Double y2Value = y2Transform.get(step, miniStep);
+                    Double z2Value = z2Transform.get(step, miniStep);
+                    
+                    Vector result2 = new Vector(x2Value, y2Value, z2Value);
+                    if (orient && orientPitch) {
+                    	result2 = VectorUtils.rotateVector(result2, location);
+                	} else if (orient) {
+                		result2 = VectorUtils.rotateVector(result2, location.getYaw(), 0);
+                    }
+                    
+                    
+                    Location target2Location = targetLocation.clone().add(result2);
                     display(particle, target2Location);
+                    
+                    miniStep++;
+                }
+                
+                if (cycleMiniStep) {
+                	miniStep = 0;
                 }
             }
-            
-            step++;
-        }
-        
-        if (cycle) {
-            step = 0;
+            if (maxSteps != 0 && step > maxSteps) {
+            	step = 0;
+            	break;
+            } else {
+            	step++;
+            }
         }
     }
 }
