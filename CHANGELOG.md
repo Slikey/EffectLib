@@ -1,5 +1,10 @@
 # CHANGELOG
 
+# 5.1
+
+ - Some updates to EquationEffect, may or may not change behavior (sorry!)
+ - Fixes for the item_crack particle effect disconnecting clients
+
 ## 5.0
 
  - Add support for 1.10

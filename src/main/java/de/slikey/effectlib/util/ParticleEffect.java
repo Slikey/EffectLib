@@ -888,6 +888,13 @@ public enum ParticleEffect {
             this.packetData = new int[]{(data << 12) | (material.getId() & 4095)};
         }
 
+        @SuppressWarnings("deprecation")
+        public ParticleData(Material material, byte data, int[] packetData) {
+            this.material = material;
+            this.data = data;
+            this.packetData = packetData;
+        }
+
         /**
          * Returns the material of this data
          *
@@ -921,7 +928,9 @@ public enum ParticleEffect {
          * @return The data string for the packet
          */
         public String getPacketDataString() {
-            return "_" + packetData[0] + "_" + packetData[1];
+            if (packetData.length >= 2) return "_" + packetData[0] + "_" + packetData[1];;
+            if (packetData.length == 1) return "_" + packetData[0];
+            return "";
         }
     }
 
@@ -940,10 +949,11 @@ public enum ParticleEffect {
          *
          * @param material Material of the item
          * @param data Data value of the item
-         * @see ParticleData#ParticleData(Material, byte)
+         * @see ParticleData#ParticleData(Material, byte, int[])
          */
+        @SuppressWarnings("deprecation")
         public ItemData(Material material, byte data) {
-            super(material, data);
+            super(material, data, new int[]{material.getId(), data});
         }
     }
 
