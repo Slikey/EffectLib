@@ -1,5 +1,9 @@
 # CHANGELOG
 
+# 5.2
+
+ - Add support for 1.10 and  1.11 particles (FALLING_DUST, TOTEM, SPIT)
+
 # 5.1
 
  - Some updates to EquationEffect, may or may not change behavior (sorry!)

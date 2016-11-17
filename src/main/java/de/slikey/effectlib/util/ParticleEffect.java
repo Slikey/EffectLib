@@ -381,7 +381,10 @@ public enum ParticleEffect {
     DRAGON_BREATH("dragonbreath", 42, 9),
     END_ROD("endRod", 43, 9),
     DAMAGE_INDICATOR("damageIndicator", 44, 9),
-    SWEEP_ATTACK("sweepAttack", 45, 9);
+    SWEEP_ATTACK("sweepAttack", 45, 9),
+    FALLING_DUST("fallingdust", 46, 10, true),
+    TOTEM("totem", 47, 11),
+    SPIT("spit", 48, 11)
     ;
 
     private static final int LONG_DISTANCE = 16;
@@ -565,7 +568,7 @@ public enum ParticleEffect {
      * @return Whether the data type is correct or not
      */
     private static boolean isDataCorrect(ParticleEffect effect, ParticleData data) {
-        return ((effect == BLOCK_CRACK || effect == BLOCK_DUST) && data instanceof BlockData) || effect == ITEM_CRACK && data instanceof ItemData;
+        return ((effect == BLOCK_CRACK || effect == BLOCK_DUST || effect == FALLING_DUST) && data instanceof BlockData) || effect == ITEM_CRACK && data instanceof ItemData;
     }
 
     /**
@@ -1444,7 +1447,7 @@ public enum ParticleEffect {
         if (blockData == null) {
             blockData = 0;
         }
-        if (this == ParticleEffect.BLOCK_CRACK || this == ParticleEffect.ITEM_CRACK || this == ParticleEffect.BLOCK_DUST) {
+        if (this == ParticleEffect.BLOCK_CRACK || this == ParticleEffect.ITEM_CRACK || this == ParticleEffect.BLOCK_DUST || this == ParticleEffect.FALLING_DUST) {
             if (material != null && material != Material.AIR) {
                 if (this == ParticleEffect.ITEM_CRACK) {
                     data = new ParticleEffect.ItemData(material, blockData);
