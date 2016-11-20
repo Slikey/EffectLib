@@ -22,6 +22,11 @@ public class BleedEffect extends de.slikey.effectlib.Effect {
     public int duration = 10;
 
     /**
+     * Height of the blood spurt
+     */
+    public double height = 1.75;
+
+    /**
      * Color of blood. Default is red (152)
      */
     public int color = 152;
@@ -37,7 +42,7 @@ public class BleedEffect extends de.slikey.effectlib.Effect {
     public void onRun() {
         // Location to spawn the blood-item.
         Location location = getLocation();
-        location.add(0, RandomUtils.random.nextFloat() * 1.75f, 0);
+        location.add(0, RandomUtils.random.nextFloat() * height, 0);
         location.getWorld().playEffect(location, Effect.STEP_SOUND, color);
 
         Entity entity = getEntity();
