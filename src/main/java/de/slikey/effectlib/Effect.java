@@ -143,6 +143,16 @@ public abstract class Effect implements Runnable {
 
     private DynamicLocation origin = null;
     private DynamicLocation target = null;
+    
+    /**
+     * Should this effect stop playing if the origin entity becomes null?
+     */
+    public boolean disappearWithOriginEntity = false;
+    
+    /**
+     * Should this effect stop playing if the target entity becomes null?
+     */
+    public boolean disappearWithTargetEntity = false;
 
     private boolean done = false;
 
@@ -319,6 +329,15 @@ public abstract class Effect implements Runnable {
     }
 
     protected final boolean validate() {
+        // Check if the origin and target entities are present
+        if (disappearWithOriginEntity && (origin != null && origin.getEntity() == null)) {
+            return false;
+        }
+        
+        if (disappearWithTargetEntity && (target != null && target.getEntity() == null)) {
+            return false;
+        }
+        
         // Check for a valid Location
         updateLocation();
         updateTarget();
