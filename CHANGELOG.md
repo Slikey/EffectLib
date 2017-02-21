@@ -1,5 +1,9 @@
 # CHANGELOG
 
+# 5.3
+
+ - Add direct yaw and pitch overrides to Effect
+
 # 5.2
 
  - Add support for 1.10 and  1.11 particles (FALLING_DUST, TOTEM, SPIT)

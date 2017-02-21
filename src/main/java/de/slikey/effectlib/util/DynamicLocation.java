@@ -20,6 +20,8 @@ public class DynamicLocation {
     private Vector entityOffset;
     private boolean updateLocation = true;
     private boolean updateDirection = true;
+    private Float yaw = null;
+    private Float pitch = null;
 
     public DynamicLocation(Location location) {
         if (location != null) {
@@ -94,10 +96,16 @@ public class DynamicLocation {
 
     public void setDirection(Vector direction) {
         location.setDirection(direction);
-        updateDirectionOffsets();
+        updateDirection();
     }
 
-    protected void updateDirectionOffsets() {
+    public void updateDirection() {
+        if (yaw != null) {
+            location.setYaw(yaw);
+        }
+        if (pitch != null) {
+            location.setPitch(pitch);
+        }
         if (yawOffset != 0) {
             location.setYaw(location.getYaw() + yawOffset);
         }
@@ -161,6 +169,13 @@ public class DynamicLocation {
     public void setDirectionOffset(float yawOffset, float pitchOffset) {
         this.pitchOffset = pitchOffset;
         this.yawOffset = yawOffset;
-        updateDirectionOffsets();
+    }
+
+    public void setPitch(Float pitch) {
+        this.pitch = pitch;
+    }
+
+    public void setYaw(Float yaw) {
+        this.yaw = yaw;
     }
 }

@@ -99,6 +99,8 @@ public abstract class Effect implements Runnable {
      */
     public float yawOffset = 0;
     public float pitchOffset = 0;
+    public Float yaw = null;
+    public Float pitch = null;
 
     /**
      * If set to false, Entity-bound locations will not update during the Effect
@@ -310,8 +312,11 @@ public abstract class Effect implements Runnable {
             origin.addRelativeOffset(relativeOffset);
         }
         origin.setDirectionOffset(yawOffset, pitchOffset);
+        origin.setYaw(yaw);
+        origin.setPitch(pitch);
         origin.setUpdateLocation(updateLocations);
         origin.setUpdateDirection(updateDirections);
+        origin.updateDirection();
     }
 
     /**
