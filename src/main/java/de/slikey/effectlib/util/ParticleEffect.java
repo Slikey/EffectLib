@@ -1409,6 +1409,10 @@ public enum ParticleEffect {
         }
     }
 
+    public void display(Location center, Color color, double range) {
+        display(null, center, color, range, 0, 0, 0, 1, 0);
+    }
+
     public void display(ParticleData data, Location center, Color color, double range, float offsetX, float offsetY, float offsetZ, float speed, int amount) {
         // Colorizeable!
         if (color != null && (this == ParticleEffect.REDSTONE || this == ParticleEffect.SPELL_MOB || this == ParticleEffect.SPELL_MOB_AMBIENT)) {
