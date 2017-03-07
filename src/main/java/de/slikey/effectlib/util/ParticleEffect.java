@@ -1042,8 +1042,20 @@ public enum ParticleEffect {
 
         private static int version;
         private static boolean isKcauldron;
+        private static Object[] enumParticles;
         private static Class<?> enumParticle;
         private static Constructor<?> packetConstructor;
+        private static Field packet_idField;
+        private static Field packet_locationXField;
+        private static Field packet_locationYField;
+        private static Field packet_locationZField;
+        private static Field packet_offsetXField;
+        private static Field packet_offsetYField;
+        private static Field packet_offsetZField;
+        private static Field packet_speedField;
+        private static Field packet_amountField;
+        private static Field packet_longDistanceField;
+        private static Field packet_dataField;
         private static Method getHandle;
         private static Field playerConnection;
         private static Method sendPacket;
@@ -1128,19 +1140,34 @@ public enum ParticleEffect {
                 return;
             }
             try {
-                
                 //Try and enable effect lib for bukkit
                 isKcauldron = false;
                 String[] pieces = StringUtils.split(PackageType.getServerVersion(), "_");
                 version = Integer.parseInt(pieces[1]);
                 if (version > 7) {
                     enumParticle = PackageType.MINECRAFT_SERVER.getClass("EnumParticle");
+                    enumParticles = enumParticle.getEnumConstants();
                 }
                 Class<?> packetClass = PackageType.MINECRAFT_SERVER.getClass(version < 7 ? "Packet63WorldParticles" : "PacketPlayOutWorldParticles");
                 packetConstructor = ReflectionUtils.getConstructor(packetClass);
                 getHandle = ReflectionUtils.getMethod("CraftPlayer", PackageType.CRAFTBUKKIT_ENTITY, "getHandle");
                 playerConnection = ReflectionUtils.getField("EntityPlayer", PackageType.MINECRAFT_SERVER, false, "playerConnection");
                 sendPacket = ReflectionUtils.getMethod(playerConnection.getType(), "sendPacket", PackageType.MINECRAFT_SERVER.getClass("Packet"));
+
+                packet_idField = ReflectionUtils.getField(packetClass, true, "a");
+                packet_locationXField = ReflectionUtils.getField(packetClass, true, "b");
+                packet_locationYField = ReflectionUtils.getField(packetClass, true, "c");
+                packet_locationZField = ReflectionUtils.getField(packetClass, true, "d");
+                packet_offsetXField = ReflectionUtils.getField(packetClass, true, "e");
+                packet_offsetYField = ReflectionUtils.getField(packetClass, true, "f");
+                packet_offsetZField = ReflectionUtils.getField(packetClass, true, "g");
+                packet_speedField = ReflectionUtils.getField(packetClass, true, "h");
+                packet_amountField = ReflectionUtils.getField(packetClass, true, "i");
+
+                if (version > 7) {
+                    packet_longDistanceField = ReflectionUtils.getField(packetClass, true, "j");
+                    packet_dataField = ReflectionUtils.getField(packetClass, true, "k");
+                }
             } catch (Exception exception) {
                 try {
                     //If an error occurs try and use KCauldron classes
@@ -1150,6 +1177,16 @@ public enum ParticleEffect {
                     getHandle = ReflectionUtils.getMethod("CraftPlayer", PackageType.CRAFTBUKKIT_ENTITY, "getHandle");
                     playerConnection = Class.forName("net.minecraft.entity.player.EntityPlayerMP").getDeclaredField("field_71135_a");
                     sendPacket = playerConnection.getType().getDeclaredMethod("func_147359_a", Class.forName("net.minecraft.network.Packet"));
+
+                    packet_idField = ReflectionUtils.getField(packetClass, true, "field_149236_a");
+                    packet_locationXField = ReflectionUtils.getField(packetClass, true, "field_149234_b");
+                    packet_locationYField = ReflectionUtils.getField(packetClass, true, "field_149235_c");
+                    packet_locationZField = ReflectionUtils.getField(packetClass, true, "field_149232_d");
+                    packet_offsetXField = ReflectionUtils.getField(packetClass, true, "field_149233_e");
+                    packet_offsetYField = ReflectionUtils.getField(packetClass, true, "field_149230_f");
+                    packet_offsetZField = ReflectionUtils.getField(packetClass, true, "field_149231_g");
+                    packet_speedField = ReflectionUtils.getField(packetClass, true, "field_149237_h");
+                    packet_amountField = ReflectionUtils.getField(packetClass, true, "field_149238_i");
                 } catch (Exception e) {
                     throw new VersionIncompatibleException("Your current bukkit version seems to be incompatible with this library", exception);
                 }
@@ -1185,38 +1222,6 @@ public enum ParticleEffect {
          * @throws PacketSendingException if sending fails due to an unknown error
          */
         public void sendTo(Location center, Player player) throws PacketInstantiationException, PacketSendingException {
-            if (isKcauldron) {
-                sendToWithKCauldron(center, player);
-            } else {
-                sendToWithBukkit(center, player);
-            }
-        }
-
-        private void sendToWithKCauldron(Location center, Player player) {
-            if (packet == null) {
-                try {
-                    packet = packetConstructor.newInstance();
-                    ReflectionUtils.setValue(packet, true, "field_149236_a", effect.getName());
-                    ReflectionUtils.setValue(packet, true, "field_149234_b", (float) center.getX());
-                    ReflectionUtils.setValue(packet, true, "field_149235_c", (float) center.getY());
-                    ReflectionUtils.setValue(packet, true, "field_149232_d", (float) center.getZ());
-                    ReflectionUtils.setValue(packet, true, "field_149233_e", offsetX);
-                    ReflectionUtils.setValue(packet, true, "field_149230_f", offsetY);
-                    ReflectionUtils.setValue(packet, true, "field_149231_g", offsetZ);
-                    ReflectionUtils.setValue(packet, true, "field_149237_h", speed);
-                    ReflectionUtils.setValue(packet, true, "field_149238_i", amount);
-                } catch (Exception exception) {
-                    throw new PacketInstantiationException("Packet instantiation failed", exception);
-                }
-            }
-            try {
-                sendPacket.invoke(playerConnection.get(getHandle.invoke(player)), packet);
-            } catch (Exception exception) {
-                throw new PacketSendingException("Failed to send the packet to player '" + player.getName() + "'", exception);
-            }
-        }
-
-        private void sendToWithBukkit(Location center, Player player) {
             if (packet == null) {
                 try {
                     packet = packetConstructor.newInstance();
@@ -1224,20 +1229,23 @@ public enum ParticleEffect {
                     if (version < 8) {
                         id = effect.getName() + (data == null ? "" : data.getPacketDataString());
                     } else {
-                        id = enumParticle.getEnumConstants()[effect.getId()];
+                        id = enumParticles[effect.getId()];
                     }
-                    ReflectionUtils.setValue(packet, true, "a", id);
-                    ReflectionUtils.setValue(packet, true, "b", (float) center.getX());
-                    ReflectionUtils.setValue(packet, true, "c", (float) center.getY());
-                    ReflectionUtils.setValue(packet, true, "d", (float) center.getZ());
-                    ReflectionUtils.setValue(packet, true, "e", offsetX);
-                    ReflectionUtils.setValue(packet, true, "f", offsetY);
-                    ReflectionUtils.setValue(packet, true, "g", offsetZ);
-                    ReflectionUtils.setValue(packet, true, "h", speed);
-                    ReflectionUtils.setValue(packet, true, "i", amount);
-                    if (version > 7) {
-                        ReflectionUtils.setValue(packet, true, "j", longDistance);
-                        ReflectionUtils.setValue(packet, true, "k", data == null ? new int[0] : data.getPacketData());
+                    packet_idField.set(packet, id);
+                    packet_locationXField.set(packet, (float) center.getX());
+                    packet_locationYField.set(packet, (float) center.getY());
+                    packet_locationZField.set(packet, (float) center.getZ());
+                    packet_offsetXField.set(packet, offsetX);
+                    packet_offsetYField.set(packet, offsetY);
+                    packet_offsetZField.set(packet, offsetZ);
+                    packet_speedField.set(packet, speed);
+                    packet_amountField.set(packet, amount);
+
+                    if (packet_longDistanceField != null) {
+                        packet_longDistanceField.set(packet, longDistance);
+                    }
+                    if (packet_dataField != null) {
+                        packet_dataField.set(packet, data == null ? new int[0] : data.getPacketData());
                     }
                 } catch (Exception exception) {
                     throw new PacketInstantiationException("Packet instantiation failed", exception);

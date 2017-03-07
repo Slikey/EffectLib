@@ -1,5 +1,9 @@
 # CHANGELOG
 
+# 5.4
+
+ - Memory use optimizations
+
 # 5.3
 
  - Add direct yaw and pitch overrides to Effect
