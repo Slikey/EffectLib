@@ -1042,6 +1042,7 @@ public enum ParticleEffect {
 
         private static int version;
         private static boolean isKcauldron;
+        private static final int[] emptyData = new int[0];
         private static Object[] enumParticles;
         private static Class<?> enumParticle;
         private static Constructor<?> packetConstructor;
@@ -1245,7 +1246,7 @@ public enum ParticleEffect {
                         packet_longDistanceField.set(packet, longDistance);
                     }
                     if (packet_dataField != null) {
-                        packet_dataField.set(packet, data == null ? new int[0] : data.getPacketData());
+                        packet_dataField.set(packet, data == null ? emptyData : data.getPacketData());
                     }
                 } catch (Exception exception) {
                     throw new PacketInstantiationException("Packet instantiation failed", exception);
