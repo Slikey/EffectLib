@@ -3,6 +3,7 @@
 # 5.4
 
  - Memory use optimizations
+ - Fix potential CME in EffectManager.cancel
 
 # 5.3
 

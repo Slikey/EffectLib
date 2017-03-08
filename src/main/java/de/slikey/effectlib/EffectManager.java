@@ -168,8 +168,9 @@ public final class EffectManager implements Disposable {
     }
     
     public void cancel(boolean callback) {
-        for (Map.Entry<Effect, BukkitTask> entry : effects.entrySet()) {
-            entry.getKey().cancel(callback);
+        List<Effect> allEffects = new ArrayList<Effect>(effects.keySet());
+        for (Effect effect : allEffects) {
+            effect.cancel(callback);
         }
     }
     
