@@ -7,6 +7,7 @@ import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.util.Vector;
 
 public abstract class Effect implements Runnable {
@@ -200,6 +201,7 @@ public abstract class Effect implements Runnable {
             return;
         }
         if (asynchronous) {
+            final Plugin plugin = effectManager.getOwningPlugin();
             if (asyncRunnableTask == null) {
                 final Effect effect = this;
                 asyncRunnableTask = new Runnable() {
@@ -209,17 +211,21 @@ public abstract class Effect implements Runnable {
                             effect.onRun();
                         } catch (Exception ex) {
                             effectManager.onError(ex);
-                            Bukkit.getScheduler().runTask(effectManager.getOwningPlugin(), new Runnable() {
-                                @Override
-                                public void run() {
-                                    effect.done();
-                                }
-                            });
+                            if (plugin.isEnabled()) {
+                                Bukkit.getScheduler().runTask(plugin, new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        effect.done();
+                                    }
+                                });
+                            }
                         }
                     }
                 };
             }
-            Bukkit.getScheduler().runTaskAsynchronously(effectManager.getOwningPlugin(), asyncRunnableTask);
+            if (plugin.isEnabled()) {
+                Bukkit.getScheduler().runTaskAsynchronously(plugin, asyncRunnableTask);
+            }
         } else {
             try {
                 onRun();

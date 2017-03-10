@@ -62,6 +62,8 @@ public final class EffectManager implements Disposable {
             effect.cancel(false);
         }
 
+        if (!owningPlugin.isEnabled()) return;
+
         BukkitScheduler s = Bukkit.getScheduler();
         BukkitTask task = null;
         switch (effect.type) {
@@ -182,7 +184,7 @@ public final class EffectManager implements Disposable {
             }
             effects.remove(effect);
         }
-        if (effect.callback != null) {
+        if (effect.callback != null && owningPlugin.isEnabled()) {
             Bukkit.getScheduler().runTask(owningPlugin, effect.callback);
         }
         if (disposeOnTermination && effects.isEmpty()) {
