@@ -4,6 +4,8 @@
 
  - Memory use optimizations
  - Fix potential CME in EffectManager.cancel
+ - Fix potential errors when playing FX while shutting down
+ - Remove EntityManager. If you were using it, sorry, please open an Issue.
 
 # 5.3
 

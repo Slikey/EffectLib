@@ -1,7 +1,5 @@
 package de.slikey.effectlib;
 
-import de.slikey.effectlib.entity.EntityManager;
-import de.slikey.effectlib.listener.ItemListener;
 import java.util.List;
 import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -123,7 +121,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 public final class EffectLib extends JavaPlugin {
 
     private static EffectLib instance;
-    private EntityManager entityManager;
 
     public EffectLib() {
         instance = this;
@@ -131,29 +128,17 @@ public final class EffectLib extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        entityManager = new EntityManager(this);
         EffectManager.initialize();
-
-        loadListeners();
     }
 
     @Override
     public void onDisable() {
-        entityManager.dispose();
         EffectManager.disposeAll();
         HandlerList.unregisterAll(this);
     }
 
-    public EntityManager getEntityManager() {
-        return entityManager;
-    }
-
     public List<EffectManager> getEffectManagers() {
         return EffectManager.getManagers();
-    }
-
-    private void loadListeners() {
-        getServer().getPluginManager().registerEvents(new ItemListener(), this);
     }
 
     public static EffectLib instance() {
