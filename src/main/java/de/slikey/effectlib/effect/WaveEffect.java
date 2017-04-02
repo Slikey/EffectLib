@@ -89,6 +89,11 @@ public class WaveEffect extends Effect {
         cloudCache = new HashSet<Vector>();
     }
 
+    @Override
+    public void reset() {
+        this.firstStep = true;
+    }
+
     /**
      * Call this method when you change anything related to the creation of the wave
      */

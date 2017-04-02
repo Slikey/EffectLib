@@ -72,6 +72,11 @@ public class TornadoEffect extends Effect {
     }
 
     @Override
+    public void reset() {
+        this.step = 0;
+    }
+
+    @Override
     public void onRun() {
         Location l = getLocation().add(0, yOffset, 0);
         for (int i = 0; i < (100 * cloudSize); i++) {

@@ -41,6 +41,11 @@ public class BigBangEffect extends Effect {
     }
 
     @Override
+    public void reset() {
+        this.step = 0;
+    }
+
+    @Override
     public void onRun() {
         if (firework == null) {
             Builder b = FireworkEffect.builder().with(fireworkType);

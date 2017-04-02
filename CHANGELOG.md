@@ -2,6 +2,8 @@
 
 # 5.5
 
+ - Try to make Effect instances reusable (by calling start() again when they are finished)
+
 # 5.4
 
  - Memory use optimizations

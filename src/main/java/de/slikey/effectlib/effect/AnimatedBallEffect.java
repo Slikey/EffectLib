@@ -55,13 +55,18 @@ public class AnimatedBallEffect extends Effect {
     /**
      * Internal Counter
      */
-    protected int step;
+    protected int step = 0;
 
     public AnimatedBallEffect(EffectManager effectManager) {
         super(effectManager);
         this.type = EffectType.REPEATING;
         this.iterations = 500;
         this.period = 1;
+    }
+
+    @Override
+    public void reset() {
+        this.step = 0;
     }
 
     @Override

@@ -106,6 +106,12 @@ public class ColoredImageEffect extends Effect {
         iterations = 200;
     }
 
+    @Override
+    public void reset() {
+        this.step = 0;
+        this.rotationStep = 0;
+    }
+
     public void loadFile(File file) {
         try {
             image = ImageIO.read(file);

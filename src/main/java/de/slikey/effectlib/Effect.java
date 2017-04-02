@@ -247,7 +247,16 @@ public abstract class Effect implements Runnable {
         }
     }
 
+    /**
+     * Effects should override this if they want to be reusable, this is called prior to starting so
+     * state can be reset.
+     */
+    protected void reset() {
+        this.done = false;
+    }
+
     public final void start() {
+        reset();
         updateDuration();
         effectManager.start(this);
     }

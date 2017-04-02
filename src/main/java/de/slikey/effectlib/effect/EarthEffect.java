@@ -58,6 +58,12 @@ public class EarthEffect extends Effect {
         cacheBlue = new HashSet<Vector>();
     }
 
+    @Override
+    public void reset() {
+        this.step = 0;
+        this.firstStep = true;
+    }
+
     public void invalidate() {
         firstStep = false;
         cacheGreen.clear();

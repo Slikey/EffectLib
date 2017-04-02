@@ -50,6 +50,11 @@ public class TraceEffect extends Effect {
     }
 
     @Override
+    public void reset() {
+        this.step = 0;
+    }
+
+    @Override
     public void onRun() {
         Location location = getLocation();
         if (world == null) {

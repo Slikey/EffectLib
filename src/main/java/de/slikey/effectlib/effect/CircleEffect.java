@@ -69,6 +69,11 @@ public class CircleEffect extends Effect {
     }
 
     @Override
+    public void reset() {
+        this.step = 0;
+    }
+
+    @Override
     public void onRun() {
         Location location = getLocation();
         location.subtract(xSubtract, ySubtract, zSubtract);

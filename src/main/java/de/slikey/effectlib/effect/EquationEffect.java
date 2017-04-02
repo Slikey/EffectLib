@@ -102,6 +102,12 @@ public class EquationEffect extends Effect {
     }
 
     @Override
+    public void reset() {
+        this.step = 0;
+        this.miniStep = 0;
+    }
+
+    @Override
     public void onRun() {
         if (xTransform == null) {
             xTransform = new EquationTransform(xEquation, variable);
