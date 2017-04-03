@@ -66,15 +66,27 @@ public final class EffectManager implements Disposable {
 
         BukkitScheduler s = Bukkit.getScheduler();
         BukkitTask task = null;
-        switch (effect.type) {
+        switch (effect.getType()) {
             case INSTANT:
-                task = s.runTask(owningPlugin, effect);
+                if(effect.isAsynchronous()) {
+                    task = s.runTaskAsynchronously(owningPlugin, effect);
+                } else {
+                    task = s.runTask(owningPlugin, effect);
+                }
                 break;
             case DELAYED:
-                task = s.runTaskLater(owningPlugin, effect, effect.delay);
+                if (effect.isAsynchronous()) {
+                    task = s.runTaskLaterAsynchronously(owningPlugin, effect, effect.getDelay());
+                } else {
+                    task = s.runTaskLater(owningPlugin, effect, effect.getDelay());
+                }
                 break;
             case REPEATING:
-                task = s.runTaskTimer(owningPlugin, effect, effect.delay, effect.period);
+                if (effect.isAsynchronous()) {
+                    task = s.runTaskTimerAsynchronously(owningPlugin, effect, effect.getDelay(), effect.getPeriod());
+                } else {
+                    task = s.runTaskTimer(owningPlugin, effect, effect.getDelay(), effect.getPeriod());
+                }
                 break;
         }
         synchronized (this) {

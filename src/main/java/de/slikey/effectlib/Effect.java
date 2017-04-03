@@ -142,7 +142,6 @@ public abstract class Effect implements Runnable {
      */
     public boolean asynchronous = true;
     protected final EffectManager effectManager;
-    protected Runnable asyncRunnableTask;
 
     private DynamicLocation origin = null;
     private DynamicLocation target = null;
@@ -200,39 +199,11 @@ public abstract class Effect implements Runnable {
         if (done) {
             return;
         }
-        if (asynchronous) {
-            final Plugin plugin = effectManager.getOwningPlugin();
-            if (asyncRunnableTask == null) {
-                final Effect effect = this;
-                asyncRunnableTask = new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            effect.onRun();
-                        } catch (Exception ex) {
-                            effectManager.onError(ex);
-                            if (plugin.isEnabled()) {
-                                Bukkit.getScheduler().runTask(plugin, new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        effect.done();
-                                    }
-                                });
-                            }
-                        }
-                    }
-                };
-            }
-            if (plugin.isEnabled()) {
-                Bukkit.getScheduler().runTaskAsynchronously(plugin, asyncRunnableTask);
-            }
-        } else {
-            try {
-                onRun();
-            } catch (Exception ex) {
-                done();
-                effectManager.onError(ex);
-            }
+        try {
+            onRun();
+        } catch (Exception ex) {
+            done();
+            effectManager.onError(ex);
         }
         if (type == EffectType.REPEATING) {
             if (iterations == -1) {
@@ -418,6 +389,22 @@ public abstract class Effect implements Runnable {
         done = true;
         effectManager.done(this);
         onDone();
+    }
+
+    public EffectType getType() {
+        return type;
+    }
+
+    public boolean isAsynchronous() {
+        return asynchronous;
+    }
+
+    public int getDelay() {
+        return delay;
+    }
+
+    public int getPeriod() {
+        return period;
     }
     
     public void setEntity(Entity entity) {
