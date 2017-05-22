@@ -119,7 +119,7 @@ public class CylinderEffect extends Effect {
             if (enableRotation) {
                 VectorUtils.rotateVector(v, xRotation, yRotation, zRotation);
             }
-            particle.display(location.add(v), visibleRange);
+            display(particle, location.add(v));
             location.subtract(v);
         }
         display(particle, location);
