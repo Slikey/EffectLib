@@ -4,6 +4,7 @@
 
  - Try to make Effect instances reusable (by calling start() again when they are finished)
  - Optimizations (thanks, XakepSDK!)
+ - Fix builtin transforms, default package was wrong
 
 # 5.4
 

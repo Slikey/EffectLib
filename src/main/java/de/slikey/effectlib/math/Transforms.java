@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 public class Transforms {
-    private static final String TRANSFORM_BUILTIN_CLASSPATH = "com.elmakers.mine.bukkit.math";
+    private static final String TRANSFORM_BUILTIN_CLASSPATH = "de.slikey.effectlib.math";
     private static Map<String, Class<?>> transformClasses = new HashMap<String, Class<?>>();
 
     public static Transform loadTransform(ConfigurationSection base, String value) {
