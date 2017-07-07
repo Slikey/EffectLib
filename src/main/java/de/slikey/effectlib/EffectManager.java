@@ -31,7 +31,7 @@ import org.bukkit.util.Vector;
  * @author Kevin
  *
  */
-public final class EffectManager implements Disposable {
+public class EffectManager implements Disposable {
 
     private static List<EffectManager> effectManagers;
     private static Map<String, Class<? extends Effect>> effectClasses = new HashMap<String, Class<? extends Effect>>();
