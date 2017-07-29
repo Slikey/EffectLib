@@ -7,6 +7,7 @@ import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.util.Vector;
 
@@ -157,6 +158,7 @@ public abstract class Effect implements Runnable {
     public boolean disappearWithTargetEntity = false;
 
     private boolean done = false;
+    private Player targetPlayer;
 
     public Effect(EffectManager effectManager) {
         if (effectManager == null) {
@@ -382,6 +384,7 @@ public abstract class Effect implements Runnable {
     }
 
     protected void display(ParticleEffect particle, Location location, Color color, float speed, int amount) {
+        if (this.targetPlayer != null) particle.setTargetPlayer(this.targetPlayer);
         particle.display(particle.getData(material, materialData), location, color, visibleRange, particleOffsetX, particleOffsetY, particleOffsetZ, speed, amount);
     }
 
@@ -422,4 +425,7 @@ public abstract class Effect implements Runnable {
     public void setTargetLocation(Location location) {
         target = new DynamicLocation(location);
     }
+
+    public Player getTargetPlayer() {return this.targetPlayer; }
+    public void setTargetPlayer(Player p){ this.targetPlayer = p; }
 }
