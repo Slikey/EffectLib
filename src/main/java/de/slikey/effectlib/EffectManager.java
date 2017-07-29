@@ -19,6 +19,7 @@ import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.scheduler.BukkitTask;
@@ -106,6 +107,10 @@ public class EffectManager implements Disposable {
         return start(effectClass, parameters, origin, null, null, null, null);
     }
 
+    public Effect start(String effectClass, ConfigurationSection parameters, Location origin, Player targetPlayer){
+        return start(effectClass, parameters, new DynamicLocation(origin, null), new DynamicLocation(null, null), null, targetPlayer);
+    }
+
     /**
      * Start an Effect from a Configuration map of parameters.
      *
@@ -132,7 +137,11 @@ public class EffectManager implements Disposable {
      * @param parameterMap A map of parameter values to replace. These must start with the "$" character, values in the parameters map that contain a $key will be replaced with the value in this parameterMap.
      * @return
      */
+
     public Effect start(String effectClass, ConfigurationSection parameters, DynamicLocation origin, DynamicLocation target, Map<String, String> parameterMap) {
+        return start(effectClass, parameters, origin, target, parameterMap, null);
+    }
+    public Effect start(String effectClass, ConfigurationSection parameters, DynamicLocation origin, DynamicLocation target, Map<String, String> parameterMap, Player targetPlayer) {
         Class<? extends Effect> effectLibClass;
         try {
             // A shaded manager may provide a fully-qualified path.
@@ -176,6 +185,10 @@ public class EffectManager implements Disposable {
 
         effect.setDynamicOrigin(origin);
         effect.setDynamicTarget(target);
+
+        if(targetPlayer != null)
+            effect.setTargetPlayer(targetPlayer);
+
 
         effect.start();
         return effect;

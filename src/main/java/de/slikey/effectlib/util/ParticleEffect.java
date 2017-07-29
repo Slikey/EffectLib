@@ -396,6 +396,8 @@ public enum ParticleEffect {
     private final int requiredVersion;
     private final boolean requiresData;
     private final boolean requiresWater;
+    private Player targetPlayer = null;
+
 
     // Initialize map for quick name and id lookup
     static {
@@ -489,6 +491,20 @@ public enum ParticleEffect {
     public boolean getRequiresWater() {
         return requiresWater;
     }
+
+    /**
+     * Return Player Target.
+     * @return Player if not null or null
+     */
+    public Player getTargetPlayer(){ return targetPlayer; }
+
+    /**
+     * Set the current target Player.
+     * Pass null if you want you effect to be visible at all players;
+     */
+    public void setTargetPlayer(Player p){this.targetPlayer = p; }
+
+
 
     /**
      * Determine if this particle effect is supported by your current server version
@@ -597,7 +613,13 @@ public enum ParticleEffect {
         if (requiresWater && !isWater(center)) {
             throw new IllegalArgumentException("There is no water at the center location");
         }
-        new ParticlePacket(this, offsetX, offsetY, offsetZ, speed, amount, range > 16, null).sendTo(center, range);
+
+
+        // Bukkit.getLogger().info("ParticleEffect: 618: targetPlayer: " + targetPlayer);
+        ParticlePacket particle = new ParticlePacket(this, offsetX, offsetY, offsetZ, speed, amount, range > 16, null);
+        if(targetPlayer != null) particle.sendTo(center, targetPlayer);
+        else particle.sendTo(center, range);
+
     }
 
     /**
@@ -671,7 +693,12 @@ public enum ParticleEffect {
         if (requiresWater && !isWater(center)) {
             throw new IllegalArgumentException("There is no water at the center location");
         }
-        new ParticlePacket(this, direction, speed, range > LONG_DISTANCE, null).sendTo(center, range);
+
+        // Bukkit.getLogger().info("ParticleEffect: 690: targetPlayer: " + targetPlayer);
+        ParticlePacket particle = new ParticlePacket(this, direction, speed, range > LONG_DISTANCE, null);
+        if(targetPlayer != null) particle.sendTo(center, targetPlayer);
+        else particle.sendTo(center, range);
+
     }
 
     /**
@@ -745,7 +772,11 @@ public enum ParticleEffect {
         if (!isDataCorrect(this, data)) {
             throw new ParticleDataException("The particle data type is incorrect: " + data + " for " + this);
         }
-        new ParticlePacket(this, offsetX, offsetY, offsetZ, speed, amount, range > LONG_DISTANCE, data).sendTo(center, range);
+
+        ParticlePacket particle = new ParticlePacket(this, offsetX, offsetY, offsetZ, speed, amount, range > LONG_DISTANCE, data);
+        // Bukkit.getLogger().info("ParticleEffect: 770: targetPlayer: " + targetPlayer);
+        if(targetPlayer != null) particle.sendTo(center, targetPlayer);
+        else particle.sendTo(center, range);
     }
 
     /**
