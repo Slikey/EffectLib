@@ -5,6 +5,7 @@
  - Try to make Effect instances reusable (by calling start() again when they are finished)
  - Optimizations (thanks, XakepSDK!)
  - Fix builtin transforms, default package was wrong
+ - Added setTargetPlayer API
 
 # 5.4
 
