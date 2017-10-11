@@ -1,5 +1,7 @@
 # CHANGELOG
 
+# 5.6
+
 # 5.5
 
  - Try to make Effect instances reusable (by calling start() again when they are finished)
