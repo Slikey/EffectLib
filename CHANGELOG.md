@@ -2,6 +2,8 @@
 
 # 5.6
 
+ - Fix inconsistent position of Circle effect when using updateLocations: false
+
 # 5.5
 
  - Try to make Effect instances reusable (by calling start() again when they are finished)

@@ -75,7 +75,7 @@ public class CircleEffect extends Effect {
 
     @Override
     public void onRun() {
-        Location location = getLocation();
+        Location location = getLocation().clone();
         location.subtract(xSubtract, ySubtract, zSubtract);
         double inc = (2 * Math.PI) / particles;
         double angle = step * inc;
