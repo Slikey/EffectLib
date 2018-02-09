@@ -1,5 +1,7 @@
 # CHANGELOG
 
+# 5.7
+
 # 5.6
 
  - Fix inconsistent position of Circle effect when using updateLocations: false
