@@ -38,6 +38,11 @@ public class EquationTransform implements Transform {
         setEquation(equation);
     }
 
+    public EquationTransform(String equation, Set<String> inputVariables) {
+        this.inputVariables = inputVariables;
+        setEquation(equation);
+    }
+
     public void setEquation(String equation) {
         try {
             if (randFunction == null) {
@@ -79,6 +84,19 @@ public class EquationTransform implements Transform {
         for (String inputVariable : inputVariables) {
             expression.setVariable(inputVariable, t[index]);
             if (index < t.length - 1) index++;
+        }
+        return expression.evaluate();
+    }
+
+    public void setVariable(String key, double value) {
+        if (expression != null) {
+            expression.setVariable(key, value);
+        }
+    }
+
+    public double get() {
+        if (expression == null) {
+            return 0;
         }
         return expression.evaluate();
     }
