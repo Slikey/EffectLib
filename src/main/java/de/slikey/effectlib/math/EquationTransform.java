@@ -61,7 +61,7 @@ public class EquationTransform implements Transform {
                 .build();
         } catch (Exception ex) {
             expression = null;
-            org.bukkit.Bukkit.getLogger().log(Level.WARNING, "Error parsing equation " + equation, ex);
+            org.bukkit.Bukkit.getLogger().log(Level.WARNING, ex.getMessage());
         }
     }
 
