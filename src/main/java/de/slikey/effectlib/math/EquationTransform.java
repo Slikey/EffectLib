@@ -14,6 +14,8 @@ public class EquationTransform implements Transform {
     private Expression expression;
     private static Function randFunction;
     private final Set<String> inputVariables;
+    private boolean quiet;
+    private Exception exception;
 
     @Override
     public void load(ConfigurationSection parameters) {
@@ -45,6 +47,7 @@ public class EquationTransform implements Transform {
 
     public void setEquation(String equation) {
         try {
+            exception = null;
             if (randFunction == null) {
                 randFunction = new Function("rand", 2) {
                     private Random random = new Random();
@@ -61,7 +64,10 @@ public class EquationTransform implements Transform {
                 .build();
         } catch (Exception ex) {
             expression = null;
-            org.bukkit.Bukkit.getLogger().log(Level.WARNING, ex.getMessage());
+            exception = ex;
+            if (!quiet) {
+                org.bukkit.Bukkit.getLogger().log(Level.WARNING, ex.getMessage()); 
+            }
         }
     }
 
@@ -73,7 +79,17 @@ public class EquationTransform implements Transform {
         for (String inputVariable : inputVariables) {
             expression.setVariable(inputVariable, t);
         }
-        return expression.evaluate();
+        double value = Double.NaN;
+        try {
+            exception = null;
+            value = expression.evaluate();
+        } catch (Exception ex) {
+            exception = ex;
+            if (!quiet) {
+                org.bukkit.Bukkit.getLogger().log(Level.WARNING, ex.getMessage());
+            }
+        }
+        return value; 
     }
     
     public double get(double... t) {
@@ -99,5 +115,13 @@ public class EquationTransform implements Transform {
             return 0;
         }
         return expression.evaluate();
+    }
+    
+    public void setQuiet(boolean quiet) {
+        this.quiet = quiet;
+    }
+    
+    public Exception getException() {
+        return exception;
     }
 }
