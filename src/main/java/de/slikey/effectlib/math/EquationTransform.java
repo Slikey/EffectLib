@@ -22,6 +22,10 @@ public class EquationTransform implements Transform {
         setEquation(parameters.getString("equation", ""));
     }
 
+    public EquationTransform() {
+        inputVariables = new HashSet<String>();
+    }
+    
     public EquationTransform(String equation) {
         this(equation, "t");
     }
@@ -45,7 +49,7 @@ public class EquationTransform implements Transform {
         setEquation(equation);
     }
 
-    public void setEquation(String equation) {
+    public boolean setEquation(String equation) {
         try {
             exception = null;
             if (randFunction == null) {
@@ -69,6 +73,8 @@ public class EquationTransform implements Transform {
                 org.bukkit.Bukkit.getLogger().log(Level.WARNING, ex.getMessage()); 
             }
         }
+        
+        return exception == null;
     }
 
     @Override
@@ -79,17 +85,7 @@ public class EquationTransform implements Transform {
         for (String inputVariable : inputVariables) {
             expression.setVariable(inputVariable, t);
         }
-        double value = Double.NaN;
-        try {
-            exception = null;
-            value = expression.evaluate();
-        } catch (Exception ex) {
-            exception = ex;
-            if (!quiet) {
-                org.bukkit.Bukkit.getLogger().log(Level.WARNING, ex.getMessage());
-            }
-        }
-        return value; 
+        return get();
     }
     
     public double get(double... t) {
@@ -101,7 +97,11 @@ public class EquationTransform implements Transform {
             expression.setVariable(inputVariable, t[index]);
             if (index < t.length - 1) index++;
         }
-        return expression.evaluate();
+        return get();
+    }
+    
+    public void addVariable(String key) {
+        inputVariables.add(key);
     }
 
     public void setVariable(String key, double value) {
@@ -112,9 +112,19 @@ public class EquationTransform implements Transform {
 
     public double get() {
         if (expression == null) {
-            return 0;
+            return Double.NaN;
         }
-        return expression.evaluate();
+        double value = Double.NaN;
+        try {
+            exception = null;
+            value = expression.evaluate();
+        } catch (Exception ex) {
+            exception = ex;
+            if (!quiet) {
+                org.bukkit.Bukkit.getLogger().log(Level.WARNING, ex.getMessage());
+            }
+        }
+        return value;
     }
     
     public void setQuiet(boolean quiet) {
