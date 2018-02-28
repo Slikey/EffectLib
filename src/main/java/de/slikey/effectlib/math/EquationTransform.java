@@ -49,6 +49,12 @@ public class EquationTransform implements Transform {
         setEquation(equation);
     }
 
+    public EquationTransform(String equation, Set<String> inputVariables, boolean quiet) {
+        this.quiet = quiet;
+        this.inputVariables = inputVariables;
+        setEquation(equation);
+    }
+
     public boolean setEquation(String equation) {
         try {
             exception = null;
