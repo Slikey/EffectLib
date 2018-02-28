@@ -140,4 +140,8 @@ public class EquationTransform implements Transform {
     public Exception getException() {
         return exception;
     }
+    
+    public Set<String> getParameters() {
+        return inputVariables;
+    }
 }
