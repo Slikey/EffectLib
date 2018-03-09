@@ -286,26 +286,6 @@ public class EffectManager implements Disposable {
                 field.set(effect, NumberConversions.toByte(value));
             } else if (field.getType().isAssignableFrom(String.class)) {
                 field.set(effect, value);
-            } else if (field.getType().isAssignableFrom(ParticleEffect.class)) {
-                ParticleEffect particleType = ParticleEffect.valueOf(value.toUpperCase());
-                field.set(effect, particleType);
-            } else if (field.getType().isAssignableFrom(EffectType.class)) {
-                EffectType effectType = EffectType.valueOf(value.toUpperCase());
-                field.set(effect, effectType);
-            } else if (field.getType().equals(Sound.class)) {
-                try {
-                    Sound sound = Sound.valueOf(value.toUpperCase());
-                    field.set(effect, sound);
-                } catch (Exception ex) {
-                    onError(ex);
-                }
-            } else if (field.getType().equals(Material.class)) {
-                try {
-                    Material material = Material.valueOf(value.toUpperCase());
-                    field.set(effect, material);
-                } catch (Exception ex) {
-                    onError(ex);
-                }
             } else if (field.getType().equals(Color.class)) {
                 try {
                     Integer rgb = Integer.parseInt(value, 16);
@@ -327,6 +307,14 @@ public class EffectManager implements Disposable {
                     onError(ex);
                 }
                 field.set(effect, new Vector(x, y, z));
+            } else if (field.getType().isEnum()) {
+                Class<Enum> enumType = (Class<Enum>)field.getType();
+                try {
+                    Enum enumValue = Enum.valueOf(enumType, value.toUpperCase());
+                    field.set(effect, enumValue);
+                } catch (Exception ex) {
+                    onError(ex);
+                }
             } else {
                 return false;
             }
