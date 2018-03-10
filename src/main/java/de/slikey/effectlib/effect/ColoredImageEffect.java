@@ -10,7 +10,6 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 
 public class ColoredImageEffect extends BaseImageEffect {
-;
     public ColoredImageEffect(EffectManager effectManager) throws IOException {
         super(effectManager);
     }
