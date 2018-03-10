@@ -34,6 +34,11 @@ public abstract class BaseImageEffect extends Effect {
     public boolean transparency = false;
 
     /**
+     * How many ticks to show each frame
+     */
+    public int frameDelay = 5;
+
+    /**
      * Each stepX pixel will be shown. Saves packets for high resolutions.
      */
     public int stepX = 10;
@@ -76,17 +81,7 @@ public abstract class BaseImageEffect extends Effect {
     /**
      * Image as BufferedImage
      */
-    protected BufferedImage image = null;
-
-    /**
-     * Is this a gif image?
-     */
-    protected boolean isGif = false;
-
-    /**
-     * File of the gif if needed
-     */
-    protected File gifFile = null;
+    protected BufferedImage[] images = null;
 
     /**
      * Step counter
@@ -118,18 +113,28 @@ public abstract class BaseImageEffect extends Effect {
 
     public void loadFile(File file) {
         try {
-            image = ImageIO.read(file);
-            this.isGif = file.getName().endsWith(".gif");
-            this.gifFile = file;
+            if (file.getName().endsWith(".gif")) {
+                ImageReader reader = ImageIO.getImageReadersBySuffix("GIF").next();
+                ImageInputStream in = ImageIO.createImageInputStream(file);
+                reader.setInput(in);
+                int numImages = reader.getNumImages(true);
+                images = new BufferedImage[numImages];
+                for (int i = 0, count = numImages; i < count; i++) {
+                    images[i] = reader.read(i);
+                }
+            } else {
+                images = new BufferedImage[1];
+                images[0] = ImageIO.read(file);
+            }
         } catch (Exception ex) {
             ex.printStackTrace();
-            image = null;
+            images = null;
         }
     }
 
     @Override
     public void onRun() {
-        if (image == null && fileName != null) {
+        if (images == null && fileName != null) {
             File file;
             if (!fileName.startsWith(File.pathSeparator)) {
                 file = new File(effectManager.getOwningPlugin().getDataFolder(), fileName);
@@ -138,22 +143,22 @@ public abstract class BaseImageEffect extends Effect {
             }
             loadFile(file);
         }
-        if (image == null) {
+        if (images == null || images.length == 0) {
             cancel();
             return;
         }
-        if (isGif) {
-            try {
-                image = getImg(step);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            if (delay == 5) {
-                step++;
-                delay = 0;
-            }
-            delay++;
+
+        if (delay == frameDelay) {
+            step++;
+            delay = 0;
         }
+        delay++;
+
+        if (step >= images.length) {
+            step = 0;
+        }
+        BufferedImage image = images[step];
+
         Location location = getLocation();
         for (int y = 0; y < image.getHeight(); y += stepY) {
             for (int x = 0; x < image.getWidth(); x += stepX) {
@@ -205,23 +210,6 @@ public abstract class BaseImageEffect extends Effect {
             }
         }
         rotationStep++;
-    }
-
-    //Reads gifs
-    private BufferedImage getImg(int s) throws IOException {
-        ArrayList<BufferedImage> images = new ArrayList<BufferedImage>();
-        ImageReader reader = ImageIO.getImageReadersBySuffix("GIF").next();
-        ImageInputStream in = ImageIO.createImageInputStream(gifFile);
-        reader.setInput(in);
-        for (int i = 0, count = reader.getNumImages(true); i < count; i++) {
-            BufferedImage image = reader.read(i);
-            images.add(image);
-        }
-        if (step >= reader.getNumImages(true)) {
-            step = 0;
-            return images.get(s - 1);
-        }
-        return images.get(s);
     }
 
     public enum Plane {
