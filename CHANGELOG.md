@@ -5,6 +5,7 @@
  - Expanded EquationTransform support.
  - Added "transparency" option to ColoredImageEffect and ImageEffect
  - ImageEffect and ColoredImageEffect semi-merged, default particle for ImageEffect is now redstone
+ - Optimize image effects, particularly with animations, to avoid constantly reloading the file
 
 # 5.6
 

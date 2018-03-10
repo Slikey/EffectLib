@@ -2,7 +2,12 @@ package de.slikey.effectlib;
 
 import de.slikey.effectlib.util.Disposable;
 import de.slikey.effectlib.util.DynamicLocation;
+import de.slikey.effectlib.util.ImageLoadCallback;
+import de.slikey.effectlib.util.ImageLoadTask;
 import de.slikey.effectlib.util.ParticleEffect;
+
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -26,6 +31,10 @@ import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.util.NumberConversions;
 import org.bukkit.util.Vector;
 
+import javax.imageio.ImageIO;
+import javax.imageio.ImageReader;
+import javax.imageio.stream.ImageInputStream;
+
 /**
  * Dispose the EffectManager if you don't need him anymore.
  *
@@ -42,6 +51,8 @@ public class EffectManager implements Disposable {
     private boolean disposeOnTermination;
     private boolean debug = false;
     private int visibleRange = 32;
+    private File imageCacheFolder;
+    private Map<String, BufferedImage[]> imageCache = new HashMap<String, BufferedImage[]>();
 
     public EffectManager(Plugin owningPlugin) {
         ParticleEffect.ParticlePacket.initialize();
@@ -346,5 +357,31 @@ public class EffectManager implements Disposable {
                 em.dispose();
             }
         }
+    }
+
+    public void setImageCacheFolder(File folder) {
+        folder.mkdirs();
+        imageCacheFolder = folder;
+    }
+
+    public void loadImage(final String fileName, final ImageLoadCallback callback) {
+        BufferedImage[] images = imageCache.get(fileName);
+        if (images != null) {
+            callback.loaded(images);
+            return;
+        }
+
+        owningPlugin.getServer().getScheduler().runTaskAsynchronously(owningPlugin, new ImageLoadTask(this, fileName, new ImageLoadCallback() {
+            @Override
+            public void loaded(final BufferedImage[] images) {
+                 owningPlugin.getServer().getScheduler().runTask(owningPlugin, new Runnable() {
+                     @Override
+                     public void run() {
+                         imageCache.put(fileName, images);
+                         callback.loaded(images);
+                     }
+                 });
+            }
+        }));
     }
 }

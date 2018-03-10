@@ -7,14 +7,9 @@ import de.slikey.effectlib.effect.ColoredImageEffect;
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
 
-import javax.imageio.ImageIO;
-import javax.imageio.ImageReader;
-import javax.imageio.stream.ImageInputStream;
-import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 
 public abstract class BaseImageEffect extends Effect {
 
@@ -98,6 +93,8 @@ public abstract class BaseImageEffect extends Effect {
      */
     protected int delay = 0;
 
+    protected ImageLoadCallback imageLoadCallback;
+
     public BaseImageEffect(EffectManager effectManager) throws IOException {
         super(effectManager);
         type = EffectType.REPEATING;
@@ -111,37 +108,29 @@ public abstract class BaseImageEffect extends Effect {
         this.rotationStep = 0;
     }
 
-    public void loadFile(File file) {
-        try {
-            if (file.getName().endsWith(".gif")) {
-                ImageReader reader = ImageIO.getImageReadersBySuffix("GIF").next();
-                ImageInputStream in = ImageIO.createImageInputStream(file);
-                reader.setInput(in);
-                int numImages = reader.getNumImages(true);
-                images = new BufferedImage[numImages];
-                for (int i = 0, count = numImages; i < count; i++) {
-                    images[i] = reader.read(i);
-                }
-            } else {
-                images = new BufferedImage[1];
-                images[0] = ImageIO.read(file);
+    public void load(String fileName) {
+        imageLoadCallback = new ImageLoadCallback() {
+            @Override
+            public void loaded(BufferedImage[] i) {
+                images = i;
+                imageLoadCallback = null;
             }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            images = null;
-        }
+        };
+        effectManager.loadImage(fileName, imageLoadCallback);
+    }
+
+    public void loadFile(File file) {
+        load(file.getName());
     }
 
     @Override
     public void onRun() {
+        if (images == null && imageLoadCallback != null) {
+            return;
+        }
         if (images == null && fileName != null) {
-            File file;
-            if (!fileName.startsWith(File.pathSeparator)) {
-                file = new File(effectManager.getOwningPlugin().getDataFolder(), fileName);
-            } else {
-                file = new File(fileName);
-            }
-            loadFile(file);
+            load(fileName);
+            return;
         }
         if (images == null || images.length == 0) {
             cancel();
