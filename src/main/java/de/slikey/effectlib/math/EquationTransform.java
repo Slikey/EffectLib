@@ -8,13 +8,11 @@ import org.bukkit.configuration.ConfigurationSection;
 import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
-import java.util.logging.Level;
 
 public class EquationTransform implements Transform {
     private Expression expression;
     private static Function randFunction;
     private final Set<String> inputVariables;
-    private boolean quiet;
     private Exception exception;
 
     @Override
@@ -49,12 +47,6 @@ public class EquationTransform implements Transform {
         setEquation(equation);
     }
 
-    public EquationTransform(String equation, Set<String> inputVariables, boolean quiet) {
-        this.quiet = quiet;
-        this.inputVariables = inputVariables;
-        setEquation(equation);
-    }
-
     public boolean setEquation(String equation) {
         try {
             exception = null;
@@ -75,9 +67,6 @@ public class EquationTransform implements Transform {
         } catch (Exception ex) {
             expression = null;
             exception = ex;
-            if (!quiet) {
-                org.bukkit.Bukkit.getLogger().log(Level.WARNING, ex.getMessage()); 
-            }
         }
         
         return exception == null;
@@ -126,15 +115,8 @@ public class EquationTransform implements Transform {
             value = expression.evaluate();
         } catch (Exception ex) {
             exception = ex;
-            if (!quiet) {
-                org.bukkit.Bukkit.getLogger().log(Level.WARNING, ex.getMessage());
-            }
         }
         return value;
-    }
-    
-    public void setQuiet(boolean quiet) {
-        this.quiet = quiet;
     }
     
     public Exception getException() {

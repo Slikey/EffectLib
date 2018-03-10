@@ -3,6 +3,7 @@ package de.slikey.effectlib.effect;
 import de.slikey.effectlib.Effect;
 import de.slikey.effectlib.EffectManager;
 import de.slikey.effectlib.EffectType;
+import de.slikey.effectlib.math.EquationStore;
 import de.slikey.effectlib.math.EquationTransform;
 import de.slikey.effectlib.util.ParticleEffect;
 import de.slikey.effectlib.util.VectorUtils;
@@ -110,14 +111,14 @@ public class EquationEffect extends Effect {
     @Override
     public void onRun() {
         if (xTransform == null) {
-            xTransform = new EquationTransform(xEquation, variable);
-            yTransform = new EquationTransform(yEquation, variable);
-            zTransform = new EquationTransform(zEquation, variable);
+            xTransform = EquationStore.getInstance().getTransform(xEquation, variable);
+            yTransform = EquationStore.getInstance().getTransform(yEquation, variable);
+            zTransform = EquationStore.getInstance().getTransform(zEquation, variable);
             
             if (x2Equation != null && y2Equation != null && z2Equation != null && particles2 > 0) {
-                x2Transform = new EquationTransform(x2Equation, variable, variable2);
-                y2Transform = new EquationTransform(y2Equation, variable, variable2);
-                z2Transform = new EquationTransform(z2Equation, variable, variable2);
+                x2Transform = EquationStore.getInstance().getTransform(x2Equation, variable, variable2);
+                y2Transform = EquationStore.getInstance().getTransform(y2Equation, variable, variable2);
+                z2Transform = EquationStore.getInstance().getTransform(z2Equation, variable, variable2);
             }
         }
         Location location = getLocation();

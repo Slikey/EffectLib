@@ -9,6 +9,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
 
 public class Transforms {
     private static final String TRANSFORM_BUILTIN_CLASSPATH = "de.slikey.effectlib.math";
@@ -26,7 +27,12 @@ public class Transforms {
             if (equation.equalsIgnoreCase("t") || equation.equalsIgnoreCase("time")) {
                 return new EchoTransform();
             }
-            return new EquationTransform(equation);
+            EquationTransform transform = EquationStore.getInstance().getTransform(equation, "t");
+            Exception ex = transform.getException();
+            if (ex != null) {
+                Bukkit.getLogger().log(Level.WARNING, "Error parsing equation: " + equation, ex);
+            }
+            return transform;
         }
         return new ConstantTransform(0);
     }
