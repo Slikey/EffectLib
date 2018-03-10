@@ -364,6 +364,10 @@ public class EffectManager implements Disposable {
         imageCacheFolder = folder;
     }
 
+    public File getImageCacheFolder() {
+        return imageCacheFolder;
+    }
+
     public void loadImage(final String fileName, final ImageLoadCallback callback) {
         BufferedImage[] images = imageCache.get(fileName);
         if (images != null) {
