@@ -35,6 +35,11 @@ public class ImageEffect extends Effect {
     public boolean invert = false;
 
     /**
+     * Whether or not to check for transparent pixels
+     */
+    public boolean transparency = false;
+
+    /**
      * Each stepX pixel will be shown. Saves packets for high resolutions.
      */
     public int stepX = 10;
@@ -139,6 +144,9 @@ public class ImageEffect extends Effect {
         for (int y = 0; y < image.getHeight(); y += stepY) {
             for (int x = 0; x < image.getWidth(); x += stepX) {
                 clr = image.getRGB(x, y);
+                if (transparency && (clr >> 24) == 0) {
+                    continue;
+                }
                 if (!invert && Color.black.getRGB() != clr) {
                     continue;
                 } else if (invert && Color.black.getRGB() == clr) {

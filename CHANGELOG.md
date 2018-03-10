@@ -3,6 +3,7 @@
 # 5.7
 
  - Expanded EquationTransform support.
+ - Added "transparency" option to ColoredImageEffect and ImageEffect
 
 # 5.6
 

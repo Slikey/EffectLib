@@ -30,6 +30,11 @@ public class ColoredImageEffect extends Effect {
     public String fileName = null;
 
     /**
+     * Whether or not to check for transparent pixels
+     */
+    public boolean transparency = false;
+
+    /**
      * Each stepX pixel will be shown. Saves packets for high resolutions.
      */
     public int stepX = 10;
@@ -188,6 +193,12 @@ public class ColoredImageEffect extends Effect {
                             break;
                     }
                     VectorUtils.rotateVector(v, rotX, rotY, rotZ);
+                }
+                if (transparency) {
+                    int pixel = image.getRGB(x, y);
+                      if ((pixel >> 24) == 0) {
+                          continue;
+                      }
                 }
                 int r = (new Color(image.getRGB(x, y))).getRed();
                 int g = (new Color(image.getRGB(x, y))).getGreen();
