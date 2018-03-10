@@ -187,14 +187,13 @@ public abstract class BaseImageEffect extends Effect {
                     }
                     VectorUtils.rotateVector(v, rotX, rotY, rotZ);
                 }
-                if (transparency) {
-                    int pixel = image.getRGB(x, y);
-                    if ((pixel >> 24) == 0) {
-                        continue;
-                    }
+
+                int pixel = image.getRGB(x, y);
+                if (transparency && (pixel >> 24) == 0) {
+                    continue;
                 }
 
-                display(image, v, location, x, y);
+                display(image, v, location, pixel);
                 location.subtract(v);
             }
         }
@@ -206,5 +205,5 @@ public abstract class BaseImageEffect extends Effect {
         X, Y, Z, XY, XZ, XYZ, YZ;
     }
 
-    protected abstract void display(BufferedImage image, Vector v, Location location, int x, int y);
+    protected abstract void display(BufferedImage image, Vector v, Location location, int pixel);
 }

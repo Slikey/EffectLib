@@ -14,10 +14,11 @@ public class ColoredImageEffect extends BaseImageEffect {
         super(effectManager);
     }
 
-    protected void display(BufferedImage image, Vector v, Location location, int x, int y) {
-        int r = (new Color(image.getRGB(x, y))).getRed();
-        int g = (new Color(image.getRGB(x, y))).getGreen();
-        int b = (new Color(image.getRGB(x, y))).getBlue();
+    protected void display(BufferedImage image, Vector v, Location location, int pixel) {
+        Color color = new Color(pixel);
+        int r = color.getRed();
+        int g = color.getGreen();
+        int b = color.getBlue();
         display(particle, location.add(v), org.bukkit.Color.fromRGB(r, g, b));
     }
 }

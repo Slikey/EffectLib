@@ -22,11 +22,10 @@ public class ImageEffect extends BaseImageEffect {
         super(effectManager);
     }
 
-    protected void display(BufferedImage image, Vector v, Location location, int x, int y) {
-        int clr = image.getRGB(x, y);
-        if (!invert && Color.black.getRGB() != clr) {
+    protected void display(BufferedImage image, Vector v, Location location, int pixel) {
+        if (!invert && Color.black.getRGB() != pixel) {
             return;
-        } else if (invert && Color.black.getRGB() == clr) {
+        } else if (invert && Color.black.getRGB() == pixel) {
             return;
         }
         VectorUtils.rotateAroundAxisY(v, -location.getYaw() * MathUtils.degreesToRadians);
