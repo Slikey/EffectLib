@@ -9,7 +9,6 @@ import org.bukkit.util.Vector;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 
 public class ImageEffect extends BaseImageEffect {
 
@@ -18,7 +17,7 @@ public class ImageEffect extends BaseImageEffect {
      */
     public boolean invert = false;
 
-    public ImageEffect(EffectManager effectManager) throws IOException {
+    public ImageEffect(EffectManager effectManager) {
         super(effectManager);
     }
 

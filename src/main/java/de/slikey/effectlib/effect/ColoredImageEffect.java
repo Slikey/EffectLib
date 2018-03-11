@@ -7,10 +7,9 @@ import org.bukkit.util.Vector;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 
 public class ColoredImageEffect extends BaseImageEffect {
-    public ColoredImageEffect(EffectManager effectManager) throws IOException {
+    public ColoredImageEffect(EffectManager effectManager) {
         super(effectManager);
     }
 

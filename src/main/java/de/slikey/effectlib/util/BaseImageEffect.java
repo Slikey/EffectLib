@@ -9,7 +9,6 @@ import org.bukkit.util.Vector;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.IOException;
 
 public abstract class BaseImageEffect extends Effect {
 
@@ -95,7 +94,7 @@ public abstract class BaseImageEffect extends Effect {
 
     protected ImageLoadCallback imageLoadCallback;
 
-    public BaseImageEffect(EffectManager effectManager) throws IOException {
+    public BaseImageEffect(EffectManager effectManager) {
         super(effectManager);
         type = EffectType.REPEATING;
         period = 2;
