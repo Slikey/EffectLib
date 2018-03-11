@@ -115,6 +115,11 @@ public abstract class Effect implements Runnable {
     public boolean updateDirections = true;
 
     /**
+     * A specific player who should see this effect.
+     */
+    public Player targetPlayer;
+
+    /**
      * The Material and data to use for block and item break particles
      */
     public Material material;
@@ -144,8 +149,8 @@ public abstract class Effect implements Runnable {
     public boolean asynchronous = true;
     protected final EffectManager effectManager;
 
-    private DynamicLocation origin = null;
-    private DynamicLocation target = null;
+    protected DynamicLocation origin = null;
+    protected DynamicLocation target = null;
     
     /**
      * Should this effect stop playing if the origin entity becomes null?
@@ -158,7 +163,6 @@ public abstract class Effect implements Runnable {
     public boolean disappearWithTargetEntity = false;
 
     private boolean done = false;
-    private Player targetPlayer;
 
     public Effect(EffectManager effectManager) {
         if (effectManager == null) {
@@ -228,9 +232,13 @@ public abstract class Effect implements Runnable {
         this.done = false;
     }
 
-    public final void start() {
+    public void prepare() {
         reset();
         updateDuration();
+    }
+
+    public final void start() {
+        prepare();
         effectManager.start(this);
     }
 

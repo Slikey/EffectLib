@@ -8,6 +8,7 @@
  - Optimize image effects, particularly with animations, to avoid constantly reloading the file
  - Image effects can now load files from a URL, as long as the owning plugin calls EffectManager.setImageCacheFolder
  - Cache parsed equations for performance
+ - Add ModifiedEffect, which allows you to parameterized any existing effect.
 
 # 5.6
 
