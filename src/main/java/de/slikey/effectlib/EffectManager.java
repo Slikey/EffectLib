@@ -1,10 +1,23 @@
 package de.slikey.effectlib;
 
+import de.slikey.effectlib.math.Transforms;
+import de.slikey.effectlib.util.ConfigUtils;
 import de.slikey.effectlib.util.Disposable;
 import de.slikey.effectlib.util.DynamicLocation;
 import de.slikey.effectlib.util.ImageLoadCallback;
 import de.slikey.effectlib.util.ImageLoadTask;
 import de.slikey.effectlib.util.ParticleEffect;
+import org.bukkit.Bukkit;
+import org.bukkit.Color;
+import org.bukkit.Location;
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
+import org.bukkit.scheduler.BukkitScheduler;
+import org.bukkit.scheduler.BukkitTask;
+import org.bukkit.util.NumberConversions;
+import org.bukkit.util.Vector;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -16,24 +29,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.logging.Level;
-import org.bukkit.Bukkit;
-import org.bukkit.Color;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.Sound;
-import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
-import org.bukkit.scheduler.BukkitScheduler;
-import org.bukkit.scheduler.BukkitTask;
-import org.bukkit.util.NumberConversions;
-import org.bukkit.util.Vector;
-
-import javax.imageio.ImageIO;
-import javax.imageio.ImageReader;
-import javax.imageio.stream.ImageInputStream;
 
 /**
  * Dispose the EffectManager if you don't need him anymore.
@@ -57,6 +54,7 @@ public class EffectManager implements Disposable {
     public EffectManager(Plugin owningPlugin) {
         ParticleEffect.ParticlePacket.initialize();
         this.owningPlugin = owningPlugin;
+        Transforms.setEffectManager(this);
         effects = new HashMap<Effect, BukkitTask>();
         disposed = false;
         disposeOnTermination = false;
@@ -152,7 +150,8 @@ public class EffectManager implements Disposable {
     public Effect start(String effectClass, ConfigurationSection parameters, DynamicLocation origin, DynamicLocation target, Map<String, String> parameterMap) {
         return start(effectClass, parameters, origin, target, parameterMap, null);
     }
-    public Effect start(String effectClass, ConfigurationSection parameters, DynamicLocation origin, DynamicLocation target, Map<String, String> parameterMap, Player targetPlayer) {
+
+    public Effect getEffectByClassName(String effectClass) {
         Class<? extends Effect> effectLibClass;
         try {
             // A shaded manager may provide a fully-qualified path.
@@ -179,6 +178,12 @@ public class EffectManager implements Disposable {
         } catch (Exception ex) {
             owningPlugin.getLogger().warning("Error creating Effect class: " + effectClass);
         }
+
+        return effect;
+    }
+
+    public Effect getEffect(String effectClass, ConfigurationSection parameters, DynamicLocation origin, DynamicLocation target, Map<String, String> parameterMap, Player targetPlayer) {
+        Effect effect = getEffectByClassName(effectClass);
         if (effect == null) {
             return null;
         }
@@ -190,17 +195,24 @@ public class EffectManager implements Disposable {
             }
 
             if (!setField(effect, key, parameters, parameterMap) && debug) {
-                owningPlugin.getLogger().warning("Unable to assign EffectLib property " + key + " of class " + effectLibClass.getName());
+                owningPlugin.getLogger().warning("Unable to assign EffectLib property " + key + " of class " + effect.getClass().getName());
             }
         }
 
         effect.setDynamicOrigin(origin);
         effect.setDynamicTarget(target);
 
-        if(targetPlayer != null)
+        if (targetPlayer != null)
             effect.setTargetPlayer(targetPlayer);
 
+        return effect;
+    }
 
+    public Effect start(String effectClass, ConfigurationSection parameters, DynamicLocation origin, DynamicLocation target, Map<String, String> parameterMap, Player targetPlayer) {
+        Effect effect = getEffect(effectClass, parameters, origin, target, parameterMap, targetPlayer);
+        if (effect == null) {
+            return null;
+        }
         effect.start();
         return effect;
     }
@@ -261,6 +273,18 @@ public class EffectManager implements Disposable {
         }
     }
 
+    public void onError(String message) {
+        if (debug) {
+            owningPlugin.getLogger().log(Level.WARNING, message);
+        }
+    }
+
+    public void onError(String message, Exception ex) {
+        if (debug) {
+            owningPlugin.getLogger().log(Level.WARNING, message, ex);
+        }
+    }
+
     public int getParticleRange() {
         return visibleRange;
     }
@@ -295,7 +319,7 @@ public class EffectManager implements Disposable {
                 field.set(effect, NumberConversions.toShort(value));
             } else if (field.getType().equals(Byte.TYPE) || field.getType().equals(Byte.class)) {
                 field.set(effect, NumberConversions.toByte(value));
-            } else if (field.getType().isAssignableFrom(String.class)) {
+            } else if (field.getType().equals(String.class)) {
                 field.set(effect, value);
             } else if (field.getType().equals(Color.class)) {
                 try {
@@ -305,6 +329,18 @@ public class EffectManager implements Disposable {
                 } catch (Exception ex) {
                     onError(ex);
                 }
+            } else if (Map.class.isAssignableFrom(field.getType()) && section.isConfigurationSection(key)) {
+                Map<String, Object> map = (Map<String, Object>)field.get(effect);
+                ConfigurationSection subSection = section.getConfigurationSection(key);
+                Set<String> keys = subSection.getKeys(false);
+                for (String mapKey : keys) {
+                    map.put(mapKey, subSection.get(mapKey));
+                }
+            } else if (Map.class.isAssignableFrom(field.getType()) && Map.class.isAssignableFrom(section.get(key).getClass())) {
+                field.set(effect, section.get(key));
+            } else if (ConfigurationSection.class.isAssignableFrom(field.getType())) {
+                ConfigurationSection configSection = ConfigUtils.getConfigurationSection(section, key);
+                field.set(effect, configSection);
             } else if (field.getType().equals(Vector.class)) {
                 double x = 0;
                 double y = 0;

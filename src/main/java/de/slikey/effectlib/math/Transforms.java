@@ -1,7 +1,7 @@
 package de.slikey.effectlib.math;
 
+import de.slikey.effectlib.EffectManager;
 import de.slikey.effectlib.util.ConfigUtils;
-import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 
 import java.util.ArrayList;
@@ -9,11 +9,11 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
 
 public class Transforms {
     private static final String TRANSFORM_BUILTIN_CLASSPATH = "de.slikey.effectlib.math";
     private static Map<String, Class<?>> transformClasses = new HashMap<String, Class<?>>();
+    private static EffectManager effectManager;
 
     public static Transform loadTransform(ConfigurationSection base, String value) {
         if (base.isConfigurationSection(value)) {
@@ -29,8 +29,8 @@ public class Transforms {
             }
             EquationTransform transform = EquationStore.getInstance().getTransform(equation, "t");
             Exception ex = transform.getException();
-            if (ex != null) {
-                Bukkit.getLogger().log(Level.WARNING, "Error parsing equation: " + equation, ex);
+            if (ex != null && effectManager != null) {
+                effectManager.onError("Error parsing equation: " + equation, ex);
             }
             return transform;
         }
@@ -83,10 +83,16 @@ public class Transforms {
                 parameters.set("class", null);
                 transform.load(parameters);
             } catch (Exception ex) {
-                Bukkit.getLogger().warning("Error loading class " + className + ": " + ex.getMessage());
+                if (effectManager != null) {
+                    effectManager.onError("Error loading class " + className, ex);
+                }
             }
         }
 
         return transform == null ? new ConstantTransform(0) : transform;
+    }
+
+    public static void setEffectManager(EffectManager manager) {
+        effectManager = manager;
     }
 }
