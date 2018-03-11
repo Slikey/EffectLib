@@ -16,6 +16,7 @@ import java.net.URLEncoder;
 import java.util.logging.Level;
 
 public class ImageLoadTask implements Runnable {
+    private static boolean dirsMade = false;
     private final String fileName;
     private final ImageLoadCallback callback;
     private final EffectManager effectManager;
@@ -34,9 +35,15 @@ public class ImageLoadTask implements Runnable {
             try {
                 File cacheFolder = effectManager.getImageCacheFolder();
                 if (cacheFolder == null) {
+                    // This should never really happen anymore, but leaving the check here just in case.
                     effectManager.getOwningPlugin().getLogger().log(Level.WARNING, "Can't load from URL because no cache folder has been set by the owning plugin: " + fileName);
                     callback.loaded(new BufferedImage[0]);
                     return;
+                }
+
+                if (!dirsMade) {
+                    dirsMade = true;
+                    cacheFolder.mkdirs();
                 }
 
                 String cacheFileName = URLEncoder.encode(fileName, "UTF-8");

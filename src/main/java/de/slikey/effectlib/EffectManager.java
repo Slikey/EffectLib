@@ -52,6 +52,7 @@ public class EffectManager implements Disposable {
     private Map<String, BufferedImage[]> imageCache = new HashMap<String, BufferedImage[]>();
 
     public EffectManager(Plugin owningPlugin) {
+        imageCacheFolder = new File(owningPlugin.getDataFolder(), "imagecache");
         ParticleEffect.ParticlePacket.initialize();
         this.owningPlugin = owningPlugin;
         Transforms.setEffectManager(this);
@@ -396,7 +397,6 @@ public class EffectManager implements Disposable {
     }
 
     public void setImageCacheFolder(File folder) {
-        folder.mkdirs();
         imageCacheFolder = folder;
     }
 
