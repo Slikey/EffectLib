@@ -12,6 +12,9 @@ import java.util.Set;
 public class EquationTransform implements Transform {
     private Expression expression;
     private static Function randFunction;
+    private static Function minFunction;
+    private static Function maxFunction;
+    private static Function selectFunction;
     private final Set<String> inputVariables;
     private Exception exception;
 
@@ -47,21 +50,54 @@ public class EquationTransform implements Transform {
         setEquation(equation);
     }
 
-    public boolean setEquation(String equation) {
-        try {
-            exception = null;
+    private void checkCustomFunctions() {
             if (randFunction == null) {
                 randFunction = new Function("rand", 2) {
                     private Random random = new Random();
-                    
+
                     @Override
                     public double apply(double... args) {
                         return random.nextDouble() * (args[1] - args[0]) + args[0];
                     }
                 };
             }
+            if (minFunction == null) {
+                minFunction = new Function("min", 2) {
+                    @Override
+                    public double apply(double... args) {
+                        return Math.min(args[0], args[1]);
+                    }
+                };
+            }
+            if (maxFunction == null) {
+                maxFunction = new Function("max", 2) {
+                    @Override
+                    public double apply(double... args) {
+                        return Math.max(args[0], args[1]);
+                    }
+                };
+            }
+            if (selectFunction == null) {
+                selectFunction = new Function("select", 4) {
+                    @Override
+                    public double apply(double... args) {
+                        if (args[0] < 0) return args[1];
+                        else if (args[0] == 0) return args[2];
+                        return args[3];
+                    }
+                };
+            }
+    }
+
+    public boolean setEquation(String equation) {
+        try {
+            checkCustomFunctions();
+            exception = null;
             expression = new ExpressionBuilder(equation)
                 .function(randFunction)
+                .function(minFunction)
+                .function(maxFunction)
+                .function(selectFunction)
                 .variables(inputVariables)
                 .build();
         } catch (Exception ex) {

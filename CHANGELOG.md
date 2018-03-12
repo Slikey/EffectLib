@@ -1,5 +1,16 @@
 # CHANGELOG
 
+# 5.8
+ 
+ - Add additional functions for use in equations: min, max, select
+   - Min and max take two parameters and should be pretty self-explanatory.
+   - The select function takes 4 parameters. 
+     - The first parameter is a test value, call it p0
+     - The second parameter is returned if p0 < 0
+     - The third parameter is returned if p0 == 0
+     - The fourth parameter is returned if p0 > 0
+ - Modified effect equations can now use a second parameter, "i", representing total # of iterations
+
 # 5.7
 
  - Expanded EquationTransform support.

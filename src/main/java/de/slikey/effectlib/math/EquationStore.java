@@ -24,7 +24,7 @@ public class EquationStore {
         return transform;
     }
 
-    public EquationTransform getTransform(String equation,String... variables) {
+    public EquationTransform getTransform(String equation, String... variables) {
         EquationTransform transform = transforms.get(equation);
         if (transform == null) {
             transform = new EquationTransform(equation, variables);
