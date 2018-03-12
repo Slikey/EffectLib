@@ -135,9 +135,9 @@ public abstract class Effect implements Runnable {
      * These can be used to apply an offset to spawned particles, particularly
      * useful when spawning multiples.
      */
-    public int particleOffsetX = 0;
-    public int particleOffsetY = 0;
-    public int particleOffsetZ = 0;
+    public float particleOffsetX = 0;
+    public float particleOffsetY = 0;
+    public float particleOffsetZ = 0;
 
     /**
      * If set, will run asynchronously.
