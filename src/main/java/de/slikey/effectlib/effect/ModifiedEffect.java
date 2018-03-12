@@ -48,6 +48,21 @@ public class ModifiedEffect extends Effect {
     private int step = 0;
 
     @Override
+    public void reset() {
+        this.step = 0;
+        if (innerEffect != null) {
+            innerEffect.prepare();
+        }
+    }
+
+    @Override
+    public void onDone() {
+        if (innerEffect != null) {
+            innerEffect.onDone();
+        }
+    }
+
+    @Override
     public void onRun() {
         if (!initialized) {
             initialized = true;
@@ -67,6 +82,10 @@ public class ModifiedEffect extends Effect {
             }
 
             innerEffect = effectManager.getEffect(effectClass, effect, origin, target, null, targetPlayer);
+            if (innerEffect == null) {
+                cancel();
+                return;
+            }
             innerEffect.materialData = materialData;
             innerEffect.material = material;
             for (Map.Entry<String, String> entry : parameters.entrySet()) {
@@ -86,11 +105,12 @@ public class ModifiedEffect extends Effect {
                     continue;
                 }
             }
+            innerEffect.prepare();
         }
         if (innerEffect == null) {
+            cancel();
             return;
         }
-        innerEffect.prepare();
 
         for (Map.Entry<Field, EquationTransform> entry : parameterTransforms.entrySet()) {
             double value = entry.getValue().get(step, maxIterations);
