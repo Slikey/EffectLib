@@ -67,6 +67,8 @@ public class ModifiedEffect extends Effect {
             }
 
             innerEffect = effectManager.getEffect(effectClass, effect, origin, target, null, targetPlayer);
+            innerEffect.materialData = materialData;
+            innerEffect.material = material;
             for (Map.Entry<String, String> entry : parameters.entrySet()) {
                 String equation = entry.getValue();
                 String fieldName = entry.getKey();
