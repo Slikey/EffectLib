@@ -96,14 +96,25 @@ public class ModifiedEffect extends Effect {
             double value = entry.getValue().get(step, maxIterations);
             try {
                 Field field = entry.getKey();
-                if (field.getType().equals(Integer.class) || field.getType().equals(Integer.TYPE)) {
+                if (field.getType().equals(Double.class) || field.getType().equals(Double.TYPE)) {
+                    entry.getKey().set(innerEffect,value);
+                } else if (field.getType().equals(Integer.class) || field.getType().equals(Integer.TYPE)) {
                     entry.getKey().set(innerEffect, (int)value);
+                } else if (field.getType().equals(Float.class) || field.getType().equals(Float.TYPE)) {
+                    entry.getKey().set(innerEffect, (float)value);
+                } else if (field.getType().equals(Short.class) || field.getType().equals(Short.TYPE)) {
+                    entry.getKey().set(innerEffect, (short)value);
+                } else if (field.getType().equals(Byte.class) || field.getType().equals(Byte.TYPE)) {
+                    entry.getKey().set(innerEffect, (byte)value);
                 } else {
-                    entry.getKey().set(innerEffect, value);
+                    effectManager.onError("Can't assign property " + entry.getKey().getName() + " of effect class " + effectClass + " of type " + field.getType().getName());
+                    cancel();
+                    return;
                 }
             } catch (Exception ex) {
                 effectManager.onError("Error assigning to : " + entry.getKey().getName() + " of effect class " + effectClass, ex);
                 cancel();
+                return;
             }
         }
 
