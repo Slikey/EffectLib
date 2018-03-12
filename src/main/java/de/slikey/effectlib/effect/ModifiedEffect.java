@@ -8,10 +8,15 @@ import de.slikey.effectlib.math.EquationTransform;
 import org.bukkit.configuration.ConfigurationSection;
 
 import java.lang.reflect.Field;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 public class ModifiedEffect extends Effect {
+    private final static String[] _variables = {"t", "i"};
+    private final static Set<String> variables = new HashSet<String>(Arrays.asList(_variables));
 
     /**
      * The base configuration of the inner effect.
@@ -29,11 +34,6 @@ public class ModifiedEffect extends Effect {
      * Effect parameters to modify each tick, paired with an equation used to modify them.
      */
     public Map<String, String> parameters = new HashMap<String, String>();
-
-    /**
-     * The variable name used in equations to represent major ticks
-     */
-    public String variable = "t";
 
     public ModifiedEffect(EffectManager effectManager) {
         super(effectManager);
@@ -70,7 +70,7 @@ public class ModifiedEffect extends Effect {
             for (Map.Entry<String, String> entry : parameters.entrySet()) {
                 String equation = entry.getValue();
                 String fieldName = entry.getKey();
-                EquationTransform transform = EquationStore.getInstance().getTransform(equation, variable);
+                EquationTransform transform = EquationStore.getInstance().getTransform(equation, variables);
                 Exception ex = transform.getException();
                 if (ex != null) {
                     effectManager.onError("Error parsing equation: " + equation, ex);
@@ -91,9 +91,14 @@ public class ModifiedEffect extends Effect {
         innerEffect.prepare();
 
         for (Map.Entry<Field, EquationTransform> entry : parameterTransforms.entrySet()) {
-            double value = entry.getValue().get(step);
+            double value = entry.getValue().get(step, maxIterations);
             try {
-                entry.getKey().set(innerEffect, value);
+                Field field = entry.getKey();
+                if (field.getType().equals(Integer.class) || field.getType().equals(Integer.TYPE)) {
+                    entry.getKey().set(innerEffect, (int)value);
+                } else {
+                    entry.getKey().set(innerEffect, value);
+                }
             } catch (Exception ex) {
                 effectManager.onError("Error assigning to : " + entry.getKey().getName() + " of effect class " + effectClass, ex);
                 cancel();

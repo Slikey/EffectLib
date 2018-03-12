@@ -151,7 +151,12 @@ public abstract class Effect implements Runnable {
 
     protected DynamicLocation origin = null;
     protected DynamicLocation target = null;
-    
+
+    /**
+     * This will store the base number of iterations
+     */
+    protected int maxIterations;
+
     /**
      * Should this effect stop playing if the origin entity becomes null?
      */
@@ -365,6 +370,7 @@ public abstract class Effect implements Runnable {
             }
             iterations = duration / period / 50;
         }
+        maxIterations = iterations;
     }
 
     protected void updateLocation() {
