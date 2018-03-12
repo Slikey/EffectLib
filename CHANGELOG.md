@@ -10,6 +10,7 @@
      - The third parameter is returned if p0 == 0
      - The fourth parameter is returned if p0 > 0
  - Modified effect equations can now use a second parameter, "i", representing total # of iterations
+ - Add Plot effect, mainly intended to be used for testing equations, not really for final effects
 
 # 5.7
 
