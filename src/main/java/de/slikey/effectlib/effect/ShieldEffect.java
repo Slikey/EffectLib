@@ -18,7 +18,7 @@ public class ShieldEffect extends Effect {
     /**
      * Radius of the shield
      */
-    public int radius = 3;
+    public double radius = 3;
 
     /**
      * Particles to display
