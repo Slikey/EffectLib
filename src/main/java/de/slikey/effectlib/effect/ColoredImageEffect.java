@@ -19,5 +19,6 @@ public class ColoredImageEffect extends BaseImageEffect {
         int g = color.getGreen();
         int b = color.getBlue();
         display(particle, location.add(v), org.bukkit.Color.fromRGB(r, g, b));
+        location.subtract(v);
     }
 }

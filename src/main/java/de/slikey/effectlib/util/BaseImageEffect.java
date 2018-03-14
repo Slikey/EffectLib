@@ -193,7 +193,6 @@ public abstract class BaseImageEffect extends Effect {
                 }
 
                 display(image, v, location, pixel);
-                location.subtract(v);
             }
         }
         rotationStep++;

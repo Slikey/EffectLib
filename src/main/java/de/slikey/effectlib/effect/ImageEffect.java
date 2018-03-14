@@ -27,8 +27,8 @@ public class ImageEffect extends BaseImageEffect {
         } else if (invert && Color.black.getRGB() == pixel) {
             return;
         }
-        VectorUtils.rotateAroundAxisY(v, -location.getYaw() * MathUtils.degreesToRadians);
         display(particle, location.add(v));
+        location.subtract(v);
     }
 
 }
