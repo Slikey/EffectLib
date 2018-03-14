@@ -153,7 +153,6 @@ public class EquationEffect extends Effect {
                 		result2 = VectorUtils.rotateVector(result2, location.getYaw(), 0);
                     }
                     
-                    
                     Location target2Location = targetLocation.clone().add(result2);
                     display(particle, target2Location);
                     
