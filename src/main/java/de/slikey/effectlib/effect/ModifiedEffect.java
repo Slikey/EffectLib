@@ -5,7 +5,10 @@ import de.slikey.effectlib.EffectManager;
 import de.slikey.effectlib.EffectType;
 import de.slikey.effectlib.math.EquationStore;
 import de.slikey.effectlib.math.EquationTransform;
+import de.slikey.effectlib.util.VectorUtils;
+import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.util.Vector;
 
 import java.lang.reflect.Field;
 import java.util.Arrays;
@@ -31,9 +34,49 @@ public class ModifiedEffect extends Effect {
     public String effectClass;
 
     /**
+     * Move the entire effect's x location around
+     */
+    public String xEquation = null;
+
+    /**
+     * Move the entire effect's y location around
+     */
+    public String yEquation = null;
+
+    /**
+     * Move the entire effect's z location around
+     */
+    public String zEquation = null;
+
+    /**
+     * Whether or not to orient the effect in the direction
+     * of the source Location
+     *
+     * If this is set to true, the X axis will represent "forward".
+     *
+     * This is only used if setting an x, y, z equation.
+     */
+    public boolean orient = true;
+
+    /**
+     * Similar to orient, however this is specific to pitch.
+     */
+    public boolean orientPitch = false;
+
+    /**
      * Effect parameters to modify each tick, paired with an equation used to modify them.
      */
     public Map<String, String> parameters = new HashMap<String, String>();
+
+    private boolean initialized = false;
+    private Effect innerEffect;
+    private Map<Field, EquationTransform> parameterTransforms = new HashMap<Field, EquationTransform>();
+    private int step = 0;
+
+    private EquationTransform xTransform;
+    private EquationTransform yTransform;
+    private EquationTransform zTransform;
+    private Vector previousOffset;
 
     public ModifiedEffect(EffectManager effectManager) {
         super(effectManager);
@@ -41,11 +84,6 @@ public class ModifiedEffect extends Effect {
         period = 1;
         iterations = 100;
     }
-
-    private boolean initialized = false;
-    private Effect innerEffect;
-    private Map<Field, EquationTransform> parameterTransforms = new HashMap<Field, EquationTransform>();
-    private int step = 0;
 
     @Override
     public void reset() {
@@ -106,10 +144,38 @@ public class ModifiedEffect extends Effect {
                 }
             }
             innerEffect.prepare();
+
+            if (xEquation != null) xTransform = EquationStore.getInstance().getTransform(xEquation, _variables);
+            if (yEquation != null) yTransform = EquationStore.getInstance().getTransform(yEquation, _variables);
+            if (zEquation != null) zTransform = EquationStore.getInstance().getTransform(zEquation, _variables);
         }
         if (innerEffect == null) {
             cancel();
             return;
+        }
+
+        if (origin != null && xTransform != null || yTransform != null || zTransform != null) {
+            Vector offset = new Vector(
+                xTransform == null ? 0 : xTransform.get(step, maxIterations),
+                yTransform == null ? 0 : yTransform.get(step, maxIterations),
+                zTransform == null ? 0 : zTransform.get(step, maxIterations)
+            );
+
+            if (previousOffset != null) {
+                offset.subtract(previousOffset);
+            } else {
+                previousOffset = new Vector();
+            }
+
+            Location location = getLocation();
+            if (orient && orientPitch) {
+            	offset = VectorUtils.rotateVector(offset, location);
+        	} else if (orient) {
+        		offset = VectorUtils.rotateVector(offset, location.getYaw(), 0);
+            }
+
+            origin.addOffset(offset);
+            previousOffset.add(offset);
         }
 
         for (Map.Entry<Field, EquationTransform> entry : parameterTransforms.entrySet()) {
