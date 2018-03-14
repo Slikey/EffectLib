@@ -13,6 +13,7 @@
  - Add Plot effect, mainly intended to be used for testing equations, not really for final effects
  - Fix particle offset x/y/z being an integer
  - ShieldEffect radius changed to floating point
+ - Add support for zEquation to Plot effect
 
 # 5.7
 

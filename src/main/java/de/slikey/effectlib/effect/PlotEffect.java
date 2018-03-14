@@ -40,6 +40,11 @@ public class PlotEffect extends Effect {
     public String yEquation;
 
     /**
+     * The equation to use for y-values. If not set, 0 will be used.
+     */
+    public String zEquation;
+
+    /**
      * This is a shortcut to quickly scaling the x value.
      */
     public double xScale = 1.0;
@@ -48,6 +53,11 @@ public class PlotEffect extends Effect {
      * This is a shortcut to quickly scaling the y value.
      */
     public double yScale = 1.0;
+
+    /**
+     * This is a shortcut to quickly scaling the z value.
+     */
+    public double zScale = 1.0;
 
     /**
      * This will re-spawn particles as the plot moves to make a solid line.
@@ -75,6 +85,7 @@ public class PlotEffect extends Effect {
             Location location = getLocation().clone();
             double xOffset = step;
             double yOffset = step;
+            double zOffset = 0;
 
             if (xEquation != null && !xEquation.isEmpty()) {
                 EquationTransform xTransform = EquationStore.getInstance().getTransform(xEquation, variables);
@@ -86,7 +97,12 @@ public class PlotEffect extends Effect {
                 yOffset = yTransform.get(i, maxIterations);
             }
 
-            location.add(xOffset * xScale, yOffset * yScale, 0);
+            if (zEquation != null && !zEquation.isEmpty()) {
+                EquationTransform zTransform = EquationStore.getInstance().getTransform(zEquation, variables);
+                zOffset = zTransform.get(i, maxIterations);
+            }
+
+            location.add(xOffset * xScale, yOffset * yScale, zOffset * zScale);
             display(particle, location);
         }
 
