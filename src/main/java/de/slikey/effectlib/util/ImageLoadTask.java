@@ -16,6 +16,8 @@ import java.net.URLEncoder;
 import java.util.logging.Level;
 
 public class ImageLoadTask implements Runnable {
+    private static final int REQUEST_TIMEOUT = 30000;
+    private static final int BUFFER_SIZE = 10 * 1024;
     private static boolean dirsMade = false;
     private final String fileName;
     private final ImageLoadCallback callback;
@@ -51,12 +53,12 @@ public class ImageLoadTask implements Runnable {
                 if (!imageFile.exists()) {
                     URL imageUrl = new URL(fileName);
                     HttpURLConnection conn = (HttpURLConnection)imageUrl.openConnection();
-                    conn.setConnectTimeout(30000);
-                    conn.setReadTimeout(30000);
+                    conn.setConnectTimeout(REQUEST_TIMEOUT);
+                    conn.setReadTimeout(REQUEST_TIMEOUT);
                     conn.setInstanceFollowRedirects(true);
                     InputStream in = conn.getInputStream();
                     OutputStream out = new FileOutputStream(imageFile);
-                    byte[] buffer = new byte[10 * 1024];
+                    byte[] buffer = new byte[BUFFER_SIZE];
                     int len;
 
                     while ((len = in.read(buffer)) != -1) {
