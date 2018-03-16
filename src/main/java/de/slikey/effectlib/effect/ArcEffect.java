@@ -3,6 +3,7 @@ package de.slikey.effectlib.effect;
 import de.slikey.effectlib.Effect;
 import de.slikey.effectlib.EffectManager;
 import de.slikey.effectlib.EffectType;
+import de.slikey.effectlib.util.DynamicLocation;
 import de.slikey.effectlib.util.ParticleEffect;
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
@@ -23,7 +24,12 @@ public class ArcEffect extends Effect {
      * Particles per arc
      */
     public int particles = 100;
+    
+    public Vector relativeOffsetFromOriginToTarget = null;
+    public Vector absoluteOffsetFromOriginToTarget = null;
 
+    protected DynamicLocation targetOffseter = null;
+    
     /**
      * Internal counter
      */
@@ -44,11 +50,27 @@ public class ArcEffect extends Effect {
     @Override
     public void onRun() {
         Location location = getLocation();
+        
+        if (step == 0 && (relativeOffsetFromOriginToTarget != null || absoluteOffsetFromOriginToTarget != null)) {
+            targetOffseter = new DynamicLocation(location);
+            if (relativeOffsetFromOriginToTarget != null) {
+                targetOffseter.addRelativeOffset(relativeOffsetFromOriginToTarget);
+            }
+            if (absoluteOffsetFromOriginToTarget != null) {
+                targetOffseter.addOffset(absoluteOffsetFromOriginToTarget);
+            }
+        }
+        
         Location target = getTarget();
         if (target == null) {
-            cancel();
-            return;
+            if (targetOffseter == null) {
+                cancel();
+                return;
+            }
+            targetOffseter.updateFrom(location);
+            target = targetOffseter.getLocation();
         }
+        
         Vector link = target.toVector().subtract(location.toVector());
         float length = (float) link.length();
         float pitch = (float) (4 * height / Math.pow(length, 2));
