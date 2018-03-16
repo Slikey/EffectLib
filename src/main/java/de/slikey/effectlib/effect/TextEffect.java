@@ -10,6 +10,8 @@ import de.slikey.effectlib.util.VectorUtils;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.image.BufferedImage;
+import java.util.Objects;
+
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
 
@@ -61,6 +63,16 @@ public class TextEffect extends Effect {
      * Contains an image version of the String
      */
     protected BufferedImage image = null;
+    
+    /**
+     * Track the text used most recently when parsing
+     */
+    private String lastParsedText = null;
+    
+    /**
+     * Track the font used most recently when parsing
+     */
+    private Font lastParsedFont = null;
 
     public TextEffect(EffectManager effectManager) {
         super(effectManager);
@@ -83,8 +95,11 @@ public class TextEffect extends Effect {
         Location location = getLocation();
         int clr = 0;
         try {
-            if (image == null || realtime) {
-                image = StringParser.stringToBufferedImage(font, text);
+            if (image == null || shouldRecalculateImage()) {
+                lastParsedText = text;
+                lastParsedFont = font;
+                // Use last parsed references instead for additional thread safety
+                image = StringParser.stringToBufferedImage(lastParsedFont, lastParsedText);
             }
             for (int y = 0; y < image.getHeight(); y += stepY) {
                 for (int x = 0; x < image.getWidth(); x += stepX) {
@@ -105,5 +120,13 @@ public class TextEffect extends Effect {
             // I'm choosing to ignore the exception and cancel the effect for now.
             cancel(true);
         }
+    }
+    
+    private boolean shouldRecalculateImage() {
+        // Don't bother if we don't use real time updates
+        if (!realtime) return false;
+        
+        // Text content or font is different, recalculate
+        return !Objects.equals(lastParsedText, text) || !Objects.equals(lastParsedFont, font);
     }
 }
