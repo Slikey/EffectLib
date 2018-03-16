@@ -71,8 +71,17 @@ public class ImageLoadTask implements Runnable {
             }
         } else if (!fileName.startsWith(File.pathSeparator)) {
             imageFile = new File(effectManager.getOwningPlugin().getDataFolder(), fileName);
+            if (!imageFile.exists()) {
+                imageFile = new File(fileName);
+            }
         } else {
             imageFile = new File(fileName);
+        }
+        if (!imageFile.exists()) {
+            effectManager.getOwningPlugin().getLogger().log(Level.WARNING, "Failed to find file " + fileName);
+            images = new BufferedImage[0];
+            callback.loaded(images);
+            return;
         }
         try {
             if (fileName.endsWith(".gif")) {

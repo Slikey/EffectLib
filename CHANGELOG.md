@@ -14,6 +14,7 @@
  - Add Plot effect, mainly intended to be used for testing equations, not really for final effects
  - Fix particle offset x/y/z being an integer
  - ShieldEffect radius changed to floating point
+ - Fix ImageEffect using a non-relative file path. 
 
 # 5.7
 
