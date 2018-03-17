@@ -121,12 +121,17 @@ public class TextEffect extends Effect {
             cancel(true);
         }
     }
+
+    // Replacement for Java 1.7 Objects.equals
+    public static boolean Objectsequals(Object a, Object b) {
+        return (a == b) || (a != null && a.equals(b));
+    }
     
     private boolean shouldRecalculateImage() {
         // Don't bother if we don't use real time updates
         if (!realtime) return false;
         
         // Text content or font is different, recalculate
-        return !Objects.equals(lastParsedText, text) || !Objects.equals(lastParsedFont, font);
+        return !Objectsequals(lastParsedText, text) || !Objectsequals(lastParsedFont, font);
     }
 }
