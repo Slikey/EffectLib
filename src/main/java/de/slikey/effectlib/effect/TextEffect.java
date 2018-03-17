@@ -10,7 +10,6 @@ import de.slikey.effectlib.util.VectorUtils;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.image.BufferedImage;
-import java.util.Objects;
 
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
