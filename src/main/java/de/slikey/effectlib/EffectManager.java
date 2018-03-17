@@ -19,6 +19,7 @@ import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.util.NumberConversions;
 import org.bukkit.util.Vector;
 
+import java.awt.Font;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.lang.reflect.Constructor;
@@ -360,6 +361,15 @@ public class EffectManager implements Disposable {
                 try {
                     Enum enumValue = Enum.valueOf(enumType, value.toUpperCase());
                     field.set(effect, enumValue);
+                } catch (Exception ex) {
+                    onError(ex);
+                }
+            } else if (field.getType().equals(Font.class)) {
+                try {
+                    // Should caching the fonts be considered?
+                    // Or is the performance gain negligible?
+                    Font font = Font.decode(value);
+                    field.set(effect, font);
                 } catch (Exception ex) {
                     onError(ex);
                 }
