@@ -45,11 +45,13 @@ public class ImageLoadTask implements Runnable {
 
                 if (!dirsMade) {
                     dirsMade = true;
-                    cacheFolder.mkdirs();
+                    if (!cacheFolder.mkdirs()) {
+                        effectManager.onError("Could not create cache folder: " + cacheFolder.getAbsolutePath());
+                    }
                 }
 
                 String cacheFileName = URLEncoder.encode(fileName, "UTF-8");
-                imageFile = cacheFolder != null ? new File(cacheFolder, cacheFileName) : null;
+                imageFile = new File(cacheFolder, cacheFileName);
                 if (!imageFile.exists()) {
                     URL imageUrl = new URL(fileName);
                     HttpURLConnection conn = (HttpURLConnection)imageUrl.openConnection();

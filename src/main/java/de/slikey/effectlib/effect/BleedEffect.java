@@ -15,13 +15,6 @@ public class BleedEffect extends de.slikey.effectlib.Effect {
     public boolean hurt = true;
 
     /**
-     * Duration in ticks, the blood-particles take to despawn.
-     * Not used anymore
-     */
-    @Deprecated
-    public int duration = 10;
-
-    /**
      * Height of the blood spurt
      */
     public double height = 1.75;

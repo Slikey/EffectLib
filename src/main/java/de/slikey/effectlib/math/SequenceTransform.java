@@ -11,7 +11,7 @@ import java.util.List;
 public class SequenceTransform implements Transform {
 	private List<Sequence> steps;
 
-	private class Sequence {
+	private static class Sequence {
 		private final Transform transform;
 		private final double start;
 

@@ -90,7 +90,7 @@ public abstract class BaseImageEffect extends Effect {
     /**
      * Delay between steps
      */
-    protected int delay = 0;
+    protected int stepDelay = 0;
 
     protected ImageLoadCallback imageLoadCallback;
 
@@ -136,11 +136,11 @@ public abstract class BaseImageEffect extends Effect {
             return;
         }
 
-        if (delay == frameDelay) {
+        if (stepDelay == frameDelay) {
             step++;
-            delay = 0;
+            stepDelay = 0;
         }
-        delay++;
+        stepDelay++;
 
         if (step >= images.length) {
             step = 0;

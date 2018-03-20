@@ -2,14 +2,15 @@ package de.slikey.effectlib;
 
 import de.slikey.effectlib.util.DynamicLocation;
 import de.slikey.effectlib.util.ParticleEffect;
-import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.util.Vector;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class Effect implements Runnable {
 
@@ -118,6 +119,11 @@ public abstract class Effect implements Runnable {
      * A specific player who should see this effect.
      */
     public Player targetPlayer;
+
+    /**
+     * A group of players who should see this effect.
+     */
+    public List<Player> targetPlayers;
 
     /**
      * The Material and data to use for block and item break particles
@@ -304,7 +310,6 @@ public abstract class Effect implements Runnable {
             throw new IllegalArgumentException("Origin Location cannot be null!");
         }
         origin = location;
-        if (origin == null) return;
 
         if (offset != null) {
             origin.addOffset(offset);
@@ -398,8 +403,11 @@ public abstract class Effect implements Runnable {
     }
 
     protected void display(ParticleEffect particle, Location location, Color color, float speed, int amount) {
-        if (this.targetPlayer != null) particle.setTargetPlayer(this.targetPlayer);
-        particle.display(particle.getData(material, materialData), location, color, visibleRange, particleOffsetX, particleOffsetY, particleOffsetZ, speed, amount);
+        if (targetPlayers == null && targetPlayer != null) {
+            targetPlayers = new ArrayList<Player>();
+            targetPlayers.add(targetPlayer);
+        }
+        particle.display(particle.getData(material, materialData), location, color, visibleRange, particleOffsetX, particleOffsetY, particleOffsetZ, speed, amount, targetPlayers);
     }
 
     private void done() {

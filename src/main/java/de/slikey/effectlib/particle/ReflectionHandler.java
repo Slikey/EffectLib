@@ -361,7 +361,7 @@ public final class ReflectionHandler {
      *
      * @author DarkBlade12
      */
-    public final class FieldPair {
+    public final static class FieldPair {
 
         private final String name;
         private final Object value;
@@ -573,7 +573,7 @@ public final class ReflectionHandler {
         }
 
         public String getName() {
-            return this.getName();
+            return this.name;
         }
 
         public Class<?> getPacket() throws Exception {

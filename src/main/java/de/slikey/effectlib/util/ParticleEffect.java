@@ -396,8 +396,6 @@ public enum ParticleEffect {
     private final int requiredVersion;
     private final boolean requiresData;
     private final boolean requiresWater;
-    private Player targetPlayer = null;
-
 
     // Initialize map for quick name and id lookup
     static {
@@ -493,20 +491,6 @@ public enum ParticleEffect {
     }
 
     /**
-     * Return Player Target.
-     * @return Player if not null or null
-     */
-    public Player getTargetPlayer(){ return targetPlayer; }
-
-    /**
-     * Set the current target Player.
-     * Pass null if you want you effect to be visible at all players;
-     */
-    public void setTargetPlayer(Player p){this.targetPlayer = p; }
-
-
-
-    /**
      * Determine if this particle effect is supported by your current server version
      *
      * @return Whether the particle effect is supported or not
@@ -597,13 +581,14 @@ public enum ParticleEffect {
      * @param amount Amount of particles
      * @param center Center location of the effect
      * @param range Range of the visibility
+     * @param targetPlayers if set, will send this packet to a specific list of players
      * @throws ParticleVersionException If the particle effect is not supported by the server version
      * @throws ParticleDataException If the particle effect requires additional data
      * @throws IllegalArgumentException If the particle effect requires water and none is at the center location
      * @see ParticlePacket
      * @see ParticlePacket#sendTo(Location, double)
      */
-    public void display(float offsetX, float offsetY, float offsetZ, float speed, int amount, Location center, double range) throws ParticleVersionException, ParticleDataException, IllegalArgumentException {
+    public void display(float offsetX, float offsetY, float offsetZ, float speed, int amount, Location center, double range, List<Player> targetPlayers) throws ParticleVersionException, ParticleDataException, IllegalArgumentException {
         if (!isSupported()) {
             throw new ParticleVersionException("The " + this + " particle effect is not supported by your server version " + ParticlePacket.getVersion());
         }
@@ -614,13 +599,15 @@ public enum ParticleEffect {
             throw new IllegalArgumentException("There is no water at the center location");
         }
 
-
-        // Bukkit.getLogger().info("ParticleEffect: 618: targetPlayer: " + targetPlayer);
         ParticlePacket particle = new ParticlePacket(this, offsetX, offsetY, offsetZ, speed, amount, range > 16, null);
-        if(targetPlayer != null) particle.sendTo(center, targetPlayer);
+        if (targetPlayers != null) particle.sendTo(center, targetPlayers);
         else particle.sendTo(center, range);
-
     }
+
+    public void display(float offsetX, float offsetY, float offsetZ, float speed, int amount, Location center, double range) throws ParticleVersionException, ParticleDataException, IllegalArgumentException {
+        display(offsetX, offsetY, offsetZ, speed, amount, center, range, null);
+    }
+
 
     /**
      * Displays a particle effect which is only visible for the specified players
@@ -694,11 +681,8 @@ public enum ParticleEffect {
             throw new IllegalArgumentException("There is no water at the center location");
         }
 
-        // Bukkit.getLogger().info("ParticleEffect: 690: targetPlayer: " + targetPlayer);
         ParticlePacket particle = new ParticlePacket(this, direction, speed, range > LONG_DISTANCE, null);
-        if(targetPlayer != null) particle.sendTo(center, targetPlayer);
-        else particle.sendTo(center, range);
-
+        particle.sendTo(center, range);
     }
 
     /**
@@ -754,12 +738,13 @@ public enum ParticleEffect {
      * @param amount Amount of particles
      * @param center Center location of the effect
      * @param range Range of the visibility
+     * @param targetPlayers if set, will send to a specific set of players
      * @throws ParticleVersionException If the particle effect is not supported by the server version
      * @throws ParticleDataException If the particle effect does not require additional data or if the data type is incorrect
      * @see ParticlePacket
      * @see ParticlePacket#sendTo(Location, double)
      */
-    public void display(ParticleData data, float offsetX, float offsetY, float offsetZ, float speed, int amount, Location center, double range) throws ParticleVersionException, ParticleDataException {
+    public void display(ParticleData data, float offsetX, float offsetY, float offsetZ, float speed, int amount, Location center, double range, List<Player> targetPlayers) throws ParticleVersionException, ParticleDataException {
         if (!isSupported()) {
             throw new ParticleVersionException("The " + this + " particle effect is not supported by your server version " + ParticlePacket.getVersion());
         }
@@ -774,9 +759,12 @@ public enum ParticleEffect {
         }
 
         ParticlePacket particle = new ParticlePacket(this, offsetX, offsetY, offsetZ, speed, amount, range > LONG_DISTANCE, data);
-        // Bukkit.getLogger().info("ParticleEffect: 770: targetPlayer: " + targetPlayer);
-        if(targetPlayer != null) particle.sendTo(center, targetPlayer);
+        if (targetPlayers != null) particle.sendTo(center, targetPlayers);
         else particle.sendTo(center, range);
+    }
+
+    public void display(ParticleData data, float offsetX, float offsetY, float offsetZ, float speed, int amount, Location center, double range) throws ParticleVersionException, ParticleDataException {
+        display(data, offsetX, offsetY, offsetZ, speed, amount, center, range, null);
     }
 
     /**
@@ -1454,6 +1442,10 @@ public enum ParticleEffect {
     }
 
     public void display(ParticleData data, Location center, Color color, double range, float offsetX, float offsetY, float offsetZ, float speed, int amount) {
+        display(data, center, color, range, offsetX, offsetY, offsetZ, speed, amount, null);
+    }
+
+    public void display(ParticleData data, Location center, Color color, double range, float offsetX, float offsetY, float offsetZ, float speed, int amount, List<Player> targetPlayers) {
         // Colorizeable!
         if (color != null && (this == ParticleEffect.REDSTONE || this == ParticleEffect.SPELL_MOB || this == ParticleEffect.SPELL_MOB_AMBIENT)) {
             amount = 0;
@@ -1472,9 +1464,9 @@ public enum ParticleEffect {
         }
 
         if (this.requiresData) {
-            display(data, offsetX, offsetY, offsetZ, speed, amount, center, range);
+            display(data, offsetX, offsetY, offsetZ, speed, amount, center, range, targetPlayers);
         } else {
-            display(offsetX, offsetY, offsetZ, speed, amount, center, range);
+            display(offsetX, offsetY, offsetZ, speed, amount, center, range, targetPlayers);
         }
     }
 

@@ -14,17 +14,12 @@ public class ExplodeEffect extends Effect {
      * Amount of spawned smoke-sparks
      */
     public int amount = 25;
-
-    /**
-     * Movement speed of smoke-sparks. Should be increases with force.
-     */
-    public float speed = .5f;
-
     public Sound sound = Sound.ENTITY_GENERIC_EXPLODE;
 
     public ExplodeEffect(EffectManager effectManager) {
         super(effectManager);
         type = EffectType.INSTANT;
+        speed = 0.5f;
     }
 
     @Override

@@ -122,7 +122,7 @@ public class TextEffect extends Effect {
     }
 
     // Replacement for Java 1.7 Objects.equals
-    public static boolean Objectsequals(Object a, Object b) {
+    public static boolean objectsEquals(Object a, Object b) {
         return (a == b) || (a != null && a.equals(b));
     }
     
@@ -131,6 +131,6 @@ public class TextEffect extends Effect {
         if (!realtime) return false;
         
         // Text content or font is different, recalculate
-        return !Objectsequals(lastParsedText, text) || !Objectsequals(lastParsedFont, font);
+        return !objectsEquals(lastParsedText, text) || !objectsEquals(lastParsedFont, font);
     }
 }

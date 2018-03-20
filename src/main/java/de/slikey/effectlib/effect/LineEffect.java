@@ -71,7 +71,7 @@ public class LineEffect extends Effect {
         } else {
             target = getTarget();
         }
-        double amount = particles / zigZags;
+        int amount = particles / zigZags;
         if (target == null) {
             cancel();
             return;

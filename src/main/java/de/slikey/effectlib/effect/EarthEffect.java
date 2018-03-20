@@ -35,11 +35,6 @@ public class EarthEffect extends Effect {
     public float mountainHeight = .5f;
 
     /**
-     * Current step. Works as counter
-     */
-    protected int step = 0;
-
-    /**
      * Triggers invalidation on first run
      */
     protected boolean firstStep = true;
@@ -60,7 +55,6 @@ public class EarthEffect extends Effect {
 
     @Override
     public void reset() {
-        this.step = 0;
         this.firstStep = true;
     }
 

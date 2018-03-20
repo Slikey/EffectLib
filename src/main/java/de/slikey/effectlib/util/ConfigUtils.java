@@ -36,7 +36,7 @@ public class ConfigUtils {
     public static void set(ConfigurationSection node, String path, Object value)
     {
         if (value == null) {
-            node.set(path, value);
+            node.set(path, null);
             return;
         }
         // This is a bunch of hackery... I suppose I ought to change the NBT
@@ -47,10 +47,14 @@ public class ConfigUtils {
             node.set(path, isTrue);
         } else {
             try {
-                Double d = (value instanceof Double) ? (Double)value : (
-                        (value instanceof Float) ? (Float)value :
-                                Double.parseDouble(value.toString())
-                );
+                Double d;
+                if (value instanceof Double) {
+                    d = (Double)value;
+                } else if (value instanceof Float) {
+                    d = (double)(Float)value;
+                } else {
+                    d = Double.parseDouble(value.toString());
+                }
                 node.set(path, d);
             } catch (Exception ex) {
                 try {

@@ -17,7 +17,6 @@ import org.bukkit.util.Vector;
 public class BigBangEffect extends Effect {
 
     public FireworkEffect.Type fireworkType = FireworkEffect.Type.BURST;
-    public Color color = Color.RED;
     public Color color2 = Color.ORANGE;
     public Color color3 = Color.BLACK;
     public Color fadeColor = Color.BLACK;
@@ -34,6 +33,7 @@ public class BigBangEffect extends Effect {
 
     public BigBangEffect(EffectManager effectManager) {
         super(effectManager);
+        color = Color.RED;
         type = EffectType.REPEATING;
         period = 2;
         iterations = 400;

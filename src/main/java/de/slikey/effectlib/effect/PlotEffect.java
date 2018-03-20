@@ -25,11 +25,6 @@ public class PlotEffect extends Effect {
     public ParticleEffect particle = ParticleEffect.REDSTONE;
 
     /**
-     * The base configuration of the inner effect.
-     */
-    public ConfigurationSection effect;
-
-    /**
      * The equation to use for x-values. If not set, the iteration count will be used.
      */
     public String xEquation;
@@ -63,11 +58,6 @@ public class PlotEffect extends Effect {
      * This will re-spawn particles as the plot moves to make a solid line.
      */
     public boolean persistent = true;
-
-    /**
-     * Effect parameters to modify each tick, paired with an equation used to modify them.
-     */
-    public Map<String, String> parameters = new HashMap<String, String>();
 
     public PlotEffect(EffectManager effectManager) {
         super(effectManager);
