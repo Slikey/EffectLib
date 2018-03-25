@@ -1,5 +1,10 @@
 # CHANGELOG
 
+# 5.9
+
+ - Effects marked disappearWithOriginEntity or disappearWithTargetEntity will now disappear
+   if their target goes invalid.
+
 # 5.8
  
  - Add additional functions for use in equations: min, max, select

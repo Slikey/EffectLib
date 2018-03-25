@@ -341,11 +341,11 @@ public abstract class Effect implements Runnable {
 
     protected final boolean validate() {
         // Check if the origin and target entities are present
-        if (disappearWithOriginEntity && (origin != null && origin.getEntity() == null)) {
+        if (disappearWithOriginEntity && (origin != null && !origin.hasValidEntity())) {
             return false;
         }
         
-        if (disappearWithTargetEntity && (target != null && target.getEntity() == null)) {
+        if (disappearWithTargetEntity && (target != null && !target.hasValidEntity())) {
             return false;
         }
         

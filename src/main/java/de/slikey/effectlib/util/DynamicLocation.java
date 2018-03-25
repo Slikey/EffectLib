@@ -178,4 +178,9 @@ public class DynamicLocation {
     public void setYaw(Float yaw) {
         this.yaw = yaw;
     }
+
+    public boolean hasValidEntity() {
+        Entity entity = this.getEntity();
+        return entity != null && entity.isValid();
+    }
 }
