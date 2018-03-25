@@ -169,9 +169,9 @@ public class ModifiedEffect extends Effect {
 
             Location location = getLocation();
             if (orient && orientPitch) {
-            	offset = VectorUtils.rotateVector(offset, location);
-        	} else if (orient) {
-        		offset = VectorUtils.rotateVector(offset, location.getYaw(), 0);
+                offset = VectorUtils.rotateVector(offset, location);
+            } else if (orient) {
+                offset = VectorUtils.rotateVector(offset, location.getYaw(), 0);
             }
 
             origin.addOffset(offset);

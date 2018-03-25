@@ -36,16 +36,16 @@ import org.bukkit.plugin.java.JavaPlugin;
 * <pre>
 * &lt;dependencies&gt;
 * &lt;dependency&gt;
-* 	&lt;groupId&gt;org.bukkit&lt;/groupId&gt;
-* 	&lt;artifactId&gt;bukkit&lt;/artifactId&gt;
-* 	&lt;version&gt;1.6.4-R2.0&lt;/version&gt;
-* 	&lt;scope&gt;provided&lt;/scope&gt;
+*     &lt;groupId&gt;org.bukkit&lt;/groupId&gt;
+*     &lt;artifactId&gt;bukkit&lt;/artifactId&gt;
+*     &lt;version&gt;1.6.4-R2.0&lt;/version&gt;
+*     &lt;scope&gt;provided&lt;/scope&gt;
 * &lt;/dependency&gt;
 * &lt;dependency&gt;
-* 	&lt;groupId&gt;de.slikey&lt;/groupId&gt;
-* 	&lt;artifactId&gt;EffectLib&lt;/artifactId&gt;
-* 	&lt;version&gt;1.4&lt;/version&gt;
-* 	&lt;scope&gt;provided&lt;/scope&gt;
+*     &lt;groupId&gt;de.slikey&lt;/groupId&gt;
+*     &lt;artifactId&gt;EffectLib&lt;/artifactId&gt;
+*     &lt;version&gt;1.4&lt;/version&gt;
+*     &lt;scope&gt;provided&lt;/scope&gt;
 * &lt;/dependency&gt;
 * &lt;/dependencies&gt;
 * &lt;repositories&gt;
@@ -110,9 +110,9 @@ import org.bukkit.plugin.java.JavaPlugin;
 * <pre>
 *       public EffectLib getEffectLib() {
 *           Plugin effectLib = Bukkit.getPluginManager().getPlugin("EffectLib");
-* 		    if (effectLib == null || !(effectLib instanceof EffectLib)) {
-* 			    return null;
-* 		    }
+*             if (effectLib == null || !(effectLib instanceof EffectLib)) {
+*                 return null;
+*             }
 *           return (EffectLib)effectLib;
 *       }
 * </pre>

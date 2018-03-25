@@ -44,10 +44,10 @@ public class SphereEffect extends Effect {
 
     @Override
     public void onRun() {
-    	if (radiusIncrease != 0) {
-    		radius += radiusIncrease;
-    	}
-    	
+        if (radiusIncrease != 0) {
+            radius += radiusIncrease;
+        }
+
         Location location = getLocation();
         location.add(0, yOffset, 0);
         for (int i = 0; i < particles; i++) {

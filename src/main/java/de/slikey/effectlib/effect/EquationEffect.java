@@ -131,9 +131,9 @@ public class EquationEffect extends Effect {
             
             Vector result = new Vector(xValue, yValue, zValue);
             if (orient && orientPitch) {
-            	result = VectorUtils.rotateVector(result, location);
-        	} else if (orient) {
-        		result = VectorUtils.rotateVector(result, location.getYaw(), 0);
+                result = VectorUtils.rotateVector(result, location);
+            } else if (orient) {
+                result = VectorUtils.rotateVector(result, location.getYaw(), 0);
             }
 
             Location targetLocation = location.clone();
@@ -148,9 +148,9 @@ public class EquationEffect extends Effect {
                     
                     Vector result2 = new Vector(x2Value, y2Value, z2Value);
                     if (orient && orientPitch) {
-                    	result2 = VectorUtils.rotateVector(result2, location);
-                	} else if (orient) {
-                		result2 = VectorUtils.rotateVector(result2, location.getYaw(), 0);
+                        result2 = VectorUtils.rotateVector(result2, location);
+                    } else if (orient) {
+                        result2 = VectorUtils.rotateVector(result2, location.getYaw(), 0);
                     }
                     
                     Location target2Location = targetLocation.clone().add(result2);
@@ -160,14 +160,14 @@ public class EquationEffect extends Effect {
                 }
                 
                 if (cycleMiniStep) {
-                	miniStep = 0;
+                    miniStep = 0;
                 }
             }
             if (maxSteps != 0 && step > maxSteps) {
-            	step = 0;
-            	break;
+                step = 0;
+                break;
             } else {
-            	step++;
+                step++;
             }
         }
     }
