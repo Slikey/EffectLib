@@ -17,6 +17,8 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import com.google.common.base.CaseFormat;
+
 public class ModifiedEffect extends Effect {
     private final static String[] _variables = {"t", "i"};
     private final static Set<String> variables = new HashSet<String>(Arrays.asList(_variables));
@@ -129,6 +131,15 @@ public class ModifiedEffect extends Effect {
             for (Map.Entry<String, String> entry : parameters.entrySet()) {
                 String equation = entry.getValue();
                 String fieldName = entry.getKey();
+
+                // Allow underscore_style and dash_style parameters
+                if (fieldName.contains("-")) {
+                    fieldName = fieldName.replace("-", "_");
+                }
+                if (fieldName.contains("_")) {
+                    fieldName = CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, fieldName);
+                }
+
                 EquationTransform transform = EquationStore.getInstance().getTransform(equation, variables);
                 Exception ex = transform.getException();
                 if (ex != null) {
