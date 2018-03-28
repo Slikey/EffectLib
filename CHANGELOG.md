@@ -4,6 +4,7 @@
 
  - Effects marked disappearWithOriginEntity or disappearWithTargetEntity will now disappear
    if their target goes invalid.
+ - Allow underscore_style and dash_style parameters in configuration-based effects
 
 # 5.8
  

@@ -33,6 +33,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
 
+import com.google.common.base.CaseFormat;
+
 /**
  * Dispose the EffectManager if you don't need him anymore.
  *
@@ -302,6 +304,15 @@ public class EffectManager implements Disposable {
     protected boolean setField(Object effect, String key, ConfigurationSection section, Map<String, String> parameterMap) {
         try {
             String value = section.getString(key);
+
+            // Allow underscore_style and dash_style parameters
+            if (key.contains("-")) {
+                key = key.replace("-", "_");
+            }
+            if (key.contains("_")) {
+                key = CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, key);
+            }
+
             if (parameterMap != null && !parameterMap.isEmpty() && value.startsWith("$")) {
                 String parameterValue = parameterMap.get(value);
                 value = parameterValue == null ? value : parameterValue;
