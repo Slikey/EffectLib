@@ -69,6 +69,10 @@ public class ConfigUtils {
 
     public static ConfigurationSection getConfigurationSection(ConfigurationSection base, String key)
     {
+        ConfigurationSection section = base.getConfigurationSection(key);
+        if (section != null) {
+            return section;
+        }
         Object value = base.get(key);
         if (value == null) return null;
 
