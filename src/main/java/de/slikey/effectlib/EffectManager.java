@@ -158,14 +158,17 @@ public class EffectManager implements Disposable {
     public Effect getEffectByClassName(String effectClass) {
         Class<? extends Effect> effectLibClass;
         try {
+            // First check the name as given
+            effectLibClass = effectClasses.get(effectClass);
+
             // A shaded manager may provide a fully-qualified path.
-            if (!effectClass.contains(".")) {
+            if (effectLibClass == null && !effectClass.contains(".")) {
                 effectClass = "de.slikey.effectlib.effect." + effectClass;
                 if (!effectClass.endsWith("Effect")) {
                     effectClass = effectClass + "Effect";
                 }
+                effectLibClass = effectClasses.get(effectClass);
             }
-            effectLibClass = effectClasses.get(effectClass);
             if (effectLibClass == null) {
                 effectLibClass = (Class<? extends Effect>) Class.forName(effectClass);
                 effectClasses.put(effectClass, effectLibClass);
@@ -444,5 +447,9 @@ public class EffectManager implements Disposable {
                  });
             }
         }));
+    }
+
+    public void registerEffectClass(String key, Class<? extends Effect> effectClass) {
+        effectClasses.put(key, effectClass);
     }
 }
