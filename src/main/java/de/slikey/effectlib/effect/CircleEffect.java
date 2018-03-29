@@ -61,6 +61,11 @@ public class CircleEffect extends Effect {
      */
     public int particles = 20;
 
+    /**
+     * To make a whole circle each iteration
+     */
+    public boolean wholeCircle = false;
+
     public CircleEffect(EffectManager effectManager) {
         super(effectManager);
         type = EffectType.REPEATING;
@@ -75,19 +80,22 @@ public class CircleEffect extends Effect {
 
     @Override
     public void onRun() {
-        Location location = getLocation().clone();
+        Location location = getLocation();
         location.subtract(xSubtract, ySubtract, zSubtract);
         double inc = (2 * Math.PI) / particles;
-        double angle = step * inc;
-        Vector v = new Vector();
-        v.setX(Math.cos(angle) * radius);
-        v.setZ(Math.sin(angle) * radius);
-        VectorUtils.rotateVector(v, xRotation, yRotation, zRotation);
-        if (enableRotation) {
-            VectorUtils.rotateVector(v, angularVelocityX * step, angularVelocityY * step, angularVelocityZ * step);
+        int steps = wholeCircle ? particles : 1;
+        for (int i = 0; i < steps; i++) {
+            double angle = step * inc;
+            Vector v = new Vector();
+            v.setX(Math.cos(angle) * radius);
+            v.setZ(Math.sin(angle) * radius);
+            VectorUtils.rotateVector(v, xRotation, yRotation, zRotation);
+            if (enableRotation) {
+                VectorUtils.rotateVector(v, angularVelocityX * step, angularVelocityY * step, angularVelocityZ * step);
+            }
+            display(particle, location.clone().add(v), 0, 30);
+            step++;
         }
-        display(particle, location.add(v), 0, 30);
-        step++;
     }
 
 }

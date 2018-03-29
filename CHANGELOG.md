@@ -6,6 +6,7 @@
    if their target goes invalid.
  - Allow underscore_style and dash_style parameters in configuration-based effects
  - Add EffectManager.registerEffectClass for registering short names for custom effects
+ - Add "wholeCircle" option to Circle effect
 
 # 5.8
  
