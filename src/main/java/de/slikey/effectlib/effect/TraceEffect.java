@@ -18,7 +18,7 @@ public class TraceEffect extends Effect {
     public ParticleEffect particle = ParticleEffect.FLAME;
 
     /**
-     * Interations to wait before refreshing particles
+     * Iterations to wait before refreshing particles
      */
     public int refresh = 5;
 

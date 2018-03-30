@@ -31,7 +31,7 @@ public class HeartEffect extends Effect {
     public double xRotation, yRotation, zRotation = 0;
 
     /**
-     * Strech/Compress factor along the x or y axis (1, 1)
+     * Stretch/Compress factor along the x or y axis (1, 1)
      */
     public double yFactor = 1, xFactor = 1;
 

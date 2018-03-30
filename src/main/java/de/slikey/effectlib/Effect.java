@@ -164,12 +164,12 @@ public abstract class Effect implements Runnable {
     protected int maxIterations;
 
     /**
-     * Should this effect stop playing if the origin entity becomes null?
+     * Should this effect stop playing if the origin entity becomes invalid?
      */
     public boolean disappearWithOriginEntity = false;
     
     /**
-     * Should this effect stop playing if the target entity becomes null?
+     * Should this effect stop playing if the target entity becomes invalid?
      */
     public boolean disappearWithTargetEntity = false;
 
