@@ -1090,6 +1090,10 @@ public enum ParticleEffect {
         private final ParticleData data;
         private Object packet;
 
+        public static void skipInitialization() {
+            initialized = true;
+        }
+
         /**
          * Construct a new particle packet
          *
