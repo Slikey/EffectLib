@@ -11,6 +11,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.MemoryConfiguration;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
@@ -356,6 +357,20 @@ public class EffectManager implements Disposable {
                 field.set(effect, section.get(key));
             } else if (ConfigurationSection.class.isAssignableFrom(field.getType())) {
                 ConfigurationSection configSection = ConfigUtils.getConfigurationSection(section, key);
+                if (parameterMap != null && !parameterMap.isEmpty()) {
+                    ConfigurationSection baseConfiguration = configSection;
+                    configSection = new MemoryConfiguration();
+                    Set<String> keys = baseConfiguration.getKeys(false);
+                    // Note this doesn't handle sections within sections.
+                    for (String baseKey : keys) {
+                        Object baseValue = baseConfiguration.get(baseKey);
+                        if (baseValue instanceof String && ((String)baseValue).startsWith("$")) {
+                            String parameterValue = parameterMap.get(baseValue);
+                            baseValue = parameterValue == null ? baseValue : parameterValue;
+                        }
+                        configSection.set(baseKey, baseValue);
+                    }
+                }
                 field.set(effect, configSection);
             } else if (field.getType().equals(Vector.class)) {
                 double x = 0;
