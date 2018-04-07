@@ -1388,19 +1388,32 @@ public enum ParticleEffect {
                 playerConnection = ReflectionUtils.getField("EntityPlayer", PackageType.MINECRAFT_SERVER, false, "playerConnection");
                 sendPacket = ReflectionUtils.getMethod(playerConnection.getType(), "sendPacket", PackageType.MINECRAFT_SERVER.getClass("Packet"));
 
-                packet_idField = ReflectionUtils.getField(packetClass, true, "a");
-                packet_locationXField = ReflectionUtils.getField(packetClass, true, "b");
-                packet_locationYField = ReflectionUtils.getField(packetClass, true, "c");
-                packet_locationZField = ReflectionUtils.getField(packetClass, true, "d");
-                packet_offsetXField = ReflectionUtils.getField(packetClass, true, "e");
-                packet_offsetYField = ReflectionUtils.getField(packetClass, true, "f");
-                packet_offsetZField = ReflectionUtils.getField(packetClass, true, "g");
-                packet_speedField = ReflectionUtils.getField(packetClass, true, "h");
-                packet_amountField = ReflectionUtils.getField(packetClass, true, "i");
+                if (version >= 13 ) {
+                    packet_idField = ReflectionUtils.getField(packetClass, true, "j");
+                    packet_locationXField = ReflectionUtils.getField(packetClass, true, "a");
+                    packet_locationYField = ReflectionUtils.getField(packetClass, true, "b");
+                    packet_locationZField = ReflectionUtils.getField(packetClass, true, "c");
+                    packet_offsetXField = ReflectionUtils.getField(packetClass, true, "d");
+                    packet_offsetYField = ReflectionUtils.getField(packetClass, true, "e");
+                    packet_offsetZField = ReflectionUtils.getField(packetClass, true, "f");
+                    packet_speedField = ReflectionUtils.getField(packetClass, true, "g");
+                    packet_amountField = ReflectionUtils.getField(packetClass, true, "h");
+                    packet_longDistanceField = ReflectionUtils.getField(packetClass, true, "i");
+                } else {
+                    packet_idField = ReflectionUtils.getField(packetClass, true, "a");
+                    packet_locationXField = ReflectionUtils.getField(packetClass, true, "b");
+                    packet_locationYField = ReflectionUtils.getField(packetClass, true, "c");
+                    packet_locationZField = ReflectionUtils.getField(packetClass, true, "d");
+                    packet_offsetXField = ReflectionUtils.getField(packetClass, true, "e");
+                    packet_offsetYField = ReflectionUtils.getField(packetClass, true, "f");
+                    packet_offsetZField = ReflectionUtils.getField(packetClass, true, "g");
+                    packet_speedField = ReflectionUtils.getField(packetClass, true, "h");
+                    packet_amountField = ReflectionUtils.getField(packetClass, true, "i");
 
-                if (version > 7) {
-                    packet_longDistanceField = ReflectionUtils.getField(packetClass, true, "j");
-                    packet_dataField = ReflectionUtils.getField(packetClass, true, "k");
+                    if (version > 7) {
+                        packet_longDistanceField = ReflectionUtils.getField(packetClass, true, "j");
+                        packet_dataField = ReflectionUtils.getField(packetClass, true, "k");
+                    }
                 }
             } catch (Exception exception) {
                 try {
@@ -1468,6 +1481,8 @@ public enum ParticleEffect {
                         if (effect.getId() < 0)
                             throw new ParticleVersionException("The " + effect + " particle effect is not supported by your server version " + ParticlePacket.getVersion());
                         id = enumParticles[effect.getId()];
+                        // TODO ... this isn't so easy, need to get the particle type and add data to it. Not actually
+                        // sure enumParticles is going to work 1.13. Need to wait for a release to see, unfortunately.
                     }
                     packet_idField.set(packet, id);
                     packet_locationXField.set(packet, (float) center.getX());
