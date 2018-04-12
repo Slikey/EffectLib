@@ -175,7 +175,7 @@ public class EffectManager implements Disposable {
                 effectClasses.put(effectClass, effectLibClass);
             }
         } catch (Throwable ex) {
-            owningPlugin.getLogger().info("Error loading EffectLib class: " + effectClass + ": " + ex.getMessage());
+            onError("Error loading EffectLib class: " + effectClass, ex);
             return null;
         }
 
@@ -184,7 +184,7 @@ public class EffectManager implements Disposable {
             Constructor constructor = effectLibClass.getConstructor(EffectManager.class);
             effect = (Effect) constructor.newInstance(this);
         } catch (Exception ex) {
-            owningPlugin.getLogger().warning("Error creating Effect class: " + effectClass);
+            onError("Error loading EffectLib class: " + effectClass, ex);
         }
 
         return effect;
@@ -287,7 +287,7 @@ public class EffectManager implements Disposable {
         }
     }
 
-    public void onError(String message, Exception ex) {
+    public void onError(String message, Throwable ex) {
         if (debug) {
             owningPlugin.getLogger().log(Level.WARNING, message, ex);
         }
