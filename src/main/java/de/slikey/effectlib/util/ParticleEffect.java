@@ -1680,7 +1680,10 @@ public enum ParticleEffect {
 
     public void display(ParticleData data, Location center, Color color, double range, float offsetX, float offsetY, float offsetZ, float speed, int amount, List<Player> targetPlayers) {
         // Colorizeable!
-        if (color != null && (this == ParticleEffect.REDSTONE || this == ParticleEffect.SPELL_MOB || this == ParticleEffect.SPELL_MOB_AMBIENT)) {
+        if (color != null && (this == ParticleEffect.REDSTONE
+            || this == ParticleEffect.SPELL_MOB || this == ParticleEffect.SPELL_MOB_AMBIENT
+            || this == ParticleEffect.DUST || this == ParticleEffect.ENTITY_EFFECT
+            || this == ParticleEffect.AMBIENT_ENTITY_EFFECT)) {
             amount = 0;
             // Colored particles can't have a speed of 0.
             if (speed == 0) {
