@@ -41,8 +41,7 @@ import org.bukkit.util.Vector;
  * This has been modified heavily by NathanWolf
  * The list was re-ordered to match the official wiki.vg list:
  * http://wiki.vg/Protocol#Particle
- * Particle enum names match the 1.13 id definitions, legacy enum names have been kept in for
- * backwards compatibility, but marked @Deprecated.
+ * Particle enum names match the 1.13 id definitions but duplicates exist for Spigot definitions.
  *
  * @author DarkBlade12
  * @version 1.6
@@ -59,7 +58,6 @@ public enum ParticleEffect {
      */
     AMBIENT_ENTITY_EFFECT("ambient_entity_effect", "mobSpellAmbient", 0, 16, -1),
 
-    @Deprecated
     SPELL_MOB_AMBIENT("ambient_entity_effect", "mobSpellAmbient", 0, 16, -1),
 
     /**
@@ -71,7 +69,6 @@ public enum ParticleEffect {
      */
     ANGRY_VILLAGER("angry_villager", "angryVillager", 1, 20, -1),
 
-    @Deprecated
     VILLAGER_ANGRY("angry_villager", "angryVillager", 1, 20, -1),
 
     /**
@@ -92,7 +89,6 @@ public enum ParticleEffect {
      */
     BLOCK("block", "blockcrack", 3, 37, -1, true),
 
-    @Deprecated
     BLOCK_CRACK("block", "blockcrack", 3, 37, -1, true),
 
     /**
@@ -102,7 +98,6 @@ public enum ParticleEffect {
      * <li>This was merged with "block as of 1.13
      * </ul>
      */
-    @Deprecated
     BLOCK_DUST("block", "blockdust", 3, 38, 7, true),
 
     /**
@@ -114,7 +109,6 @@ public enum ParticleEffect {
      */
     BUBBLE("bubble", "bubble", 4, 4, -1, false, true),
 
-    @Deprecated
     WATER_BUBBLE("bubble", "bubble", 4, 4, -1, false, true),
 
     /**
@@ -160,7 +154,6 @@ public enum ParticleEffect {
      */
     DRIPPING_LAVA("dripping_lava", "dripLava", 9, 19, -1),
 
-    @Deprecated
     DRIP_LAVA("dripping_lava", "dripLava", 9, 19, -1),
 
     /**
@@ -172,7 +165,6 @@ public enum ParticleEffect {
      */
     DRIPPING_WATER("dripping_water", "dripWater", 10, 18, -1),
 
-    @Deprecated
     DRIP_WATER("dripping_water", "dripWater", 10, 18, -1),
 
     /**
@@ -184,7 +176,6 @@ public enum ParticleEffect {
      */
     DUST("dust", "reddust", 11, 30, -1),
 
-    @Deprecated
     REDSTONE("dust", "reddust", 11, 30, -1),
 
     /**
@@ -196,7 +187,6 @@ public enum ParticleEffect {
      */
     EFFECT("effect", "spell", 12, 13, -1),
 
-    @Deprecated
     SPELL("effect", "spell", 12, 13, -1),
 
     /**
@@ -208,7 +198,6 @@ public enum ParticleEffect {
      */
     ELDER_GUARDIAN("elder_guardian", "mobappearance", 13, 41, 8),
 
-    @Deprecated
     MOB_APPEARANCE("elder_guardian", "mobappearance", 13, 41, 8),
 
     /**
@@ -220,7 +209,6 @@ public enum ParticleEffect {
      */
     ENCHANTED_HIT("enchanted_hit", "magicCrit", 14, 10, -1),
 
-    @Deprecated
     CRIT_MAGIC("enchanted_hit", "magicCrit", 14, 10, -1),
 
     /**
@@ -232,7 +220,6 @@ public enum ParticleEffect {
      */
     ENCHANT("enchant", "enchantmenttable", 15, 25, -1),
 
-    @Deprecated
     ENCHANTMENT_TABLE("enchant", "enchantmenttable", 15, 25, -1),
 
     /**
@@ -253,7 +240,6 @@ public enum ParticleEffect {
      */
     ENTITY_EFFECT("entity_effect", "mobSpell", 17, 15, -1),
 
-    @Deprecated
     SPELL_MOB("entity_effect", "mobSpell", 17, 15, -1),
 
     /**
@@ -265,7 +251,6 @@ public enum ParticleEffect {
      */
     EXPLOSION_EMITTER("explosion_emitter", "hugeexplosion", 18, 2, -1),
 
-    @Deprecated
     EXPLOSION_HUGE("explosion_emitter", "hugeexplosion", 18, 2, -1),
 
     /**
@@ -277,7 +262,6 @@ public enum ParticleEffect {
      */
     EXPLOSION("explosion", "largeexplode", 19, 1, -1),
 
-    @Deprecated
     EXPLOSION_LARGE("explosion", "largeexplode", 19, 1, -1),
 
     /**
@@ -298,7 +282,6 @@ public enum ParticleEffect {
      */
     FIREWORK("firework", "fireworksSpark", 21, 3, -1),
 
-    @Deprecated
     FIREWORKS_SPARK("firework", "fireworksSpark", 21, 3, -1),
 
     /**
@@ -310,7 +293,6 @@ public enum ParticleEffect {
      */
     FISHING("fishing", "wake", 22, 6, 7),
 
-    @Deprecated
     WATER_WAKE("fishing", "wake", 22, 6, 7),
 
     /**
@@ -331,7 +313,6 @@ public enum ParticleEffect {
      */
     HAPPY_VILLAGER("happy_villager", "happyVillager", 24, 21, -1),
 
-    @Deprecated
     VILLAGER_HAPPY("happy_villager", "happyVillager", 24, 21, -1),
 
     /**
@@ -352,7 +333,6 @@ public enum ParticleEffect {
      */
     INSTANT_EFFECT("instant_effect", "instantSpell", 26, 14, -1),
 
-    @Deprecated
     SPELL_INSTANT("instant_effect", "instantSpell", 26, 14, -1),
 
     /**
@@ -363,7 +343,6 @@ public enum ParticleEffect {
      */
     ITEM("item", "iconcrack", 27, 36, -1, true),
 
-    @Deprecated
     ITEM_CRACK("item", "iconcrack", 27, 36, -1, true),
 
     /**
@@ -375,7 +354,6 @@ public enum ParticleEffect {
      */
     ITEM_SLIME("item_slime", "slime", 28, 33, -1),
 
-    @Deprecated
     SLIME("item_slime", "slime", 28, 33, -1),
 
     /**
@@ -387,7 +365,6 @@ public enum ParticleEffect {
      */
     ITEM_SNOWBALL("item_snowball", "snowballpoof", 29, 31, -1),
 
-    @Deprecated
     SNOWBALL("item_snowball", "snowballpoof", 29, 31, -1),
 
     /**
@@ -399,7 +376,6 @@ public enum ParticleEffect {
      */
     LARGE_SMOKE("large_smoke", "largesmoke", 30, 12, -1),
 
-    @Deprecated
     SMOKE_LARGE("large_smoke", "largesmoke", 30, 12, -1),
 
     /**
@@ -420,7 +396,6 @@ public enum ParticleEffect {
      */
     MYCELIUM("mycelium", "townaura", 32, 22, -1),
 
-    @Deprecated
     TOWN_AURA("mycelium", "townaura", 32, 22, -1),
 
     /**
@@ -441,7 +416,6 @@ public enum ParticleEffect {
      */
     POOF("poof", "explode", 34, 0, -1),
 
-    @Deprecated
     EXPLOSION_NORMAL("poof", "explode", 34, 0, -1),
 
     /**
@@ -462,7 +436,6 @@ public enum ParticleEffect {
      */
     RAIN("rain", "droplet", 36, 39, 8),
 
-    @Deprecated
     WATER_DROP("rain", "droplet", 36, 39, 8),
 
     /**
@@ -474,7 +447,6 @@ public enum ParticleEffect {
      */
     SMOKE("smoke", "smoke", 37, 11, -1),
 
-    @Deprecated
     SMOKE_NORMAL("smoke", "smoke", 37, 11, -1),
 
     /**
@@ -509,7 +481,6 @@ public enum ParticleEffect {
      */
     TOTEM_OF_UNDYING("totem_of_undying", "totem", 41, 47, 11),
 
-    @Deprecated
     TOTEM("totem_of_undying", "totem", 41, 47, 11),
 
     /**
@@ -521,7 +492,6 @@ public enum ParticleEffect {
      */
     UNDERWATER("underwater", "suspended", 42, 7, -1, false, true),
 
-    @Deprecated
     SUSPENDED("underwater", "suspended", 42, 7, -1, false, true),
 
     /**
@@ -533,7 +503,6 @@ public enum ParticleEffect {
      */
     SPLASH("splash", "splash", 43, 5, -1),
 
-    @Deprecated
     WATER_SPLASH("splash", "splash", 43, 5, -1),
 
     /**
@@ -545,7 +514,6 @@ public enum ParticleEffect {
      */
     WITCH("witch", "witchMagic", 44, 17, -1),
 
-    @Deprecated
     SPELL_WITCH("witch", "witchMagic", 44, 17, -1),
 
     /**
@@ -580,7 +548,6 @@ public enum ParticleEffect {
      * <li>Removed as of 1.13
      * </ul>
      */
-    @Deprecated
     FOOTSTEP("", "footstep", -1, 28, -1),
 
     /**
@@ -590,7 +557,6 @@ public enum ParticleEffect {
      * <li>This was removed as of 1.13
      * </ul>
      */
-    @Deprecated
     ITEM_TAKE("", "take", -1, 40, 8),
 
     /**
@@ -601,7 +567,6 @@ public enum ParticleEffect {
      * <li>This was removed as of 1.13
      * </ul>
      */
-    @Deprecated
     SNOW_SHOVEL("", "snowshovel", -1, 32, -1),
 
     /**
@@ -612,7 +577,6 @@ public enum ParticleEffect {
      * <li>Removed as of 1.13
      * </ul>
      */
-    @Deprecated
     SUSPENDED_DEPTH("", "depthSuspend", -1, 8, -1),
     ;
 
