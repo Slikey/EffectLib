@@ -128,6 +128,7 @@ public enum ParticleEffect {
      * <li>Removed as of 1.13
      * </ul>
      */
+    @Deprecated
     SUSPENDED_DEPTH("", "depthSuspend", -1, 8, -1),
 
     /**
@@ -338,6 +339,7 @@ public enum ParticleEffect {
      * <li>This was removed as of 1.13
      * </ul>
      */
+    @Deprecated
     SNOW_SHOVEL("", "snowshovel", -1, 32, -1),
 
     /**
@@ -513,6 +515,7 @@ public enum ParticleEffect {
      * <li>Removed as of 1.13
      * </ul>
      */
+    @Deprecated
     FOOTSTEP("", "footstep", -1, 28, -1),
 
     /**
@@ -522,6 +525,7 @@ public enum ParticleEffect {
      * <li>This was removed as of 1.13
      * </ul>
      */
+    @Deprecated
     ITEM_TAKE("", "take", -1, 40, 8),
     ;
 
