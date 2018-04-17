@@ -5,7 +5,7 @@ import de.slikey.effectlib.EffectManager;
 import de.slikey.effectlib.EffectType;
 import de.slikey.effectlib.math.EquationStore;
 import de.slikey.effectlib.math.EquationTransform;
-import de.slikey.effectlib.util.ParticleEffect;
+import org.bukkit.Particle;
 import de.slikey.effectlib.util.VectorUtils;
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
@@ -15,7 +15,7 @@ public class EquationEffect extends Effect {
     /**
      * ParticleType of spawned particle
      */
-    public ParticleEffect particle = ParticleEffect.REDSTONE;
+    public Particle particle = Particle.REDSTONE;
 
     /**
      * Equations defining the X,Y,Z coordinates over

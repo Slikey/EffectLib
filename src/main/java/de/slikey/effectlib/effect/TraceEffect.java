@@ -3,7 +3,7 @@ package de.slikey.effectlib.effect;
 import de.slikey.effectlib.Effect;
 import de.slikey.effectlib.EffectManager;
 import de.slikey.effectlib.EffectType;
-import de.slikey.effectlib.util.ParticleEffect;
+import org.bukkit.Particle;
 import java.util.ArrayList;
 import java.util.List;
 import org.bukkit.Location;
@@ -15,7 +15,7 @@ public class TraceEffect extends Effect {
     /**
      * Particle to spawn
      */
-    public ParticleEffect particle = ParticleEffect.FLAME;
+    public Particle particle = Particle.FLAME;
 
     /**
      * Iterations to wait before refreshing particles

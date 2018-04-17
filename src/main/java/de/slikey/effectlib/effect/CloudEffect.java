@@ -3,7 +3,7 @@ package de.slikey.effectlib.effect;
 import de.slikey.effectlib.Effect;
 import de.slikey.effectlib.EffectManager;
 import de.slikey.effectlib.EffectType;
-import de.slikey.effectlib.util.ParticleEffect;
+import org.bukkit.Particle;
 import de.slikey.effectlib.util.RandomUtils;
 import org.bukkit.Color;
 import org.bukkit.Location;
@@ -14,13 +14,13 @@ public class CloudEffect extends Effect {
     /*
      * Particle of the cloud
      */
-    public ParticleEffect cloudParticle = ParticleEffect.CLOUD;
+    public Particle cloudParticle = Particle.CLOUD;
     public Color cloudColor = null;
 
     /*
      * Particle of the rain/snow
      */
-    public ParticleEffect mainParticle = ParticleEffect.DRIP_WATER;
+    public Particle mainParticle = Particle.DRIP_WATER;
 
     /*
      * Size of the cloud

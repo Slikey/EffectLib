@@ -5,14 +5,11 @@ import de.slikey.effectlib.EffectManager;
 import de.slikey.effectlib.EffectType;
 import de.slikey.effectlib.math.EquationStore;
 import de.slikey.effectlib.math.EquationTransform;
-import de.slikey.effectlib.util.ParticleEffect;
+import org.bukkit.Particle;
 import org.bukkit.Location;
-import org.bukkit.configuration.ConfigurationSection;
 
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 public class PlotEffect extends Effect {
@@ -22,7 +19,7 @@ public class PlotEffect extends Effect {
     /**
      * ParticleType of spawned particle
      */
-    public ParticleEffect particle = ParticleEffect.REDSTONE;
+    public Particle particle = Particle.REDSTONE;
 
     /**
      * The equation to use for x-values. If not set, the iteration count will be used.

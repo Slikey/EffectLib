@@ -3,7 +3,7 @@ package de.slikey.effectlib.effect;
 import de.slikey.effectlib.Effect;
 import de.slikey.effectlib.EffectManager;
 import de.slikey.effectlib.EffectType;
-import de.slikey.effectlib.util.ParticleEffect;
+import org.bukkit.Particle;
 import de.slikey.effectlib.util.RandomUtils;
 import de.slikey.effectlib.util.VectorUtils;
 import org.bukkit.Color;
@@ -15,13 +15,13 @@ public class AtomEffect extends Effect {
     /**
      * ParticleType of the nucleus
      */
-    public ParticleEffect particleNucleus = ParticleEffect.DRIP_WATER;
+    public Particle particleNucleus = Particle.DRIP_WATER;
     public Color colorNucleus = null;
 
     /**
      * ParticleType of orbitals
      */
-    public ParticleEffect particleOrbital = ParticleEffect.DRIP_LAVA;
+    public Particle particleOrbital = Particle.DRIP_LAVA;
     public Color colorOrbital = null;
 
     /**

@@ -1,7 +1,9 @@
 package de.slikey.effectlib;
 
 import de.slikey.effectlib.util.DynamicLocation;
-import de.slikey.effectlib.util.ParticleEffect;
+import de.slikey.effectlib.util.ParticleUtils;
+
+import org.bukkit.Particle;
 import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -390,24 +392,28 @@ public abstract class Effect implements Runnable {
         }
     }
 
-    protected void display(ParticleEffect effect, Location location) {
+    protected void display(Particle effect, Location location) {
         display(effect, location, this.color);
     }
 
-    protected void display(ParticleEffect particle, Location location, Color color) {
+    protected void display(Particle particle, Location location, Color color) {
         display(particle, location, color, speed, particleCount);
     }
 
-    protected void display(ParticleEffect particle, Location location, float speed, int amount) {
+    protected void display(Particle particle, Location location, float speed, int amount) {
         display(particle, location, this.color, speed, amount);
     }
 
-    protected void display(ParticleEffect particle, Location location, Color color, float speed, int amount) {
+    protected void display(Particle particle, Location location, Color color, float speed, int amount) {
         if (targetPlayers == null && targetPlayer != null) {
             targetPlayers = new ArrayList<Player>();
             targetPlayers.add(targetPlayer);
         }
-        particle.display(particle.getData(material, materialData), location, color, visibleRange, particleOffsetX, particleOffsetY, particleOffsetZ, speed, amount, targetPlayers);
+        display(particle, location, particleOffsetX, particleOffsetY, particleOffsetZ, speed, amount, color, material, materialData, visibleRange, targetPlayers);
+    }
+
+    public static void display(Particle particle, Location center, float offsetX, float offsetY, float offsetZ, float speed, int amount, Color color, Material material, byte materialData, double range, List<Player> targetPlayers) {
+        ParticleUtils.display(particle, center, offsetX, offsetY, offsetZ, speed, amount, color, material, materialData, range, targetPlayers);
     }
 
     private void done() {

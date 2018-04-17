@@ -4,7 +4,7 @@ import de.slikey.effectlib.Effect;
 import de.slikey.effectlib.EffectManager;
 import de.slikey.effectlib.EffectType;
 import de.slikey.effectlib.util.MathUtils;
-import de.slikey.effectlib.util.ParticleEffect;
+import org.bukkit.Particle;
 import de.slikey.effectlib.util.RandomUtils;
 import de.slikey.effectlib.util.VectorUtils;
 import java.util.HashSet;
@@ -13,6 +13,8 @@ import org.bukkit.Location;
 import org.bukkit.util.Vector;
 
 public class EarthEffect extends Effect {
+    public Particle particle1 = Particle.VILLAGER_HAPPY;
+    public Particle particle2 = Particle.DRIP_WATER;
 
     /**
      * Precision of generation. Higher numbers have better results, but increase the time of generation. Don't pick Number above 10.000
@@ -123,11 +125,11 @@ public class EarthEffect extends Effect {
             invalidate();
         }
         for (Vector v : cacheGreen) {
-            ParticleEffect.VILLAGER_HAPPY.display(location.add(v), visibleRange, 0, 0, 0, 0, 3);
+            display(particle1, location.add(v), 0, 3);
             location.subtract(v);
         }
         for (Vector v : cacheBlue) {
-            ParticleEffect.DRIP_WATER.display(location.add(v), visibleRange, 0, 0, 0, 0, 1);
+            display(particle2, location.add(v));
             location.subtract(v);
         }
     }

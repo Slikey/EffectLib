@@ -28,11 +28,11 @@ public class ParticleUtils {
     }
 
     public static void display(Particle particle, Location center, Color color, double range) {
-        display(particle, center, 0, 0, 0, 0, 0, color, null, range, null);
+        display(particle, center, 0, 0, 0, 0, 0, 1, color, null, (byte)0, range, null);
     }
 
     public static void display(Particle particle, Location center, float offsetX, float offsetY, float offsetZ, float speed, int amount, Color color, Material material, double range) {
-        display(particle, center, offsetX, offsetY, offsetZ, speed, amount, color, material, range, null);
+        display(particle, center, offsetX, offsetY, offsetZ, speed, amount, 1, color, material, (byte)0, range, null);
     }
 
     public static void display(Particle particle, Location center, float offsetX, float offsetY, float offsetZ, float speed, int amount, Color color, Material material, byte materialData, double range) {
@@ -45,6 +45,9 @@ public class ParticleUtils {
 
     public static void display(Particle particle, Location center, float offsetX, float offsetY, float offsetZ, float speed, int amount, float size, Color color, Material material, double range, List<Player> targetPlayers) {
         display(particle, center, offsetX, offsetY, offsetZ, speed, amount, size, color, material, (byte)0, range, targetPlayers);
+    }
+    public static void display(Particle particle, Location center, float offsetX, float offsetY, float offsetZ, float speed, int amount, Color color, Material material, byte materialData, double range, List<Player> targetPlayers) {
+        display(particle, center, offsetX, offsetY, offsetZ, speed, amount, 1, color, material, materialData, range, targetPlayers);
     }
 
     public static void display(Particle particle, Location center, float offsetX, float offsetY, float offsetZ, float speed, int amount, float size, Color color, Material material, byte materialData, double range, List<Player> targetPlayers) {

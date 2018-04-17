@@ -4,7 +4,7 @@ import de.slikey.effectlib.Effect;
 import de.slikey.effectlib.EffectManager;
 import de.slikey.effectlib.EffectType;
 import de.slikey.effectlib.util.MathUtils;
-import de.slikey.effectlib.util.ParticleEffect;
+import org.bukkit.Particle;
 import de.slikey.effectlib.util.VectorUtils;
 import java.util.Collection;
 import java.util.HashSet;
@@ -14,8 +14,8 @@ import org.bukkit.util.Vector;
 
 public class WaveEffect extends Effect {
 
-    public ParticleEffect particle = ParticleEffect.DRIP_WATER;
-    public ParticleEffect cloudParticle = ParticleEffect.CLOUD;
+    public Particle particle = Particle.DRIP_WATER;
+    public Particle cloudParticle = Particle.CLOUD;
     public Color cloudColor = null;
 
     /**

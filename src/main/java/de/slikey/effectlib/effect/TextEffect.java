@@ -4,7 +4,7 @@ import de.slikey.effectlib.Effect;
 import de.slikey.effectlib.EffectManager;
 import de.slikey.effectlib.EffectType;
 import de.slikey.effectlib.util.MathUtils;
-import de.slikey.effectlib.util.ParticleEffect;
+import org.bukkit.Particle;
 import de.slikey.effectlib.util.StringParser;
 import de.slikey.effectlib.util.VectorUtils;
 import java.awt.Color;
@@ -19,7 +19,7 @@ public class TextEffect extends Effect {
     /**
      * Particle to draw the text
      */
-    public ParticleEffect particle = ParticleEffect.FIREWORKS_SPARK;
+    public Particle particle = Particle.FIREWORKS_SPARK;
 
     /**
      * Text to display

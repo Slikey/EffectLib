@@ -3,7 +3,7 @@ package de.slikey.effectlib.effect;
 import de.slikey.effectlib.Effect;
 import de.slikey.effectlib.EffectManager;
 import de.slikey.effectlib.EffectType;
-import de.slikey.effectlib.util.ParticleEffect;
+import org.bukkit.Particle;
 import de.slikey.effectlib.util.VectorUtils;
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
@@ -13,7 +13,7 @@ public class CubeEffect extends Effect {
     /**
      * Particle of the cube
      */
-    public ParticleEffect particle = ParticleEffect.FLAME;
+    public Particle particle = Particle.FLAME;
 
     /**
      * Length of the edges

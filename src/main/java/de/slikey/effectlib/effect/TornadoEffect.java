@@ -3,7 +3,7 @@ package de.slikey.effectlib.effect;
 import de.slikey.effectlib.Effect;
 import de.slikey.effectlib.EffectManager;
 import de.slikey.effectlib.EffectType;
-import de.slikey.effectlib.util.ParticleEffect;
+import org.bukkit.Particle;
 import de.slikey.effectlib.util.RandomUtils;
 import java.util.ArrayList;
 import org.bukkit.Color;
@@ -15,13 +15,13 @@ public class TornadoEffect extends Effect {
     /*
      * Tornado particle
      */
-    public ParticleEffect tornadoParticle = ParticleEffect.FLAME;
+    public Particle tornadoParticle = Particle.FLAME;
     public Color tornadoColor = null;
 
     /*
      * Particle of the cloud
      */
-    public ParticleEffect cloudParticle = ParticleEffect.CLOUD;
+    public Particle cloudParticle = Particle.CLOUD;
     public Color cloudColor = null;
 
     /*

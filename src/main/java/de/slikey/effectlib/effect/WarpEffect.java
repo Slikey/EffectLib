@@ -3,7 +3,7 @@ package de.slikey.effectlib.effect;
 import de.slikey.effectlib.Effect;
 import de.slikey.effectlib.EffectManager;
 import de.slikey.effectlib.EffectType;
-import de.slikey.effectlib.util.ParticleEffect;
+import org.bukkit.Particle;
 import org.bukkit.Location;
 
 public class WarpEffect extends Effect {
@@ -21,7 +21,7 @@ public class WarpEffect extends Effect {
     /**
      * Particle to display
      */
-    public ParticleEffect particle = ParticleEffect.FIREWORKS_SPARK;
+    public Particle particle = Particle.FIREWORKS_SPARK;
 
     /**
      * Interval of the circles

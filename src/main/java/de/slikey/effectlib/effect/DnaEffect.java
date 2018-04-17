@@ -4,7 +4,7 @@ import de.slikey.effectlib.Effect;
 import de.slikey.effectlib.EffectManager;
 import de.slikey.effectlib.EffectType;
 import de.slikey.effectlib.util.MathUtils;
-import de.slikey.effectlib.util.ParticleEffect;
+import org.bukkit.Particle;
 import de.slikey.effectlib.util.VectorUtils;
 import org.bukkit.Color;
 import org.bukkit.Location;
@@ -15,19 +15,19 @@ public class DnaEffect extends Effect {
     /**
      * ParticleType of spawned particle
      */
-    public ParticleEffect particleHelix = ParticleEffect.FLAME;
+    public Particle particleHelix = Particle.FLAME;
     public Color colorHelix = null;
 
     /**
      * Particle of base 1
      */
-    public ParticleEffect particleBase1 = ParticleEffect.WATER_WAKE;
+    public Particle particleBase1 = Particle.WATER_WAKE;
     public Color colorBase1 = null;
 
     /**
      * Particle of base 2
      */
-    public ParticleEffect particleBase2 = ParticleEffect.REDSTONE;
+    public Particle particleBase2 = Particle.REDSTONE;
     public Color colorBase2 = null;
 
     /**
@@ -99,7 +99,7 @@ public class DnaEffect extends Effect {
                     if (i == 0) {
                         continue;
                     }
-                    ParticleEffect particle = particleBase1;
+                    Particle particle = particleBase1;
                     Color color = colorBase1;
                     if (i < 0) {
                         particle = particleBase2;
@@ -114,7 +114,7 @@ public class DnaEffect extends Effect {
         }
     }
 
-    protected void drawParticle(Location location, Vector v, ParticleEffect particle, Color color) {
+    protected void drawParticle(Location location, Vector v, Particle particle, Color color) {
         VectorUtils.rotateAroundAxisX(v, (location.getPitch() + 90) * MathUtils.degreesToRadians);
         VectorUtils.rotateAroundAxisY(v, -location.getYaw() * MathUtils.degreesToRadians);
 

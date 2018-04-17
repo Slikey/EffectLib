@@ -6,7 +6,7 @@ package de.slikey.effectlib.effect;
 import de.slikey.effectlib.Effect;
 import de.slikey.effectlib.EffectManager;
 import de.slikey.effectlib.EffectType;
-import de.slikey.effectlib.util.ParticleEffect;
+import org.bukkit.Particle;
 import de.slikey.effectlib.util.RandomUtils;
 import org.bukkit.Color;
 import org.bukkit.Location;
@@ -27,7 +27,7 @@ public class DiscoBallEffect extends Effect {
     /**
      * Particle of the sphere and of the lines
      */
-    public ParticleEffect sphereParticle = ParticleEffect.FLAME, lineParticle = ParticleEffect.REDSTONE;
+    public Particle sphereParticle = Particle.FLAME, lineParticle = Particle.REDSTONE;
     public Color sphereColor = null, lineColor = null;
 
     /**

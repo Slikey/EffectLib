@@ -3,17 +3,16 @@ package de.slikey.effectlib.effect;
 import de.slikey.effectlib.Effect;
 import de.slikey.effectlib.EffectManager;
 import de.slikey.effectlib.EffectType;
-import de.slikey.effectlib.util.ParticleEffect;
+import org.bukkit.Particle;
 import de.slikey.effectlib.util.RandomUtils;
 import org.bukkit.Location;
-import org.bukkit.entity.Entity;
 
 public class SmokeEffect extends Effect {
 
     /**
      * ParticleType of spawned particle
      */
-    public ParticleEffect particle = ParticleEffect.SMOKE_NORMAL;
+    public Particle particle = Particle.SMOKE_NORMAL;
 
     public SmokeEffect(EffectManager effectManager) {
         super(effectManager);

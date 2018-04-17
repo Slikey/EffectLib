@@ -6,7 +6,6 @@ import de.slikey.effectlib.util.Disposable;
 import de.slikey.effectlib.util.DynamicLocation;
 import de.slikey.effectlib.util.ImageLoadCallback;
 import de.slikey.effectlib.util.ImageLoadTask;
-import de.slikey.effectlib.util.ParticleEffect;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Location;
@@ -57,7 +56,6 @@ public class EffectManager implements Disposable {
 
     public EffectManager(Plugin owningPlugin) {
         imageCacheFolder = owningPlugin == null ? null : new File(owningPlugin.getDataFolder(), "imagecache");
-        ParticleEffect.ParticlePacket.initialize();
         this.owningPlugin = owningPlugin;
         Transforms.setEffectManager(this);
         effects = new HashMap<Effect, BukkitTask>();
