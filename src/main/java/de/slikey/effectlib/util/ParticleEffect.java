@@ -41,7 +41,7 @@ import org.bukkit.util.Vector;
  * This has been modified heavily by NathanWolf
  * The list was re-ordered to match the official wiki.vg list:
  * http://wiki.vg/Protocol#Particle
- * Particle enum names match the 1.13 id definitions but duplicates exist for Spigot definitions.
+ * Particle enum names match the Spigot Particle enum definitions.
  *
  * @author DarkBlade12
  * @version 1.6
@@ -56,8 +56,6 @@ public enum ParticleEffect {
      * <li>The particle color gets lighter when increasing the speed and darker when decreasing the speed
      * </ul>
      */
-    AMBIENT_ENTITY_EFFECT("ambient_entity_effect", "mobSpellAmbient", 0, 16, -1),
-
     SPELL_MOB_AMBIENT("ambient_entity_effect", "mobSpellAmbient", 0, 16, -1),
 
     /**
@@ -67,8 +65,6 @@ public enum ParticleEffect {
      * <li>The speed value has no influence on this particle effect
      * </ul>
      */
-    ANGRY_VILLAGER("angry_villager", "angryVillager", 1, 20, -1),
-
     VILLAGER_ANGRY("angry_villager", "angryVillager", 1, 20, -1),
 
     /**
@@ -87,8 +83,6 @@ public enum ParticleEffect {
      * <li>The speed value has no influence on this particle effect
      * </ul>
      */
-    BLOCK("block", "blockcrack", 3, 37, -1, true),
-
     BLOCK_CRACK("block", "blockcrack", 3, 37, -1, true),
 
     /**
@@ -107,8 +101,6 @@ public enum ParticleEffect {
      * <li>The speed value influences the velocity at which the particle flies off
      * </ul>
      */
-    BUBBLE("bubble", "bubble", 4, 4, -1, false, true),
-
     WATER_BUBBLE("bubble", "bubble", 4, 4, -1, false, true),
 
     /**
@@ -152,8 +144,6 @@ public enum ParticleEffect {
      * <li>The speed value has no influence on this particle effect
      * </ul>
      */
-    DRIPPING_LAVA("dripping_lava", "dripLava", 9, 19, -1),
-
     DRIP_LAVA("dripping_lava", "dripLava", 9, 19, -1),
 
     /**
@@ -163,8 +153,6 @@ public enum ParticleEffect {
      * <li>The speed value has no influence on this particle effect
      * </ul>
      */
-    DRIPPING_WATER("dripping_water", "dripWater", 10, 18, -1),
-
     DRIP_WATER("dripping_water", "dripWater", 10, 18, -1),
 
     /**
@@ -174,8 +162,6 @@ public enum ParticleEffect {
      * <li>The speed value causes the particle to be colored red when set to 0
      * </ul>
      */
-    DUST("dust", "reddust", 11, 30, -1),
-
     REDSTONE("dust", "reddust", 11, 30, -1),
 
     /**
@@ -185,8 +171,6 @@ public enum ParticleEffect {
      * <li>The speed value causes the particle to only move upwards when set to 0
      * </ul>
      */
-    EFFECT("effect", "spell", 12, 13, -1),
-
     SPELL("effect", "spell", 12, 13, -1),
 
     /**
@@ -196,8 +180,6 @@ public enum ParticleEffect {
      * <li>The speed value has no influence on this particle effect
      * </ul>
      */
-    ELDER_GUARDIAN("elder_guardian", "mobappearance", 13, 41, 8),
-
     MOB_APPEARANCE("elder_guardian", "mobappearance", 13, 41, 8),
 
     /**
@@ -207,8 +189,6 @@ public enum ParticleEffect {
      * <li>The speed value influences the velocity at which the particle flies off
      * </ul>
      */
-    ENCHANTED_HIT("enchanted_hit", "magicCrit", 14, 10, -1),
-
     CRIT_MAGIC("enchanted_hit", "magicCrit", 14, 10, -1),
 
     /**
@@ -218,8 +198,6 @@ public enum ParticleEffect {
      * <li>The speed value influences the spread of this particle effect
      * </ul>
      */
-    ENCHANT("enchant", "enchantmenttable", 15, 25, -1),
-
     ENCHANTMENT_TABLE("enchant", "enchantmenttable", 15, 25, -1),
 
     /**
@@ -238,8 +216,6 @@ public enum ParticleEffect {
      * <li>The particle color gets lighter when increasing the speed and darker when decreasing the speed
      * </ul>
      */
-    ENTITY_EFFECT("entity_effect", "mobSpell", 17, 15, -1),
-
     SPELL_MOB("entity_effect", "mobSpell", 17, 15, -1),
 
     /**
@@ -249,8 +225,6 @@ public enum ParticleEffect {
      * <li>The speed value has no influence on this particle effect
      * </ul>
      */
-    EXPLOSION_EMITTER("explosion_emitter", "hugeexplosion", 18, 2, -1),
-
     EXPLOSION_HUGE("explosion_emitter", "hugeexplosion", 18, 2, -1),
 
     /**
@@ -260,8 +234,6 @@ public enum ParticleEffect {
      * <li>The speed value slightly influences the size of this particle effect
      * </ul>
      */
-    EXPLOSION("explosion", "largeexplode", 19, 1, -1),
-
     EXPLOSION_LARGE("explosion", "largeexplode", 19, 1, -1),
 
     /**
@@ -280,8 +252,6 @@ public enum ParticleEffect {
      * <li>The speed value influences the velocity at which the particle flies off
      * </ul>
      */
-    FIREWORK("firework", "fireworksSpark", 21, 3, -1),
-
     FIREWORKS_SPARK("firework", "fireworksSpark", 21, 3, -1),
 
     /**
@@ -291,8 +261,6 @@ public enum ParticleEffect {
      * <li>The speed value influences the velocity at which the particle flies off
      * </ul>
      */
-    FISHING("fishing", "wake", 22, 6, 7),
-
     WATER_WAKE("fishing", "wake", 22, 6, 7),
 
     /**
@@ -311,8 +279,6 @@ public enum ParticleEffect {
      * <li>The speed value has no influence on this particle effect
      * </ul>
      */
-    HAPPY_VILLAGER("happy_villager", "happyVillager", 24, 21, -1),
-
     VILLAGER_HAPPY("happy_villager", "happyVillager", 24, 21, -1),
 
     /**
@@ -331,8 +297,6 @@ public enum ParticleEffect {
      * <li>The speed value causes the particle to only move upwards when set to 0
      * </ul>
      */
-    INSTANT_EFFECT("instant_effect", "instantSpell", 26, 14, -1),
-
     SPELL_INSTANT("instant_effect", "instantSpell", 26, 14, -1),
 
     /**
@@ -341,8 +305,6 @@ public enum ParticleEffect {
      * <li>It looks like a little piece with an item texture
      * </ul>
      */
-    ITEM("item", "iconcrack", 27, 36, -1, true),
-
     ITEM_CRACK("item", "iconcrack", 27, 36, -1, true),
 
     /**
@@ -352,8 +314,6 @@ public enum ParticleEffect {
      * <li>The speed value has no influence on this particle effect
      * </ul>
      */
-    ITEM_SLIME("item_slime", "slime", 28, 33, -1),
-
     SLIME("item_slime", "slime", 28, 33, -1),
 
     /**
@@ -363,8 +323,6 @@ public enum ParticleEffect {
      * <li>The speed value has no influence on this particle effect
      * </ul>
      */
-    ITEM_SNOWBALL("item_snowball", "snowballpoof", 29, 31, -1),
-
     SNOWBALL("item_snowball", "snowballpoof", 29, 31, -1),
 
     /**
@@ -374,8 +332,6 @@ public enum ParticleEffect {
      * <li>The speed value influences the velocity at which the particle flies off
      * </ul>
      */
-    LARGE_SMOKE("large_smoke", "largesmoke", 30, 12, -1),
-
     SMOKE_LARGE("large_smoke", "largesmoke", 30, 12, -1),
 
     /**
@@ -394,8 +350,6 @@ public enum ParticleEffect {
      * <li>The speed value has no influence on this particle effect
      * </ul>
      */
-    MYCELIUM("mycelium", "townaura", 32, 22, -1),
-
     TOWN_AURA("mycelium", "townaura", 32, 22, -1),
 
     /**
@@ -414,8 +368,6 @@ public enum ParticleEffect {
      * <li>The speed value influences the velocity at which the particle flies off
      * </ul>
      */
-    POOF("poof", "explode", 34, 0, -1),
-
     EXPLOSION_NORMAL("poof", "explode", 34, 0, -1),
 
     /**
@@ -434,8 +386,6 @@ public enum ParticleEffect {
      * <li>The speed value has no influence on this particle effect
      * </ul>
      */
-    RAIN("rain", "droplet", 36, 39, 8),
-
     WATER_DROP("rain", "droplet", 36, 39, 8),
 
     /**
@@ -445,8 +395,6 @@ public enum ParticleEffect {
      * <li>The speed value influences the velocity at which the particle flies off
      * </ul>
      */
-    SMOKE("smoke", "smoke", 37, 11, -1),
-
     SMOKE_NORMAL("smoke", "smoke", 37, 11, -1),
 
     /**
@@ -479,8 +427,6 @@ public enum ParticleEffect {
      * <li>It looks like a green diamond
      * </ul>
      */
-    TOTEM_OF_UNDYING("totem_of_undying", "totem", 41, 47, 11),
-
     TOTEM("totem_of_undying", "totem", 41, 47, 11),
 
     /**
@@ -490,8 +436,6 @@ public enum ParticleEffect {
      * <li>The speed value has no influence on this particle effect
      * </ul>
      */
-    UNDERWATER("underwater", "suspended", 42, 7, -1, false, true),
-
     SUSPENDED("underwater", "suspended", 42, 7, -1, false, true),
 
     /**
@@ -501,8 +445,6 @@ public enum ParticleEffect {
      * <li>The speed value has no influence on this particle effect
      * </ul>
      */
-    SPLASH("splash", "splash", 43, 5, -1),
-
     WATER_SPLASH("splash", "splash", 43, 5, -1),
 
     /**
@@ -512,8 +454,6 @@ public enum ParticleEffect {
      * <li>The speed value causes the particle to only move upwards when set to 0
      * </ul>
      */
-    WITCH("witch", "witchMagic", 44, 17, -1),
-
     SPELL_WITCH("witch", "witchMagic", 44, 17, -1),
 
     /**
@@ -1644,10 +1584,7 @@ public enum ParticleEffect {
 
     public void display(ParticleData data, Location center, Color color, double range, float offsetX, float offsetY, float offsetZ, float speed, int amount, List<Player> targetPlayers) {
         // Colorizeable!
-        if (color != null && (this == ParticleEffect.REDSTONE
-            || this == ParticleEffect.SPELL_MOB || this == ParticleEffect.SPELL_MOB_AMBIENT
-            || this == ParticleEffect.DUST || this == ParticleEffect.ENTITY_EFFECT
-            || this == ParticleEffect.AMBIENT_ENTITY_EFFECT)) {
+        if (color != null && (this == ParticleEffect.REDSTONE || this == ParticleEffect.SPELL_MOB || this == ParticleEffect.SPELL_MOB_AMBIENT)) {
             amount = 0;
             // Colored particles can't have a speed of 0.
             if (speed == 0) {
@@ -1684,11 +1621,10 @@ public enum ParticleEffect {
         if (blockData == null) {
             blockData = 0;
         }
-        if (this == ParticleEffect.BLOCK_CRACK || this == ParticleEffect.BLOCK
-            || this == ParticleEffect.ITEM_CRACK || this == ParticleEffect.ITEM
+        if (this == ParticleEffect.BLOCK_CRACK || this == ParticleEffect.ITEM_CRACK
             || this == ParticleEffect.BLOCK_DUST || this == ParticleEffect.FALLING_DUST) {
             if (material != null && material != Material.AIR) {
-                if (this == ParticleEffect.ITEM_CRACK || this == ParticleEffect.ITEM) {
+                if (this == ParticleEffect.ITEM_CRACK) {
                     data = new ParticleEffect.ItemData(material, blockData);
                 } else {
                     data = new ParticleEffect.BlockData(material, blockData);
