@@ -49,50 +49,40 @@ import org.bukkit.util.Vector;
 public enum ParticleEffect {
 
     /**
-     * A particle effect which is displayed by entities with active potion effects applied through a beacon:
+     * A particle effect which is displayed by exploding tnt and creepers:
      * <ul>
-     * <li>It looks like a transparent colored swirl
-     * <li>The speed value causes the particle to be always colored black when set to 0
-     * <li>The particle color gets lighter when increasing the speed and darker when decreasing the speed
+     * <li>It looks like a white cloud
+     * <li>The speed value influences the velocity at which the particle flies off
      * </ul>
      */
-    SPELL_MOB_AMBIENT("ambient_entity_effect", "mobSpellAmbient", 0, 16, -1),
+    EXPLOSION_NORMAL("poof", "explode", 34, 0, -1),
 
     /**
-     * A particle effect which is displayed when attacking a villager in a village:
+     * A particle effect which is displayed by exploding ghast fireballs and wither skulls:
      * <ul>
-     * <li>It looks like a cracked gray heart
+     * <li>It looks like a gray ball which is fading away
+     * <li>The speed value slightly influences the size of this particle effect
+     * </ul>
+     */
+    EXPLOSION_LARGE("explosion", "largeexplode", 19, 1, -1),
+
+    /**
+     * A particle effect which is displayed by exploding tnt and creepers:
+     * <ul>
+     * <li>It looks like a crowd of gray balls which are fading away
      * <li>The speed value has no influence on this particle effect
      * </ul>
      */
-    VILLAGER_ANGRY("angry_villager", "angryVillager", 1, 20, -1),
+    EXPLOSION_HUGE("explosion_emitter", "hugeexplosion", 18, 2, -1),
 
     /**
-     * A particle effect which is displayed by barriers:
+     * A particle effect which is displayed by launching fireworks:
      * <ul>
-     * <li>It looks like a red box with a slash through it
-     * <li>The speed value has no influence on this particle effect
+     * <li>It looks like a white star which is sparkling
+     * <li>The speed value influences the velocity at which the particle flies off
      * </ul>
      */
-    BARRIER("barrier", "barrier", 2, 35, 8),
-
-    /**
-     * A particle effect which is displayed when breaking blocks or sprinting:
-     * <ul>
-     * <li>It looks like a little piece with a block texture
-     * <li>The speed value has no influence on this particle effect
-     * </ul>
-     */
-    BLOCK_CRACK("block", "blockcrack", 3, 37, -1, true),
-
-    /**
-     * A particle effect which is displayed when falling:
-     * <ul>
-     * <li>It looks like a little piece with a block texture
-     * <li>This was merged with "block as of 1.13
-     * </ul>
-     */
-    BLOCK_DUST("block", "blockdust", 3, 38, 7, true),
+    FIREWORKS_SPARK("firework", "fireworksSpark", 21, 3, -1),
 
     /**
      * A particle effect which is displayed by swimming entities and arrows in water:
@@ -104,13 +94,41 @@ public enum ParticleEffect {
     WATER_BUBBLE("bubble", "bubble", 4, 4, -1, false, true),
 
     /**
-     * A particle effect which is displayed when a mob dies:
+     * A particle effect which is displayed by swimming entities and shaking wolves:
      * <ul>
-     * <li>It looks like a large white cloud
+     * <li>It looks like a blue drop
+     * <li>The speed value has no influence on this particle effect
+     * </ul>
+     */
+    WATER_SPLASH("splash", "splash", 43, 5, -1),
+
+    /**
+     * A particle effect which is displayed on water when fishing:
+     * <ul>
+     * <li>It looks like a blue droplet
      * <li>The speed value influences the velocity at which the particle flies off
      * </ul>
      */
-    CLOUD("cloud", "cloud", 5, 29, -1),
+    WATER_WAKE("fishing", "wake", 22, 6, 7),
+
+    /**
+     * A particle effect which is displayed by water:
+     * <ul>
+     * <li>It looks like a tiny blue square
+     * <li>The speed value has no influence on this particle effect
+     * </ul>
+     */
+    SUSPENDED("underwater", "suspended", 42, 7, -1, false, true),
+
+    /**
+     * A particle effect which is displayed by air when close to bedrock and the in the void:
+     * <ul>
+     * <li>It looks like a tiny gray square
+     * <li>The speed value has no influence on this particle effect
+     * <li>Removed as of 1.13
+     * </ul>
+     */
+    SUSPENDED_DEPTH("", "depthSuspend", -1, 8, -1),
 
     /**
      * A particle effect which is displayed when landing a critical hit and by arrows:
@@ -122,47 +140,31 @@ public enum ParticleEffect {
     CRIT("crit", "crit", 6, 9, -1),
 
     /**
-     * A particle effect which is displayed when damaging a mob:
+     * A particle effect which is displayed when landing a hit with an enchanted weapon:
      * <ul>
-     * <li>It looks like a dark red heart
+     * <li>It looks like a cyan star
+     * <li>The speed value influences the velocity at which the particle flies off
      * </ul>
      */
-    DAMAGE_INDICATOR("damage_indicator", "damageIndicator", 7, 44, 9),
+    CRIT_MAGIC("enchanted_hit", "magicCrit", 14, 10, -1),
 
     /**
-     * A particle effect which is displayed by the ender drag when breathing poison:
+     * A particle effect which is displayed by primed tnt, torches, droppers, dispensers, end portals, brewing stands and monster spawners:
      * <ul>
-     * <li>It looks like a purple redstone particle
+     * <li>It looks like a little gray cloud
+     * <li>The speed value influences the velocity at which the particle flies off
      * </ul>
      */
-    DRAGON_BREATH("dragon_breath", "dragonbreath", 8, 42, 9),
+    SMOKE_NORMAL("smoke", "smoke", 37, 11, -1),
 
     /**
-     * A particle effect which is displayed by blocks beneath a lava source:
+     * A particle effect which is displayed by fire, minecarts with furnace and blazes:
      * <ul>
-     * <li>It looks like an orange drip
-     * <li>The speed value has no influence on this particle effect
+     * <li>It looks like a large gray cloud
+     * <li>The speed value influences the velocity at which the particle flies off
      * </ul>
      */
-    DRIP_LAVA("dripping_lava", "dripLava", 9, 19, -1),
-
-    /**
-     * A particle effect which is displayed by blocks beneath a water source:
-     * <ul>
-     * <li>It looks like a blue drip
-     * <li>The speed value has no influence on this particle effect
-     * </ul>
-     */
-    DRIP_WATER("dripping_water", "dripWater", 10, 18, -1),
-
-    /**
-     * A particle effect which is displayed by redstone ore, powered redstone, redstone torches and redstone repeaters:
-     * <ul>
-     * <li>It looks like a tiny colored cloud
-     * <li>The speed value causes the particle to be colored red when set to 0
-     * </ul>
-     */
-    REDSTONE("dust", "reddust", 11, 30, -1),
+    SMOKE_LARGE("large_smoke", "largesmoke", 30, 12, -1),
 
     /**
      * A particle effect which is displayed when splash potions or bottles o' enchanting hit something:
@@ -174,39 +176,13 @@ public enum ParticleEffect {
     SPELL("effect", "spell", 12, 13, -1),
 
     /**
-     * A particle effect which is displayed by elder guardians:
+     * A particle effect which is displayed when instant splash potions hit something:
      * <ul>
-     * <li>It looks like the shape of the elder guardian
-     * <li>The speed value has no influence on this particle effect
+     * <li>It looks like a white cross
+     * <li>The speed value causes the particle to only move upwards when set to 0
      * </ul>
      */
-    MOB_APPEARANCE("elder_guardian", "mobappearance", 13, 41, 8),
-
-    /**
-     * A particle effect which is displayed when landing a hit with an enchanted weapon:
-     * <ul>
-     * <li>It looks like a cyan star
-     * <li>The speed value influences the velocity at which the particle flies off
-     * </ul>
-     */
-    CRIT_MAGIC("enchanted_hit", "magicCrit", 14, 10, -1),
-
-    /**
-     * A particle effect which is displayed by enchantment tables which are nearby bookshelves:
-     * <ul>
-     * <li>It looks like a cryptic white letter
-     * <li>The speed value influences the spread of this particle effect
-     * </ul>
-     */
-    ENCHANTMENT_TABLE("enchant", "enchantmenttable", 15, 25, -1),
-
-    /**
-     * A particle effect which is displayed by end rods.
-     * <ul>
-     * <li>It looks like a bright white glow
-     * </ul>
-     */
-    END_ROD("end_rod", "endRod", 16, 43, 9),
+    SPELL_INSTANT("instant_effect", "instantSpell", 26, 14, -1),
 
     /**
      * A particle effect which is displayed by entities with active potion effects:
@@ -219,58 +195,41 @@ public enum ParticleEffect {
     SPELL_MOB("entity_effect", "mobSpell", 17, 15, -1),
 
     /**
-     * A particle effect which is displayed by exploding tnt and creepers:
+     * A particle effect which is displayed by entities with active potion effects applied through a beacon:
      * <ul>
-     * <li>It looks like a crowd of gray balls which are fading away
+     * <li>It looks like a transparent colored swirl
+     * <li>The speed value causes the particle to be always colored black when set to 0
+     * <li>The particle color gets lighter when increasing the speed and darker when decreasing the speed
+     * </ul>
+     */
+    SPELL_MOB_AMBIENT("ambient_entity_effect", "mobSpellAmbient", 0, 16, -1),
+
+    /**
+     * A particle effect which is displayed by witches:
+     * <ul>
+     * <li>It looks like a purple cross
+     * <li>The speed value causes the particle to only move upwards when set to 0
+     * </ul>
+     */
+    SPELL_WITCH("witch", "witchMagic", 44, 17, -1),
+
+    /**
+     * A particle effect which is displayed by blocks beneath a water source:
+     * <ul>
+     * <li>It looks like a blue drip
      * <li>The speed value has no influence on this particle effect
      * </ul>
      */
-    EXPLOSION_HUGE("explosion_emitter", "hugeexplosion", 18, 2, -1),
+    DRIP_WATER("dripping_water", "dripWater", 10, 18, -1),
 
     /**
-     * A particle effect which is displayed by exploding ghast fireballs and wither skulls:
+     * A particle effect which is displayed by blocks beneath a lava source:
      * <ul>
-     * <li>It looks like a gray ball which is fading away
-     * <li>The speed value slightly influences the size of this particle effect
+     * <li>It looks like an orange drip
+     * <li>The speed value has no influence on this particle effect
      * </ul>
      */
-    EXPLOSION_LARGE("explosion", "largeexplode", 19, 1, -1),
-
-    /**
-     * A particle effect which is displayed by sand and other gravity-effected blocks while
-     * they are suspended in the air.
-     * <ul>
-     * <li>It looks like falling particles of the target block
-     * </ul>
-     */
-    FALLING_DUST("falling_dust", "fallingdust", 20, 46, 10, true),
-
-    /**
-     * A particle effect which is displayed by launching fireworks:
-     * <ul>
-     * <li>It looks like a white star which is sparkling
-     * <li>The speed value influences the velocity at which the particle flies off
-     * </ul>
-     */
-    FIREWORKS_SPARK("firework", "fireworksSpark", 21, 3, -1),
-
-    /**
-     * A particle effect which is displayed on water when fishing:
-     * <ul>
-     * <li>It looks like a blue droplet
-     * <li>The speed value influences the velocity at which the particle flies off
-     * </ul>
-     */
-    WATER_WAKE("fishing", "wake", 22, 6, 7),
-
-    /**
-     * A particle effect which is displayed by torches, active furnaces, magma cubes and monster spawners:
-     * <ul>
-     * <li>It looks like a tiny flame
-     * <li>The speed value influences the velocity at which the particle flies off
-     * </ul>
-     */
-    FLAME("flame", "flame", 23, 26, -1),
+    DRIP_LAVA("dripping_lava", "dripLava", 9, 19, -1),
 
     /**
      * A particle effect which is displayed when using bone meal and trading with a villager in a village:
@@ -282,66 +241,13 @@ public enum ParticleEffect {
     VILLAGER_HAPPY("happy_villager", "happyVillager", 24, 21, -1),
 
     /**
-     * A particle effect which is displayed when breeding and taming animals:
+     * A particle effect which is displayed when attacking a villager in a village:
      * <ul>
-     * <li>It looks like a red heart
+     * <li>It looks like a cracked gray heart
      * <li>The speed value has no influence on this particle effect
      * </ul>
      */
-    HEART("heart", "heart", 25, 34, -1),
-
-    /**
-     * A particle effect which is displayed when instant splash potions hit something:
-     * <ul>
-     * <li>It looks like a white cross
-     * <li>The speed value causes the particle to only move upwards when set to 0
-     * </ul>
-     */
-    SPELL_INSTANT("instant_effect", "instantSpell", 26, 14, -1),
-
-    /**
-     * A particle effect which is displayed when breaking a tool or eggs hit a block:
-     * <ul>
-     * <li>It looks like a little piece with an item texture
-     * </ul>
-     */
-    ITEM_CRACK("item", "iconcrack", 27, 36, -1, true),
-
-    /**
-     * A particle effect which is displayed by slimes:
-     * <ul>
-     * <li>It looks like a tiny part of the slimeball icon
-     * <li>The speed value has no influence on this particle effect
-     * </ul>
-     */
-    SLIME("item_slime", "slime", 28, 33, -1),
-
-    /**
-     * A particle effect which is displayed when snowballs hit a block:
-     * <ul>
-     * <li>It looks like a little piece with the snowball texture
-     * <li>The speed value has no influence on this particle effect
-     * </ul>
-     */
-    SNOWBALL("item_snowball", "snowballpoof", 29, 31, -1),
-
-    /**
-     * A particle effect which is displayed by fire, minecarts with furnace and blazes:
-     * <ul>
-     * <li>It looks like a large gray cloud
-     * <li>The speed value influences the velocity at which the particle flies off
-     * </ul>
-     */
-    SMOKE_LARGE("large_smoke", "largesmoke", 30, 12, -1),
-
-    /**
-     * A particle effect which is displayed by lava:
-     * <ul>
-     * <li>It looks like a spark
-     * <li>The speed value has no influence on this particle effect
-     * </ul>
-     */
-    LAVA("lava", "lava", 31, 27, -1),
+    VILLAGER_ANGRY("angry_villager", "angryVillager", 1, 20, -1),
 
     /**
      * A particle effect which is displayed by mycelium:
@@ -362,15 +268,6 @@ public enum ParticleEffect {
     NOTE("note", "note", 33, 23, -1),
 
     /**
-     * A particle effect which is displayed by exploding tnt and creepers:
-     * <ul>
-     * <li>It looks like a white cloud
-     * <li>The speed value influences the velocity at which the particle flies off
-     * </ul>
-     */
-    EXPLOSION_NORMAL("poof", "explode", 34, 0, -1),
-
-    /**
      * A particle effect which is displayed by nether portals, endermen, ender pearls, eyes of ender, ender chests and dragon eggs:
      * <ul>
      * <li>It looks like a purple cloud
@@ -378,6 +275,123 @@ public enum ParticleEffect {
      * </ul>
      */
     PORTAL("portal", "portal", 35, 24, -1),
+
+    /**
+     * A particle effect which is displayed by enchantment tables which are nearby bookshelves:
+     * <ul>
+     * <li>It looks like a cryptic white letter
+     * <li>The speed value influences the spread of this particle effect
+     * </ul>
+     */
+    ENCHANTMENT_TABLE("enchant", "enchantmenttable", 15, 25, -1),
+
+    /**
+     * A particle effect which is displayed by torches, active furnaces, magma cubes and monster spawners:
+     * <ul>
+     * <li>It looks like a tiny flame
+     * <li>The speed value influences the velocity at which the particle flies off
+     * </ul>
+     */
+    FLAME("flame", "flame", 23, 26, -1),
+
+    /**
+     * A particle effect which is displayed by lava:
+     * <ul>
+     * <li>It looks like a spark
+     * <li>The speed value has no influence on this particle effect
+     * </ul>
+     */
+    LAVA("lava", "lava", 31, 27, -1),
+
+    /**
+     * A particle effect which is displayed when a mob dies:
+     * <ul>
+     * <li>It looks like a large white cloud
+     * <li>The speed value influences the velocity at which the particle flies off
+     * </ul>
+     */
+    CLOUD("cloud", "cloud", 5, 29, -1),
+
+    /**
+     * A particle effect which is displayed by redstone ore, powered redstone, redstone torches and redstone repeaters:
+     * <ul>
+     * <li>It looks like a tiny colored cloud
+     * <li>The speed value causes the particle to be colored red when set to 0
+     * </ul>
+     */
+    REDSTONE("dust", "reddust", 11, 30, -1),
+
+    /**
+     * A particle effect which is displayed when snowballs hit a block:
+     * <ul>
+     * <li>It looks like a little piece with the snowball texture
+     * <li>The speed value has no influence on this particle effect
+     * </ul>
+     */
+    SNOWBALL("item_snowball", "snowballpoof", 29, 31, -1),
+
+    /**
+     * A particle effect which is currently unused:
+     * <ul>
+     * <li>It looks like a tiny white cloud
+     * <li>The speed value influences the velocity at which the particle flies off
+     * <li>This was removed as of 1.13
+     * </ul>
+     */
+    SNOW_SHOVEL("", "snowshovel", -1, 32, -1),
+
+    /**
+     * A particle effect which is displayed by slimes:
+     * <ul>
+     * <li>It looks like a tiny part of the slimeball icon
+     * <li>The speed value has no influence on this particle effect
+     * </ul>
+     */
+    SLIME("item_slime", "slime", 28, 33, -1),
+
+    /**
+     * A particle effect which is displayed when breeding and taming animals:
+     * <ul>
+     * <li>It looks like a red heart
+     * <li>The speed value has no influence on this particle effect
+     * </ul>
+     */
+    HEART("heart", "heart", 25, 34, -1),
+
+    /**
+     * A particle effect which is displayed by barriers:
+     * <ul>
+     * <li>It looks like a red box with a slash through it
+     * <li>The speed value has no influence on this particle effect
+     * </ul>
+     */
+    BARRIER("barrier", "barrier", 2, 35, 8),
+
+    /**
+     * A particle effect which is displayed when breaking a tool or eggs hit a block:
+     * <ul>
+     * <li>It looks like a little piece with an item texture
+     * </ul>
+     */
+    ITEM_CRACK("item", "iconcrack", 27, 36, -1, true),
+
+    /**
+     * A particle effect which is displayed when breaking blocks or sprinting:
+     * <ul>
+     * <li>It looks like a little piece with a block texture
+     * <li>The speed value has no influence on this particle effect
+     * </ul>
+     */
+    BLOCK_CRACK("block", "blockcrack", 3, 37, -1, true),
+
+    /**
+     * A particle effect which is displayed when falling:
+     * <ul>
+     * <li>It looks like a little piece with a block texture
+     * <li>This was merged with "block as of 1.13
+     * </ul>
+     */
+    BLOCK_DUST("block", "blockdust", 3, 38, 7, true),
 
     /**
      * A particle effect which is displayed when rain hits the ground:
@@ -389,13 +403,62 @@ public enum ParticleEffect {
     WATER_DROP("rain", "droplet", 36, 39, 8),
 
     /**
-     * A particle effect which is displayed by primed tnt, torches, droppers, dispensers, end portals, brewing stands and monster spawners:
+     * A particle effect which is displayed by elder guardians:
      * <ul>
-     * <li>It looks like a little gray cloud
-     * <li>The speed value influences the velocity at which the particle flies off
+     * <li>It looks like the shape of the elder guardian
+     * <li>The speed value has no influence on this particle effect
      * </ul>
      */
-    SMOKE_NORMAL("smoke", "smoke", 37, 11, -1),
+    MOB_APPEARANCE("elder_guardian", "mobappearance", 13, 41, 8),
+
+    /**
+     * A particle effect which is displayed by the ender dragon when breathing poison:
+     * <ul>
+     * <li>It looks like a purple redstone particle
+     * </ul>
+     */
+    DRAGON_BREATH("dragon_breath", "dragonbreath", 8, 42, 9),
+
+    /**
+     * A particle effect which is displayed by end rods.
+     * <ul>
+     * <li>It looks like a bright white glow
+     * </ul>
+     */
+    END_ROD("end_rod", "endRod", 16, 43, 9),
+
+    /**
+     * A particle effect which is displayed when damaging a mob:
+     * <ul>
+     * <li>It looks like a dark red heart
+     * </ul>
+     */
+    DAMAGE_INDICATOR("damage_indicator", "damageIndicator", 7, 44, 9),
+
+    /**
+     * A particle effect which is displayed when performing a well-timed attack
+     * <ul>
+     * <li>It looks like a gray/white arc
+     * </ul>
+     */
+    SWEEP_ATTACK("sweep_attack", "sweepAttack", 40, 45, 9),
+
+    /**
+     * A particle effect which is displayed by sand and other gravity-effected blocks while
+     * they are suspended in the air.
+     * <ul>
+     * <li>It looks like falling particles of the target block
+     * </ul>
+     */
+    FALLING_DUST("falling_dust", "fallingdust", 20, 46, 10, true),
+
+    /**
+     * A particle effect which is displayed when using a totem of undying:
+     * <ul>
+     * <li>It looks like a green diamond
+     * </ul>
+     */
+    TOTEM("totem_of_undying", "totem", 41, 47, 11),
 
     /**
      * A particle effect which is displayed when a llama spits:
@@ -412,49 +475,6 @@ public enum ParticleEffect {
      * </ul>
      */
     SQUID_INK("squid_ink", "", 39, -1, 13, false, true),
-
-    /**
-     * A particle effect which is displayed when performing a well-timed attack
-     * <ul>
-     * <li>It looks like a gray/white arc
-     * </ul>
-     */
-    SWEEP_ATTACK("sweep_attack", "sweepAttack", 40, 45, 9),
-
-    /**
-     * A particle effect which is displayed when using a totem of undying:
-     * <ul>
-     * <li>It looks like a green diamond
-     * </ul>
-     */
-    TOTEM("totem_of_undying", "totem", 41, 47, 11),
-
-    /**
-     * A particle effect which is displayed by water:
-     * <ul>
-     * <li>It looks like a tiny blue square
-     * <li>The speed value has no influence on this particle effect
-     * </ul>
-     */
-    SUSPENDED("underwater", "suspended", 42, 7, -1, false, true),
-
-    /**
-     * A particle effect which is displayed by swimming entities and shaking wolves:
-     * <ul>
-     * <li>It looks like a blue drop
-     * <li>The speed value has no influence on this particle effect
-     * </ul>
-     */
-    WATER_SPLASH("splash", "splash", 43, 5, -1),
-
-    /**
-     * A particle effect which is displayed by witches:
-     * <ul>
-     * <li>It looks like a purple cross
-     * <li>The speed value causes the particle to only move upwards when set to 0
-     * </ul>
-     */
-    SPELL_WITCH("witch", "witchMagic", 44, 17, -1),
 
     /**
      * A particle effect which is displayed at the top bubble columns:
@@ -481,6 +501,11 @@ public enum ParticleEffect {
     BUBBLE_COLUMN_UP("bubble_column_up", "", 47, -1, 13, false, true),
 
     /**
+     * TODO: Document me!
+     */
+    NAUTILUS("nautilus", "", -1, 48, -1),
+
+    /**
      * A particle effect which is currently unused:
      * <ul>
      * <li>It looks like a transparent gray square
@@ -498,26 +523,6 @@ public enum ParticleEffect {
      * </ul>
      */
     ITEM_TAKE("", "take", -1, 40, 8),
-
-    /**
-     * A particle effect which is currently unused:
-     * <ul>
-     * <li>It looks like a tiny white cloud
-     * <li>The speed value influences the velocity at which the particle flies off
-     * <li>This was removed as of 1.13
-     * </ul>
-     */
-    SNOW_SHOVEL("", "snowshovel", -1, 32, -1),
-
-    /**
-     * A particle effect which is displayed by air when close to bedrock and the in the void:
-     * <ul>
-     * <li>It looks like a tiny gray square
-     * <li>The speed value has no influence on this particle effect
-     * <li>Removed as of 1.13
-     * </ul>
-     */
-    SUSPENDED_DEPTH("", "depthSuspend", -1, 8, -1),
     ;
 
     private static final int LONG_DISTANCE = 16;
