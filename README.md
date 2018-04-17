@@ -12,25 +12,15 @@ Find more information on [BukkitForums] [forum] or [BukkitDev] [dev]!
 
 Note that **this library** is no standalone plugin! You have to **create yourself a plugin** to run the effects!
 
-Tech
------------
-
-EffectLib uses some third party libraries from other Bukkit developers.
-  
-  - [ParticleEffect v1.6] [particleeffect]
-  - [ReflectionUtils v1.1] [reflectionhandler]
-
 
 License
 ----
 
 MIT
 
-
 **Free Software, Hell Yeah!**
 
 [dev]:http://dev.bukkit.org/bukkit-plugins/effectlib/
 [forum]:http://forums.bukkit.org/threads/effectlib-manage-your-effects-the-nice-way-text-in-particles.259879/
-[particleeffect]:https://gist.github.com/DarkBlade12/5868517
-[reflectionhandler]:https://gist.github.com/DarkBlade12/8832875
+
     
