@@ -2,53 +2,43 @@ package de.slikey.effectlib.util;
 
 import java.util.List;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.entity.Player;
 
+import de.slikey.effectlib.util.versions.ParticleDisplay_12;
+import de.slikey.effectlib.util.versions.ParticleDisplay_13;
+
 public class ParticleUtils {
+    private static ParticleDisplay display;
+
+    private static ParticleDisplay getDisplay() {
+        if (display == null) {
+            try {
+               Particle.valueOf("SQUID_INK");
+               display = new ParticleDisplay_13();
+            } catch (Throwable not13) {
+               display = new ParticleDisplay_12();
+            }
+        }
+
+        return display;
+    }
+
     public static void display(Particle particle, Location center, Color color, double range) {
-        display(particle, center, 0, 0, 0, 0, 0, color, null, range);
+        display(particle, center, 0, 0, 0, 0, 0, color, null, range, null);
     }
 
     public static void display(Particle particle, Location center, float offsetX, float offsetY, float offsetZ, float speed, int amount, Color color, Material material, double range) {
-        display(particle, center, offsetX, offsetY, offsetZ, speed, amount, color, material, range);
+        display(particle, center, offsetX, offsetY, offsetZ, speed, amount, color, material, range, null);
+    }
+    public static void display(Particle particle, Location center, float offsetX, float offsetY, float offsetZ, float speed, int amount, Color color, Material material, double range, List<Player> targetPlayers) {
+        display(particle, center, offsetX, offsetY, offsetZ, speed, amount, 1, color, material, (byte)0, range, targetPlayers);
     }
 
-    public static void display(Particle particle, Location center, float offsetX, float offsetY, float offsetZ, float speed, int amount, Color color, Material material, double range, List<Player> targetPlayers) {
-        // Colorizeable!
-        if (color != null && (particle == Particle.REDSTONE || particle == Particle.SPELL_MOB || particle == Particle.SPELL_MOB_AMBIENT)) {
-            amount = 0;
-            // Colored particles can't have a speed of 0.
-            if (speed == 0) {
-                speed = 1;
-            }
-            offsetX = (float) color.getRed() / 255;
-            offsetY = (float) color.getGreen() / 255;
-            offsetZ = (float) color.getBlue() / 255;
-
-            // The redstone particle reverts to red if R is 0!
-            if (offsetX < Float.MIN_NORMAL) {
-                offsetX = Float.MIN_NORMAL;
-            }
-        }
-
-        if (targetPlayers == null) {
-            String worldName = center.getWorld().getName();
-            double squared = range * range;
-            for (Player player : Bukkit.getOnlinePlayers()) {
-                if (!player.getWorld().getName().equals(worldName) || player.getLocation().distanceSquared(center) > squared) {
-                    continue;
-                }
-                player.spawnParticle(particle, center, amount, offsetX, offsetY, offsetZ, speed, material);
-            }
-        } else {
-            for (Player player : targetPlayers) {
-                player.spawnParticle(particle, center, amount, offsetX, offsetY, offsetZ, speed, material);
-            }
-        }
+    public static void display(Particle particle, Location center, float offsetX, float offsetY, float offsetZ, float speed, int amount, float size, Color color, Material material, byte materialData, double range, List<Player> targetPlayers) {
+        getDisplay().display(particle, center, offsetX, offsetY, offsetZ, speed, amount, size, color, material, materialData, range, targetPlayers);
     }
 }
