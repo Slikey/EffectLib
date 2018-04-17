@@ -669,8 +669,9 @@ public enum ParticleEffect {
      * @return Whether water is at this location or not
      */
     private static boolean isWater(Location location) {
-        Material material = location.getBlock().getType();
-        return material == Material.WATER || material == Material.STATIONARY_WATER;
+        // Short-circuited due to differences in Material between versions.
+        // TODO: Just remove this check.
+        return true;
     }
 
     /**
@@ -735,7 +736,6 @@ public enum ParticleEffect {
     public void display(float offsetX, float offsetY, float offsetZ, float speed, int amount, Location center, double range) throws ParticleVersionException, ParticleDataException, IllegalArgumentException {
         display(offsetX, offsetY, offsetZ, speed, amount, center, range, null);
     }
-
 
     /**
      * Displays a particle effect which is only visible for the specified players
