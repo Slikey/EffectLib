@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>de.slikey</groupId>
     <artifactId>EffectLib</artifactId>
-    <version>5.10-SNAPSHOT</version>
+    <version>6.0-SNAPSHOT</version>
 
     <name>EffectLib</name>
     <url>http://www.kevin-carstens.de/</url>
@@ -48,7 +48,10 @@
         <dependency>
             <groupId>org.bukkit</groupId>
             <artifactId>bukkit</artifactId>
+            <version>18w15a-R0.1-SNAPSHOT</version>
+            <!-- for testing backwards-compat
             <version>1.9-R0.1-SNAPSHOT</version>
+            -->
             <scope>provided</scope>
         </dependency>
         <dependency>
