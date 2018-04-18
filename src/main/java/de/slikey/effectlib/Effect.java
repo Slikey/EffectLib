@@ -147,6 +147,13 @@ public abstract class Effect implements Runnable {
     public float particleOffsetZ = 0;
 
     /**
+     * This can be used to scale up or down a particle's size.
+     *
+     * This currently only works with the redstone particle in 1.13 and up.
+     */
+    public float particleSize = 1;
+
+    /**
      * If set, will run asynchronously.
      * Some effects don't support this (TurnEffect, JumpEffect)
      *
@@ -408,11 +415,7 @@ public abstract class Effect implements Runnable {
             targetPlayers = new ArrayList<Player>();
             targetPlayers.add(targetPlayer);
         }
-        display(particle, location, particleOffsetX, particleOffsetY, particleOffsetZ, speed, amount, color, material, materialData, visibleRange, targetPlayers);
-    }
-
-    public void display(Particle particle, Location center, float offsetX, float offsetY, float offsetZ, float speed, int amount, Color color, Material material, byte materialData, double range, List<Player> targetPlayers) {
-        effectManager.display(particle, center, offsetX, offsetY, offsetZ, speed, amount, 1, color, material, materialData, range, targetPlayers);
+        effectManager.display(particle, location, particleOffsetX, particleOffsetY, particleOffsetZ, speed, amount, particleSize, color, material, materialData, visibleRange, targetPlayers);
     }
 
     private void done() {
