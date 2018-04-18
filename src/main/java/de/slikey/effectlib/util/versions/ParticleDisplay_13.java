@@ -20,7 +20,7 @@ public class ParticleDisplay_13 extends ParticleDisplay {
         }
 
         if (particle == Particle.ITEM_CRACK) {
-            displayItem(particle, center, offsetX, offsetY, offsetZ, speed, amount, material, range, targetPlayers);
+            displayItem(particle, center, offsetX, offsetY, offsetZ, speed, amount, material, materialData, range, targetPlayers);
         }
 
         Object data = null;
@@ -35,6 +35,6 @@ public class ParticleDisplay_13 extends ParticleDisplay {
             data = new Particle.DustOptions(color, size);
         }
 
-        display(particle, center, offsetX, offsetY, offsetZ, speed, amount, null, range, targetPlayers);
+        display(particle, center, offsetX, offsetY, offsetZ, speed, amount, data, range, targetPlayers);
     }
 }

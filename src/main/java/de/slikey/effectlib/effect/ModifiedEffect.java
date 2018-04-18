@@ -127,6 +127,7 @@ public class ModifiedEffect extends Effect {
                 return;
             }
             innerEffect.material = material;
+            innerEffect.materialData = materialData;
             for (Map.Entry<String, String> entry : parameters.entrySet()) {
                 String equation = entry.getValue();
                 String fieldName = entry.getKey();

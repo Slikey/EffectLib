@@ -30,12 +30,13 @@ public abstract class ParticleDisplay {
         }
     }
 
-    protected void displayItem(Particle particle, Location center, float offsetX, float offsetY, float offsetZ, float speed, int amount, Material material, double range, List<Player> targetPlayers) {
+    protected void displayItem(Particle particle, Location center, float offsetX, float offsetY, float offsetZ, float speed, int amount, Material material, byte materialData, double range, List<Player> targetPlayers) {
         if (material == null || material == Material.AIR) {
             return;
         }
 
         ItemStack item = new ItemStack(material);
+        item.setDurability(materialData);
         display(particle, center, offsetX, offsetY, offsetZ, speed, amount, item, range, targetPlayers);
     }
 

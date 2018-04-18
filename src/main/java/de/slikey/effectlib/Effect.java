@@ -130,7 +130,7 @@ public abstract class Effect implements Runnable {
      * The Material and data to use for block and item break particles
      */
     public Material material;
-    public Byte materialData;
+    public byte materialData;
 
     /**
      * These can be used to spawn multiple particles per packet.
@@ -415,7 +415,8 @@ public abstract class Effect implements Runnable {
             targetPlayers = new ArrayList<Player>();
             targetPlayers.add(targetPlayer);
         }
-        effectManager.display(particle, location, particleOffsetX, particleOffsetY, particleOffsetZ, speed, amount, particleSize, color, material, materialData, visibleRange, targetPlayers);
+        effectManager.display(particle, location, particleOffsetX, particleOffsetY, particleOffsetZ, speed, amount,
+                particleSize, color, material, materialData, visibleRange, targetPlayers);
     }
 
     private void done() {
