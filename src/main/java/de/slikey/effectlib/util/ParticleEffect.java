@@ -3,11 +3,14 @@ package de.slikey.effectlib.util;
 import java.util.Arrays;
 import java.util.List;
 
+import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
+
+import de.slikey.effectlib.EffectManager;
 
 /**
  * <b>ParticleEffect Enum</b>
@@ -500,6 +503,7 @@ public enum ParticleEffect {
     ;
 
     private Particle particle;
+    private static EffectManager effectManager;
 
     ParticleEffect() {
         try {
@@ -507,6 +511,10 @@ public enum ParticleEffect {
         } catch (Exception ex) {
             particle = null;
         }
+    }
+    
+    public static void setEffectManager(EffectManager manager) {
+        effectManager = manager;
     }
 
     /**
@@ -536,7 +544,7 @@ public enum ParticleEffect {
             throw new ParticleVersionException("The " + this + " particle effect is not supported by your server version.");
         }
 
-        ParticleUtils.display(particle, center, offsetX, offsetY, offsetZ, speed, amount, range, targetPlayers);
+        display(particle, center, offsetX, offsetY, offsetZ, speed, amount, 1, null, null, (byte)0, range, targetPlayers);
     }
 
     public void display(float offsetX, float offsetY, float offsetZ, float speed, int amount, Location center, double range) throws ParticleVersionException {
@@ -559,7 +567,7 @@ public enum ParticleEffect {
         if (!isSupported()) {
             throw new ParticleVersionException("The " + this + " particle effect is not supported by your server version.");
         }
-        ParticleUtils.display(particle, center, offsetX, offsetY, offsetZ, speed, amount, 0, players);
+        display(particle, center, offsetX, offsetY, offsetZ, speed, amount, 1, null, null, (byte)0, 0, players);
     }
 
     /**
@@ -593,7 +601,8 @@ public enum ParticleEffect {
             throw new ParticleVersionException("The " + this + " particle effect is not supported by your server version.");
         }
 
-        ParticleUtils.display(particle, center, (float)direction.getX(), (float)direction.getY(), (float)direction.getZ(), speed, 1, range, null);
+        display(particle, center, (float)direction.getX(), (float)direction.getY(), (float)direction.getZ(),
+                speed, 1, 1, null, null, (byte)0, range, null);
     }
 
     /**
@@ -610,7 +619,8 @@ public enum ParticleEffect {
             throw new ParticleVersionException("The " + this + " particle effect is not supported by your server version.");
         }
 
-        ParticleUtils.display(particle, center, (float)direction.getX(), (float)direction.getY(), (float)direction.getZ(), speed, 1, 0, players);
+        display(particle, center, (float)direction.getX(), (float)direction.getY(), (float)direction.getZ(),
+                speed, 1, 1, null, null, (byte)0, 0, players);
     }
 
     /**
@@ -653,7 +663,7 @@ public enum ParticleEffect {
             materialData = data.data;
         }
 
-        ParticleUtils.display(particle, center, offsetX, offsetY, offsetZ, speed, amount, material, materialData, range, targetPlayers);
+        display(particle, center, offsetX, offsetY, offsetZ, speed, amount, 1, null, material, materialData, range, targetPlayers);
     }
 
     public void display(ParticleData data, float offsetX, float offsetY, float offsetZ, float speed, int amount, Location center, double range) throws ParticleVersionException, ParticleDataException {
@@ -684,7 +694,7 @@ public enum ParticleEffect {
             material = data.material;
             materialData = data.data;
         }
-        ParticleUtils.display(particle, center, offsetX, offsetY, offsetZ, speed, amount, material, materialData, 0, players);
+        display(particle, center, offsetX, offsetY, offsetZ, speed, amount, 1, null, material, materialData, 0, players);
     }
 
     /**
@@ -725,7 +735,8 @@ public enum ParticleEffect {
             material = data.material;
             materialData = data.data;
         }
-        ParticleUtils.display(particle, center, (float)direction.getX(), (float)direction.getY(), (float)direction.getZ(), speed, 1, material, materialData, range, null);
+        display(particle, center, (float)direction.getX(), (float)direction.getY(), (float)direction.getZ(),
+                speed, 1, 1, null, material, materialData, range, null);
     }
 
     /**
@@ -749,7 +760,8 @@ public enum ParticleEffect {
             material = data.material;
             materialData = data.data;
         }
-        ParticleUtils.display(particle, center, (float)direction.getX(), (float)direction.getY(), (float)direction.getZ(), speed, 1, material, materialData, 0, players);
+        display(particle, center, (float)direction.getX(), (float)direction.getY(), (float)direction.getZ(),
+                speed, 1, 1, null, material, materialData, 0, players);
     }
 
     /**
@@ -764,6 +776,32 @@ public enum ParticleEffect {
      */
     public void display(ParticleData data, Vector direction, float speed, Location center, Player... players) throws ParticleVersionException, ParticleDataException {
         display(data, direction, speed, center, Arrays.asList(players));
+    }
+
+    public void display(Location center, Color color, double range) {
+        display(null, center, color, range, 0, 0, 0, 1, 0);
+    }
+
+    public void display(ParticleData data, Location center, Color color, double range, float offsetX, float offsetY, float offsetZ, float speed, int amount) {
+        display(data, center, color, range, offsetX, offsetY, offsetZ, speed, amount, null);
+    }
+
+    public void display(ParticleData data, Location center, Color color, double range, float offsetX, float offsetY, float offsetZ, float speed, int amount, List<Player> targetPlayers) {
+        Material material = null;
+        byte materialData = 0;
+        if (data != null) {
+            material = data.material;
+            materialData = data.data;
+        }
+        display(particle, center, offsetX, offsetY, offsetZ, speed, amount, 1, color, material, materialData, range, targetPlayers);
+    }
+
+    public void display(Particle particle, Location center, float offsetX, float offsetY, float offsetZ, float speed, int amount, float size, Color color, Material material, byte materialData, double range, List<Player> targetPlayers) {
+        if (effectManager == null) {
+            throw new IllegalStateException("EffectManager is not initialized");
+        }
+
+        effectManager.display(particle, center, offsetX, offsetY, offsetZ, speed, amount, size, color, material, materialData, range, targetPlayers);
     }
 
     /**

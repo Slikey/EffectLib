@@ -1,7 +1,6 @@
 package de.slikey.effectlib;
 
 import de.slikey.effectlib.util.DynamicLocation;
-import de.slikey.effectlib.util.ParticleUtils;
 
 import org.bukkit.Particle;
 import org.bukkit.Color;
@@ -412,8 +411,8 @@ public abstract class Effect implements Runnable {
         display(particle, location, particleOffsetX, particleOffsetY, particleOffsetZ, speed, amount, color, material, materialData, visibleRange, targetPlayers);
     }
 
-    public static void display(Particle particle, Location center, float offsetX, float offsetY, float offsetZ, float speed, int amount, Color color, Material material, byte materialData, double range, List<Player> targetPlayers) {
-        ParticleUtils.display(particle, center, offsetX, offsetY, offsetZ, speed, amount, color, material, materialData, range, targetPlayers);
+    public void display(Particle particle, Location center, float offsetX, float offsetY, float offsetZ, float speed, int amount, Color color, Material material, byte materialData, double range, List<Player> targetPlayers) {
+        effectManager.display(particle, center, offsetX, offsetY, offsetZ, speed, amount, 1, color, material, materialData, range, targetPlayers);
     }
 
     private void done() {

@@ -6,9 +6,15 @@ import de.slikey.effectlib.util.Disposable;
 import de.slikey.effectlib.util.DynamicLocation;
 import de.slikey.effectlib.util.ImageLoadCallback;
 import de.slikey.effectlib.util.ImageLoadTask;
+import de.slikey.effectlib.util.ParticleDisplay;
+import de.slikey.effectlib.util.versions.ParticleDisplay_12;
+import de.slikey.effectlib.util.versions.ParticleDisplay_13;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.Particle;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.MemoryConfiguration;
 import org.bukkit.entity.Entity;
@@ -47,6 +53,7 @@ public class EffectManager implements Disposable {
     private static Map<String, Class<? extends Effect>> effectClasses = new HashMap<String, Class<? extends Effect>>();
     private final Plugin owningPlugin;
     private final Map<Effect, BukkitTask> effects;
+    private ParticleDisplay display;
     private boolean disposed;
     private boolean disposeOnTermination;
     private boolean debug = false;
@@ -61,6 +68,23 @@ public class EffectManager implements Disposable {
         effects = new HashMap<Effect, BukkitTask>();
         disposed = false;
         disposeOnTermination = false;
+    }
+
+    private ParticleDisplay getDisplay() {
+        if (display == null) {
+            try {
+               Particle.valueOf("SQUID_INK");
+               display = new ParticleDisplay_13();
+            } catch (Throwable not13) {
+               display = new ParticleDisplay_12();
+            }
+        }
+
+        return display;
+    }
+
+    public void display(Particle particle, Location center, float offsetX, float offsetY, float offsetZ, float speed, int amount, float size, Color color, Material material, byte materialData, double range, List<Player> targetPlayers) {
+        getDisplay().display(particle, center, offsetX, offsetY, offsetZ, speed, amount, size, color, material, materialData, range, targetPlayers);
     }
 
     public void start(Effect effect) {

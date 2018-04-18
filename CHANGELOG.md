@@ -1,8 +1,10 @@
 # CHANGELOG
 
-# 5.10
+# 6.0
 
  - 1.13 Support
+ - ParticleEffect has been deprecated, use the Spigot Particle API enum instead
+ - EffectManager.display helper method available to handle colors, items and blocks in a version-independent way
 
 # 5.9
 
