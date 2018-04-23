@@ -21,6 +21,7 @@ public class ParticleDisplay_13 extends ParticleDisplay {
 
         if (particle == Particle.ITEM_CRACK) {
             displayItem(particle, center, offsetX, offsetY, offsetZ, speed, amount, material, materialData, range, targetPlayers);
+            return;
         }
 
         Object data = null;
