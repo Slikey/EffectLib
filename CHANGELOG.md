@@ -3,7 +3,7 @@
 # 6.0
 
  - Plugins that interact directly with Effect properties may need to be rebuilt! Configuration-based plugins should be OK.
- - Added 1.13 Support
+ - Added 1.13 Support (maybe)
  - ParticleEffect has been deprecated, use the Spigot Particle API enum instead
  - EffectManager.display helper method available to handle colors, items and blocks in a version-independent way
  - Effect.materialData changed from Byte to byte
