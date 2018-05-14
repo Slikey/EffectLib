@@ -144,7 +144,7 @@ public class EffectManager implements Disposable {
     }
 
     public Effect start(String effectClass, ConfigurationSection parameters, Location origin, Player targetPlayer){
-        return start(effectClass, parameters, new DynamicLocation(origin, null), new DynamicLocation(null, null), null, targetPlayer);
+        return start(effectClass, parameters, new DynamicLocation(origin, null), new DynamicLocation(null, null), (ConfigurationSection)null, targetPlayer);
     }
 
     /**
@@ -159,6 +159,7 @@ public class EffectManager implements Disposable {
      * @param parameterMap A map of parameter values to replace. These must start with the "$" character, values in the parameters map that contain a $key will be replaced with the value in this parameterMap.
      * @return
      */
+    @Deprecated
     public Effect start(String effectClass, ConfigurationSection parameters, Location origin, Location target, Entity originEntity, Entity targetEntity, Map<String, String> parameterMap) {
         return start(effectClass, parameters, new DynamicLocation(origin, originEntity), new DynamicLocation(target, targetEntity), parameterMap);
     }
@@ -173,7 +174,7 @@ public class EffectManager implements Disposable {
      * @param parameterMap A map of parameter values to replace. These must start with the "$" character, values in the parameters map that contain a $key will be replaced with the value in this parameterMap.
      * @return
      */
-
+    @Deprecated
     public Effect start(String effectClass, ConfigurationSection parameters, DynamicLocation origin, DynamicLocation target, Map<String, String> parameterMap) {
         return start(effectClass, parameters, origin, target, parameterMap, null);
     }
@@ -212,7 +213,7 @@ public class EffectManager implements Disposable {
         return effect;
     }
 
-    public Effect getEffect(String effectClass, ConfigurationSection parameters, DynamicLocation origin, DynamicLocation target, Map<String, String> parameterMap, Player targetPlayer) {
+    public Effect getEffect(String effectClass, ConfigurationSection parameters, DynamicLocation origin, DynamicLocation target, ConfigurationSection parameterMap, Player targetPlayer) {
         Effect effect = getEffectByClassName(effectClass);
         if (effect == null) {
             return null;
@@ -238,7 +239,28 @@ public class EffectManager implements Disposable {
         return effect;
     }
 
+    @Deprecated
     public Effect start(String effectClass, ConfigurationSection parameters, DynamicLocation origin, DynamicLocation target, Map<String, String> parameterMap, Player targetPlayer) {
+        ConfigurationSection configMap = null;
+        if (parameterMap != null) {
+            configMap = ConfigUtils.toStringConfiguration(parameterMap);
+        }
+
+        return start(effectClass, parameters, origin, target, configMap, targetPlayer);
+    }
+
+    /**
+     * Start an effect, possibly using parameter replacement.
+     *
+     * @param effectClass the effect class to start
+     * @param parameters any parameters to pass to the effect
+     * @param origin the origin location
+     * @param target the target location
+     * @param parameterMap a configuration of variables from the parameter config to replace
+     * @param targetPlayer The player who should see this effect.
+     * @return
+     */
+    public Effect start(String effectClass, ConfigurationSection parameters, DynamicLocation origin, DynamicLocation target, ConfigurationSection parameterMap, Player targetPlayer) {
         Effect effect = getEffect(effectClass, parameters, origin, target, parameterMap, targetPlayer);
         if (effect == null) {
             return null;
@@ -327,9 +349,9 @@ public class EffectManager implements Disposable {
         return owningPlugin;
     }
 
-    protected boolean setField(Object effect, String key, ConfigurationSection section, Map<String, String> parameterMap) {
+    protected boolean setField(Object effect, String key, ConfigurationSection section, ConfigurationSection parameterMap) {
         try {
-            String value = section.getString(key);
+            String stringValue = section.getString(key);
 
             // Allow underscore_style and dash_style parameters
             if (key.contains("-")) {
@@ -339,29 +361,33 @@ public class EffectManager implements Disposable {
                 key = CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, key);
             }
 
-            if (parameterMap != null && !parameterMap.isEmpty() && value.startsWith("$")) {
-                String parameterValue = parameterMap.get(value);
-                value = parameterValue == null ? value : parameterValue;
+            String fieldKey = key;
+            ConfigurationSection fieldSection = section;
+            if (parameterMap != null && stringValue.startsWith("$") && parameterMap.contains(stringValue)) {
+                fieldKey = stringValue;
+                fieldSection = parameterMap;
             }
             Field field = effect.getClass().getField(key);
             if (field.getType().equals(Integer.TYPE) || field.getType().equals(Integer.class)) {
-                field.set(effect, NumberConversions.toInt(value));
+                field.set(effect, fieldSection.getInt(fieldKey));
             } else if (field.getType().equals(Float.TYPE) || field.getType().equals(Float.class)) {
-                field.set(effect, NumberConversions.toFloat(value));
+                field.set(effect, (float)fieldSection.getDouble(fieldKey));
             } else if (field.getType().equals(Double.TYPE) || field.getType().equals(Double.class)) {
-                field.set(effect, NumberConversions.toDouble(value));
+                field.set(effect, fieldSection.getDouble(fieldKey));
             } else if (field.getType().equals(Boolean.TYPE) || field.getType().equals(Boolean.class)) {
-                field.set(effect, value.equalsIgnoreCase("true"));
+                field.set(effect, fieldSection.getBoolean(fieldKey));
             } else if (field.getType().equals(Long.TYPE) || field.getType().equals(Long.class)) {
-                field.set(effect, NumberConversions.toLong(value));
+                field.set(effect, fieldSection.getLong(fieldKey));
             } else if (field.getType().equals(Short.TYPE) || field.getType().equals(Short.class)) {
-                field.set(effect, NumberConversions.toShort(value));
+                field.set(effect, (short)fieldSection.getInt(fieldKey));
             } else if (field.getType().equals(Byte.TYPE) || field.getType().equals(Byte.class)) {
-                field.set(effect, NumberConversions.toByte(value));
+                field.set(effect, (byte)fieldSection.getInt(fieldKey));
             } else if (field.getType().equals(String.class)) {
+                String value = fieldSection.getString(fieldKey);
                 field.set(effect, value);
             } else if (field.getType().equals(Color.class)) {
                 try {
+                    String value = fieldSection.getString(fieldKey);
                     Integer rgb = Integer.parseInt(value, 16);
                     Color color = Color.fromRGB(rgb);
                     field.set(effect, color);
@@ -379,15 +405,16 @@ public class EffectManager implements Disposable {
                 field.set(effect, section.get(key));
             } else if (ConfigurationSection.class.isAssignableFrom(field.getType())) {
                 ConfigurationSection configSection = ConfigUtils.getConfigurationSection(section, key);
-                if (parameterMap != null && !parameterMap.isEmpty()) {
+                if (parameterMap != null) {
                     ConfigurationSection baseConfiguration = configSection;
                     configSection = new MemoryConfiguration();
                     Set<String> keys = baseConfiguration.getKeys(false);
                     // Note this doesn't handle sections within sections.
                     for (String baseKey : keys) {
-                        Object baseValue = baseConfiguration.get(baseKey);
-                        if (baseValue instanceof String && ((String)baseValue).startsWith("$")) {
-                            String parameterValue = parameterMap.get(baseValue);
+                        String baseValue = baseConfiguration.getString(baseKey);
+                        if (baseValue.startsWith("$")) {
+                            // If this is an equation it will get parsed when needed
+                            String parameterValue = parameterMap.getString(baseValue);
                             baseValue = parameterValue == null ? baseValue : parameterValue;
                         }
                         configSection.set(baseKey, baseValue);
@@ -399,6 +426,7 @@ public class EffectManager implements Disposable {
                 double y = 0;
                 double z = 0;
                 try {
+                    String value = fieldSection.getString(fieldKey);
                     String[] pieces = value.split(",");
                     x = pieces.length > 0 ? Double.parseDouble(pieces[0]) : 0;
                     y = pieces.length > 1 ? Double.parseDouble(pieces[1]) : 0;
@@ -410,6 +438,7 @@ public class EffectManager implements Disposable {
             } else if (field.getType().isEnum()) {
                 Class<Enum> enumType = (Class<Enum>)field.getType();
                 try {
+                    String value = fieldSection.getString(fieldKey);
                     Enum enumValue = Enum.valueOf(enumType, value.toUpperCase());
                     field.set(effect, enumValue);
                 } catch (Exception ex) {
@@ -419,6 +448,7 @@ public class EffectManager implements Disposable {
                 try {
                     // Should caching the fonts be considered?
                     // Or is the performance gain negligible?
+                    String value = fieldSection.getString(fieldKey);
                     Font font = Font.decode(value);
                     field.set(effect, font);
                 } catch (Exception ex) {

@@ -33,6 +33,19 @@ public class ConfigUtils {
         return newSection;
     }
 
+    public static ConfigurationSection toStringConfiguration(Map<String, String> stringMap) {
+        if (stringMap == null) {
+            return null;
+        }
+        ConfigurationSection configMap = new MemoryConfiguration();
+        for (Map.Entry<String, String> entry : stringMap.entrySet()) {
+            configMap.set(entry.getKey(), entry.getValue());
+        }
+
+        return configMap;
+    }
+
+
     public static void set(ConfigurationSection node, String path, Object value)
     {
         if (value == null) {
