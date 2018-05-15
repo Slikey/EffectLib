@@ -5,10 +5,9 @@ import java.util.Map;
 import java.util.Set;
 
 public class EquationStore {
+    private static final String DEFAULT_VARIABLE = "x";
     private static EquationStore instance;
     private Map<String, EquationTransform> transforms = new HashMap<String, EquationTransform>();
-
-    public static final String DEFAULT_VARIABLE = "x";
 
     public EquationTransform getTransform(String equation) {
         return getTransform(equation, DEFAULT_VARIABLE);
@@ -42,6 +41,12 @@ public class EquationStore {
         }
         
         return transform;
+    }
+
+    public static void clear() {
+        if (instance != null) {
+            instance.transforms.clear();
+        }
     }
     
     public static EquationStore getInstance() {
