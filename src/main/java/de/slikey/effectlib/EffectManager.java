@@ -352,6 +352,7 @@ public class EffectManager implements Disposable {
     protected boolean setField(Object effect, String key, ConfigurationSection section, ConfigurationSection parameterMap) {
         try {
             String stringValue = section.getString(key);
+            String fieldKey = key;
 
             // Allow underscore_style and dash_style parameters
             if (key.contains("-")) {
@@ -361,7 +362,6 @@ public class EffectManager implements Disposable {
                 key = CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, key);
             }
 
-            String fieldKey = key;
             ConfigurationSection fieldSection = section;
             if (parameterMap != null && stringValue.startsWith("$") && parameterMap.contains(stringValue)) {
                 fieldKey = stringValue;
@@ -411,10 +411,10 @@ public class EffectManager implements Disposable {
                     Set<String> keys = baseConfiguration.getKeys(false);
                     // Note this doesn't handle sections within sections.
                     for (String baseKey : keys) {
-                        String baseValue = baseConfiguration.getString(baseKey);
-                        if (baseValue.startsWith("$")) {
+                        Object baseValue = baseConfiguration.get(baseKey);
+                        if (baseValue instanceof String && ((String)baseValue).startsWith("$")) {
                             // If this is an equation it will get parsed when needed
-                            String parameterValue = parameterMap.getString(baseValue);
+                            String parameterValue = parameterMap.getString((String)baseValue);
                             baseValue = parameterValue == null ? baseValue : parameterValue;
                         }
                         configSection.set(baseKey, baseValue);
