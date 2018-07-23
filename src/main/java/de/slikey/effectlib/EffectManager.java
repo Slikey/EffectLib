@@ -78,6 +78,7 @@ public class EffectManager implements Disposable {
             } catch (Throwable not13) {
                display = new ParticleDisplay_12();
             }
+            display.setManager(this);
         }
 
         return display;

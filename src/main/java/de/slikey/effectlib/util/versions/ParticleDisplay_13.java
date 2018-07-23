@@ -25,14 +25,21 @@ public class ParticleDisplay_13 extends ParticleDisplay {
         }
 
         Object data = null;
-        if (particle == Particle.BLOCK_CRACK || particle == Particle.BLOCK_DUST || particle.name().equals("FALLING_DUST")) {
+        if (particle == Particle.BLOCK_CRACK || particle == Particle.BLOCK_DUST || particle == Particle.FALLING_DUST) {
             if (material == null || material == Material.AIR) {
                 return;
             }
             data = material.createBlockData();
+            if (data == null) {
+                return;
+            }
         }
 
         if (particle == Particle.REDSTONE) {
+            // color is required for 1.13
+            if (color == null) {
+                color = Color.RED;
+            }
             data = new Particle.DustOptions(color, size);
         }
 

@@ -10,22 +10,32 @@ import org.bukkit.Particle;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import de.slikey.effectlib.EffectManager;
+
 public abstract class ParticleDisplay {
+    private EffectManager manager;
+
     public abstract void display(Particle particle, Location center, float offsetX, float offsetY, float offsetZ, float speed, int amount, float size, Color color, Material material, byte materialData, double range, List<Player> targetPlayers);
 
     protected void display(Particle particle, Location center, float offsetX, float offsetY, float offsetZ, float speed, int amount, Object data, double range, List<Player> targetPlayers) {
-        if (targetPlayers == null) {
-            String worldName = center.getWorld().getName();
-            double squared = range * range;
-            for (Player player : Bukkit.getOnlinePlayers()) {
-                if (!player.getWorld().getName().equals(worldName) || player.getLocation().distanceSquared(center) > squared) {
-                    continue;
+        try {
+            if (targetPlayers == null) {
+                String worldName = center.getWorld().getName();
+                double squared = range * range;
+                for (Player player : Bukkit.getOnlinePlayers()) {
+                    if (!player.getWorld().getName().equals(worldName) || player.getLocation().distanceSquared(center) > squared) {
+                        continue;
+                    }
+                    player.spawnParticle(particle, center, amount, offsetX, offsetY, offsetZ, speed, data);
                 }
-                player.spawnParticle(particle, center, amount, offsetX, offsetY, offsetZ, speed, data);
+            } else {
+                for (Player player : targetPlayers) {
+                    player.spawnParticle(particle, center, amount, offsetX, offsetY, offsetZ, speed, data);
+                }
             }
-        } else {
-            for (Player player : targetPlayers) {
-                player.spawnParticle(particle, center, amount, offsetX, offsetY, offsetZ, speed, data);
+        } catch (Exception ex) {
+            if (manager != null) {
+                manager.onError(ex);
             }
         }
     }
@@ -56,5 +66,9 @@ public abstract class ParticleDisplay {
         }
 
         display(particle, center, offsetX, offsetY, offsetZ, speed, amount, null, range, targetPlayers);
+    }
+
+    public void setManager(EffectManager manager) {
+        this.manager = manager;
     }
 }

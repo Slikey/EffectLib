@@ -2,6 +2,8 @@
 
 # 6.1
 
+ - Fix redstone particles with no color specified (color is required for 1.13, defaults to red now)
+
 # 6.0
 
  - Plugins that interact directly with Effect properties may need to be rebuilt! Configuration-based plugins should be OK.
