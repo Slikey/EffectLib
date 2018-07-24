@@ -3,6 +3,7 @@
 # 6.1
 
  - Fix redstone particles with no color specified (color is required for 1.13, defaults to red now)
+ - Fix offset/relativeOffset used via API 
 
 # 6.0
 
