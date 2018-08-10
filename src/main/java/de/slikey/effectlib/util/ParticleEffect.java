@@ -12,8 +12,6 @@ import org.bukkit.Particle;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
-import de.slikey.effectlib.EffectManager;
-
 /**
  * <b>ParticleEffect Enum</b>
  * <p>
@@ -507,7 +505,7 @@ public enum ParticleEffect {
     private Particle particle;
     private final String name;
 
-    private static EffectManager effectManager;
+    private static ParticleDisplay display;
     private static final Map<String, ParticleEffect> NAME_MAP = new HashMap<String, ParticleEffect>();
 
     // Initialize map for quick name and id lookup
@@ -515,10 +513,6 @@ public enum ParticleEffect {
         for (ParticleEffect effect : values()) {
             NAME_MAP.put(effect.name, effect);
         }
-    }
-    
-    public static void setEffectManager(EffectManager manager) {
-        effectManager = manager;
     }
 
     ParticleEffect(String name) {
@@ -827,11 +821,11 @@ public enum ParticleEffect {
     }
 
     public void display(Particle particle, Location center, float offsetX, float offsetY, float offsetZ, float speed, int amount, float size, Color color, Material material, byte materialData, double range, List<Player> targetPlayers) {
-        if (effectManager == null) {
-            throw new IllegalStateException("EffectManager is not initialized");
+        if (display == null) {
+            display = ParticleDisplay.newInstance();
         }
 
-        effectManager.display(particle, center, offsetX, offsetY, offsetZ, speed, amount, size, color, material, materialData, range, targetPlayers);
+        display.display(particle, center, offsetX, offsetY, offsetZ, speed, amount, size, color, material, materialData, range, targetPlayers);
     }
 
     /**

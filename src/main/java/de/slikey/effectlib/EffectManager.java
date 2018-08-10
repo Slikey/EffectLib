@@ -7,8 +7,6 @@ import de.slikey.effectlib.util.DynamicLocation;
 import de.slikey.effectlib.util.ImageLoadCallback;
 import de.slikey.effectlib.util.ImageLoadTask;
 import de.slikey.effectlib.util.ParticleDisplay;
-import de.slikey.effectlib.util.versions.ParticleDisplay_12;
-import de.slikey.effectlib.util.versions.ParticleDisplay_13;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
@@ -22,7 +20,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.scheduler.BukkitTask;
-import org.bukkit.util.NumberConversions;
 import org.bukkit.util.Vector;
 
 import java.awt.Font;
@@ -72,14 +69,9 @@ public class EffectManager implements Disposable {
 
     private ParticleDisplay getDisplay() {
         if (display == null) {
-            try {
-               Particle.valueOf("SQUID_INK");
-               display = new ParticleDisplay_13();
-            } catch (Throwable not13) {
-               display = new ParticleDisplay_12();
-            }
-            display.setManager(this);
+            display = ParticleDisplay.newInstance();
         }
+        display.setManager(this);
 
         return display;
     }

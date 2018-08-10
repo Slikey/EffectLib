@@ -11,6 +11,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import de.slikey.effectlib.EffectManager;
+import de.slikey.effectlib.util.versions.ParticleDisplay_12;
+import de.slikey.effectlib.util.versions.ParticleDisplay_13;
 
 public abstract class ParticleDisplay {
     private EffectManager manager;
@@ -70,5 +72,16 @@ public abstract class ParticleDisplay {
 
     public void setManager(EffectManager manager) {
         this.manager = manager;
+    }
+
+    public static ParticleDisplay newInstance() {
+        ParticleDisplay display;
+        try {
+           Particle.valueOf("SQUID_INK");
+           display = new ParticleDisplay_13();
+        } catch (Throwable not13) {
+           display = new ParticleDisplay_12();
+        }
+        return display;
     }
 }
