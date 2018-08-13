@@ -2,6 +2,8 @@
 
 # 6.2
 
+ - Some specific internal FX fixes (please let me know if any effects look weird now)
+
 # 6.1
 
  - Fix redstone particles with no color specified (color is required for 1.13, defaults to red now)
