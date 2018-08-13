@@ -1,5 +1,7 @@
 # CHANGELOG
 
+# 6.2
+
 # 6.1
 
  - Fix redstone particles with no color specified (color is required for 1.13, defaults to red now)
