@@ -32,7 +32,16 @@ public abstract class Effect implements Runnable {
      * This can be used to give particles a set speed when spawned.
      * This will not work with colored particles.
      */
+    @Deprecated
     public float speed = 0;
+
+    /**
+     * This can be used to give particles a set speed when spawned.
+     * This will not work with colored particles.
+     *
+     * This is a replacement for "speed"
+     */
+    public float particleData = 0;
 
     /**
      * Delay to wait for delayed effects.
@@ -403,7 +412,7 @@ public abstract class Effect implements Runnable {
     }
 
     protected void display(Particle particle, Location location, Color color) {
-        display(particle, location, color, speed, particleCount);
+        display(particle, location, color, particleData != 0 ? particleData : speed, particleCount);
     }
 
     protected void display(Particle particle, Location location, float speed, int amount) {
