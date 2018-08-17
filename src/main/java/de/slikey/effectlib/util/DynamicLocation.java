@@ -58,7 +58,7 @@ public class DynamicLocation {
         } else {
             this.entity = null;
         }
-        this.originalLocation = this.location;
+        this.originalLocation = this.location == null ? null : this.location.clone();
     }
 
     public void addOffset(Vector offset) {
