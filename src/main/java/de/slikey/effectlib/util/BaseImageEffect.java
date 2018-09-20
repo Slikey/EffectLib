@@ -54,6 +54,16 @@ public abstract class BaseImageEffect extends Effect {
     public boolean enableRotation = true;
 
     /**
+     * Apply a fixed rotation
+     */
+    public Vector rotation = null;
+
+    /**
+     * Should it orient to face the player's direction?
+     */
+    public boolean orient = true;
+
+    /**
      * What plane should it rotate?
      */
     public ColoredImageEffect.Plane plane = ColoredImageEffect.Plane.XYZ;
@@ -152,7 +162,12 @@ public abstract class BaseImageEffect extends Effect {
         for (int y = 0; y < image.getHeight(); y += stepY) {
             for (int x = 0; x < image.getWidth(); x += stepX) {
                 Vector v = new Vector((float) image.getWidth() / 2 - x, (float) image.getHeight() / 2 - y, 0).multiply(size);
-                VectorUtils.rotateAroundAxisY(v, -location.getYaw() * MathUtils.degreesToRadians);
+                if (rotation != null) {
+                    VectorUtils.rotateVector(v, rotation.getX() * MathUtils.degreesToRadians, rotation.getY() * MathUtils.degreesToRadians, rotation.getZ() * MathUtils.degreesToRadians);
+                }
+                if (orient) {
+                    VectorUtils.rotateAroundAxisY(v, -location.getYaw() * MathUtils.degreesToRadians);
+                }
                 if (enableRotation) {
                     double rotX = 0;
                     double rotY = 0;

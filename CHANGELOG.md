@@ -3,6 +3,7 @@
 # 6.2
 
  - Some specific internal FX fixes (please let me know if any effects look weird now)
+ - Add "rotation" and "orient" parameters to image effects
 
 # 6.1
 
