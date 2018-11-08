@@ -173,7 +173,7 @@ public abstract class BaseImageEffect extends Effect {
                 if (orient) {
                     VectorUtils.rotateAroundAxisY(v, -location.getYaw() * MathUtils.degreesToRadians);
                 }
-                if (mimic) {
+                if (orientPitch) {
                     VectorUtils.rotateVector(v, location);   
                 }
                 if (enableRotation) {
