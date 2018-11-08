@@ -62,6 +62,11 @@ public abstract class BaseImageEffect extends Effect {
      * Should it orient to face the player's direction?
      */
     public boolean orient = true;
+    
+    /**
+     * Should it face in the same direction as the location. Obeying yaw and pitch?
+     */
+    public boolean mimic = false;
 
     /**
      * What plane should it rotate?
@@ -167,6 +172,9 @@ public abstract class BaseImageEffect extends Effect {
                 }
                 if (orient) {
                     VectorUtils.rotateAroundAxisY(v, -location.getYaw() * MathUtils.degreesToRadians);
+                }
+                if (mimic) {
+                    VectorUtils.rotateVector(v, location);   
                 }
                 if (enableRotation) {
                     double rotX = 0;
