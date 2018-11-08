@@ -66,7 +66,7 @@ public abstract class BaseImageEffect extends Effect {
     /**
      * Should it face in the same direction as the location. Obeying yaw and pitch?
      */
-    public boolean mimic = false;
+    public boolean orientPitch = false;
 
     /**
      * What plane should it rotate?
