@@ -7,3 +7,4 @@ website: http://www.kevin-carstens.de/
 prefix: Effect Library
 load: POSTWORLD
 database: false
+api-version: 1.13
