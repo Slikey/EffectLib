@@ -1,17 +1,17 @@
 package de.slikey.effectlib;
 
-import de.slikey.effectlib.util.DynamicLocation;
+import java.util.List;
+import java.util.ArrayList;
 
-import org.bukkit.Particle;
 import org.bukkit.Color;
+import org.bukkit.Particle;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.util.Vector;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
-import org.bukkit.util.Vector;
 
-import java.util.ArrayList;
-import java.util.List;
+import de.slikey.effectlib.util.DynamicLocation;
 
 public abstract class Effect implements Runnable {
 
@@ -466,6 +466,12 @@ public abstract class Effect implements Runnable {
         target = new DynamicLocation(location);
     }
 
-    public Player getTargetPlayer() {return this.targetPlayer; }
-    public void setTargetPlayer(Player p){ this.targetPlayer = p; }
+    public Player getTargetPlayer() {
+    	return this.targetPlayer;
+    }
+
+    public void setTargetPlayer(Player p) {
+    	this.targetPlayer = p;
+    }
+
 }

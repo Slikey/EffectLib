@@ -1,15 +1,16 @@
 package de.slikey.effectlib.util;
 
-import de.slikey.effectlib.Effect;
-import de.slikey.effectlib.EffectManager;
-import de.slikey.effectlib.EffectType;
-import de.slikey.effectlib.effect.ColoredImageEffect;
+import java.io.File;
+import java.awt.image.BufferedImage;
+
 import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.util.Vector;
 
-import java.awt.image.BufferedImage;
-import java.io.File;
+import de.slikey.effectlib.Effect;
+import de.slikey.effectlib.EffectType;
+import de.slikey.effectlib.EffectManager;
+import de.slikey.effectlib.effect.ColoredImageEffect;
 
 public abstract class BaseImageEffect extends Effect {
 
@@ -170,12 +171,10 @@ public abstract class BaseImageEffect extends Effect {
                 if (rotation != null) {
                     VectorUtils.rotateVector(v, rotation.getX() * MathUtils.degreesToRadians, rotation.getY() * MathUtils.degreesToRadians, rotation.getZ() * MathUtils.degreesToRadians);
                 }
-                if (orient) {
-                    VectorUtils.rotateAroundAxisY(v, -location.getYaw() * MathUtils.degreesToRadians);
-                }
-                if (orientPitch) {
-                    VectorUtils.rotateVector(v, location);   
-                }
+
+				if (orientPitch) VectorUtils.rotateAroundAxisX(v, Math.toRadians(location.getPitch()));
+                if (orient) VectorUtils.rotateAroundAxisY(v, -location.getYaw() * MathUtils.degreesToRadians);
+
                 if (enableRotation) {
                     double rotX = 0;
                     double rotY = 0;
@@ -228,4 +227,5 @@ public abstract class BaseImageEffect extends Effect {
     }
 
     protected abstract void display(BufferedImage image, Vector v, Location location, int pixel);
+
 }

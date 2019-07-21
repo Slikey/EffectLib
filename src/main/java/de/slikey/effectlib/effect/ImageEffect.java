@@ -1,14 +1,13 @@
 package de.slikey.effectlib.effect;
 
-import de.slikey.effectlib.EffectManager;
-import de.slikey.effectlib.util.BaseImageEffect;
-import de.slikey.effectlib.util.MathUtils;
-import de.slikey.effectlib.util.VectorUtils;
+import java.awt.Color;
+import java.awt.image.BufferedImage;
+
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
 
-import java.awt.Color;
-import java.awt.image.BufferedImage;
+import de.slikey.effectlib.EffectManager;
+import de.slikey.effectlib.util.BaseImageEffect;
 
 public class ImageEffect extends BaseImageEffect {
 

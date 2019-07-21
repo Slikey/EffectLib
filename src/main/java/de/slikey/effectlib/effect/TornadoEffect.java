@@ -1,14 +1,17 @@
 package de.slikey.effectlib.effect;
 
-import de.slikey.effectlib.Effect;
-import de.slikey.effectlib.EffectManager;
-import de.slikey.effectlib.EffectType;
-import org.bukkit.Particle;
-import de.slikey.effectlib.util.RandomUtils;
+import java.util.List;
 import java.util.ArrayList;
+
 import org.bukkit.Color;
 import org.bukkit.Location;
+import org.bukkit.Particle;
 import org.bukkit.util.Vector;
+
+import de.slikey.effectlib.Effect;
+import de.slikey.effectlib.EffectType;
+import de.slikey.effectlib.EffectManager;
+import de.slikey.effectlib.util.RandomUtils;
 
 public class TornadoEffect extends Effect {
 
@@ -23,6 +26,7 @@ public class TornadoEffect extends Effect {
      */
     public Particle cloudParticle = Particle.CLOUD;
     public Color cloudColor = null;
+    public float cloudSpeed = 0;
 
     /*
      * Size of the cloud
@@ -82,7 +86,7 @@ public class TornadoEffect extends Effect {
         for (int i = 0; i < (100 * cloudSize); i++) {
             Vector v = RandomUtils.getRandomCircleVector().multiply(RandomUtils.random.nextDouble() * cloudSize);
             if (showCloud) {
-                display(cloudParticle, l.add(v), cloudColor, 0, 7);
+                display(cloudParticle, l.add(v), cloudColor, cloudSpeed, 1);
                 l.subtract(v);
             }
         }
@@ -104,10 +108,10 @@ public class TornadoEffect extends Effect {
         l.subtract(0, yOffset, 0);
     }
 
-    public ArrayList<Vector> createCircle(double y, double radius) {
+    public List<Vector> createCircle(double y, double radius) {
         double amount = radius * 64;
         double inc = (2 * Math.PI) / amount;
-        ArrayList<Vector> vecs = new ArrayList<Vector>();
+        List<Vector> vecs = new ArrayList<Vector>();
         for (int i = 0; i < amount; i++) {
             double angle = i * inc;
             double x = radius * Math.cos(angle);

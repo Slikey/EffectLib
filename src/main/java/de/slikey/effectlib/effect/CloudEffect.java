@@ -1,13 +1,14 @@
 package de.slikey.effectlib.effect;
 
-import de.slikey.effectlib.Effect;
-import de.slikey.effectlib.EffectManager;
-import de.slikey.effectlib.EffectType;
-import org.bukkit.Particle;
-import de.slikey.effectlib.util.RandomUtils;
 import org.bukkit.Color;
 import org.bukkit.Location;
+import org.bukkit.Particle;
 import org.bukkit.util.Vector;
+
+import de.slikey.effectlib.Effect;
+import de.slikey.effectlib.EffectType;
+import de.slikey.effectlib.EffectManager;
+import de.slikey.effectlib.util.RandomUtils;
 
 public class CloudEffect extends Effect {
 
@@ -16,6 +17,7 @@ public class CloudEffect extends Effect {
      */
     public Particle cloudParticle = Particle.CLOUD;
     public Color cloudColor = null;
+    public float cloudSpeed = 0;
 
     /*
      * Particle of the rain/snow
@@ -37,6 +39,9 @@ public class CloudEffect extends Effect {
      */
     public double yOffset = .8;
 
+    // Should the effect increase its height every iteration?
+    public boolean increaseHeight = true;
+
     public CloudEffect(EffectManager manager) {
         super(manager);
         type = EffectType.REPEATING;
@@ -50,23 +55,21 @@ public class CloudEffect extends Effect {
         location.add(0, yOffset, 0);
         for (int i = 0; i < 50; i++) {
             Vector v = RandomUtils.getRandomCircleVector().multiply(RandomUtils.random.nextDouble() * cloudSize);
-            display(cloudParticle, location.add(v), cloudColor, 0, 7);
+            display(cloudParticle, location.add(v), cloudColor, cloudSpeed, 1);
             location.subtract(v);
         }
-        Location l = location.add(0, .2, 0);
+        Location l;
+        if (increaseHeight) l = location.add(0, 0.2, 0);
+        else l = location;
         for (int i = 0; i < 15; i++) {
             int r = RandomUtils.random.nextInt(2);
             double x = RandomUtils.random.nextDouble() * particleRadius;
             double z = RandomUtils.random.nextDouble() * particleRadius;
             l.add(x, 0, z);
-            if (r != 1) {
-                display(mainParticle, l);
-            }
+            if (r != 1) display(mainParticle, l);
             l.subtract(x, 0, z);
             l.subtract(x, 0, z);
-            if (r != 1) {
-                display(mainParticle, l);
-            }
+            if (r != 1) display(mainParticle, l);
             l.add(x, 0, z);
         }
     }

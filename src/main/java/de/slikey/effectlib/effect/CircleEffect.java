@@ -1,15 +1,15 @@
 package de.slikey.effectlib.effect;
 
-import de.slikey.effectlib.Effect;
-import de.slikey.effectlib.EffectManager;
-import de.slikey.effectlib.EffectType;
 import org.bukkit.Particle;
-import de.slikey.effectlib.util.VectorUtils;
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
 
-public class CircleEffect extends Effect {
+import de.slikey.effectlib.Effect;
+import de.slikey.effectlib.EffectType;
+import de.slikey.effectlib.EffectManager;
+import de.slikey.effectlib.util.VectorUtils;
 
+public class CircleEffect extends Effect {
 
     /*
      * ParticleType of spawned particle
@@ -90,10 +90,8 @@ public class CircleEffect extends Effect {
             v.setX(Math.cos(angle) * radius);
             v.setZ(Math.sin(angle) * radius);
             VectorUtils.rotateVector(v, xRotation, yRotation, zRotation);
-            if (enableRotation) {
-                VectorUtils.rotateVector(v, angularVelocityX * step, angularVelocityY * step, angularVelocityZ * step);
-            }
-            display(particle, location.clone().add(v), 0, 30);
+            if (enableRotation) VectorUtils.rotateVector(v, angularVelocityX * step, angularVelocityY * step, angularVelocityZ * step);
+            display(particle, location.clone().add(v));
             step++;
         }
     }

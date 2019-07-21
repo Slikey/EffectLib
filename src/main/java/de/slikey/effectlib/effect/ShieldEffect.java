@@ -1,12 +1,13 @@
 package de.slikey.effectlib.effect;
 
-import de.slikey.effectlib.Effect;
-import de.slikey.effectlib.EffectManager;
-import de.slikey.effectlib.EffectType;
 import org.bukkit.Particle;
-import de.slikey.effectlib.util.RandomUtils;
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
+
+import de.slikey.effectlib.Effect;
+import de.slikey.effectlib.EffectType;
+import de.slikey.effectlib.EffectManager;
+import de.slikey.effectlib.util.RandomUtils;
 
 public class ShieldEffect extends Effect {
 
@@ -30,6 +31,9 @@ public class ShieldEffect extends Effect {
      */
     public boolean sphere = false;
 
+    // Set to true to reverse the direction of the shield (works only if sphere is set to false)
+    public boolean reverse = false;
+
     public ShieldEffect(EffectManager effectManager) {
         super(effectManager);
         type = EffectType.REPEATING;
@@ -43,7 +47,8 @@ public class ShieldEffect extends Effect {
         for (int i = 0; i < particles; i++) {
             Vector vector = RandomUtils.getRandomVector().multiply(radius);
             if (!sphere) {
-                vector.setY(Math.abs(vector.getY()));
+                if (reverse) vector.setY(Math.abs(vector.getY()) * -1);
+                else vector.setY(Math.abs(vector.getY()));
             }
             location.add(vector);
             display(particle, location);

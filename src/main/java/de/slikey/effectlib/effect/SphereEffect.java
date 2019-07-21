@@ -1,12 +1,13 @@
 package de.slikey.effectlib.effect;
 
-import de.slikey.effectlib.Effect;
-import de.slikey.effectlib.EffectManager;
-import de.slikey.effectlib.EffectType;
 import org.bukkit.Particle;
-import de.slikey.effectlib.util.RandomUtils;
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
+
+import de.slikey.effectlib.Effect;
+import de.slikey.effectlib.EffectType;
+import de.slikey.effectlib.EffectManager;
+import de.slikey.effectlib.util.RandomUtils;
 
 public class SphereEffect extends Effect {
 
@@ -35,6 +36,9 @@ public class SphereEffect extends Effect {
      */
     public double radiusIncrease = 0;
 
+    // Amount to increase the particles per tick
+    public int particleIncrease = 0;
+
     public SphereEffect(EffectManager effectManager) {
         super(effectManager);
         type = EffectType.REPEATING;
@@ -44,9 +48,8 @@ public class SphereEffect extends Effect {
 
     @Override
     public void onRun() {
-        if (radiusIncrease != 0) {
-            radius += radiusIncrease;
-        }
+        if (radiusIncrease != 0) radius += radiusIncrease;
+		if (particleIncrease != 0) particles += particleIncrease;
 
         Location location = getLocation();
         location.add(0, yOffset, 0);
