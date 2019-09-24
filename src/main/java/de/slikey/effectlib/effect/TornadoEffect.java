@@ -60,6 +60,21 @@ public class TornadoEffect extends Effect {
     public double distance = .375d;
 
     /*
+     * Number of particles per circle
+     */
+    public int circleParticles = 64;
+
+    /*
+     * Number of particles in the cloud
+     */
+    public int cloudParticles = 100;
+
+    /*
+     * Amount of y-jitter between circle particles
+     */
+    public double circleHeight = 0;
+
+    /*
      * Internal counter
      */
     protected int step = 0;
@@ -79,7 +94,7 @@ public class TornadoEffect extends Effect {
     @Override
     public void onRun() {
         Location l = getLocation().add(0, yOffset, 0);
-        for (int i = 0; i < (100 * cloudSize); i++) {
+        for (int i = 0; i < (cloudParticles * cloudSize); i++) {
             Vector v = RandomUtils.getRandomCircleVector().multiply(RandomUtils.random.nextDouble() * cloudSize);
             if (showCloud) {
                 display(cloudParticle, l.add(v), cloudColor, 0, 7);
@@ -95,6 +110,9 @@ public class TornadoEffect extends Effect {
             }
             for (Vector v : createCircle(y, fr)) {
                 if (showTornado) {
+                    if (circleHeight > 0) {
+                        v.setY(v.getY() + RandomUtils.random.nextDouble() * circleHeight / 2 - circleHeight / 2);
+                    }
                     display(tornadoParticle, t.add(v), tornadoColor);
                     t.subtract(v);
                     step++;
@@ -105,7 +123,7 @@ public class TornadoEffect extends Effect {
     }
 
     public ArrayList<Vector> createCircle(double y, double radius) {
-        double amount = radius * 64;
+        double amount = radius * circleParticles;
         double inc = (2 * Math.PI) / amount;
         ArrayList<Vector> vecs = new ArrayList<Vector>();
         for (int i = 0; i < amount; i++) {
