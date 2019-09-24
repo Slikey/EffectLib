@@ -73,6 +73,12 @@ public class CylinderEffect extends Effect {
      */
     protected float sideRatio = 0;
 
+    /**
+     * Whether or not to orient the effect in the direction
+     * of the source Location
+     */
+    public boolean orient = false;
+
     public CylinderEffect(EffectManager effectManager) {
         super(effectManager);
         type = EffectType.REPEATING;
@@ -93,6 +99,10 @@ public class CylinderEffect extends Effect {
         }
         Random r = RandomUtils.random;
         double xRotation = rotationX, yRotation = rotationY, zRotation = rotationZ;
+        if (orient) {
+            xRotation = Math.toRadians(90 - location.getPitch()) + rotationX;
+            yRotation = Math.toRadians(180 - location.getYaw()) + rotationY;
+        }
         if (enableRotation) {
             xRotation += step * angularVelocityX;
             yRotation += step * angularVelocityY;
@@ -116,7 +126,7 @@ public class CylinderEffect extends Effect {
                     v.setY(-multi * (height / 2));
                 }
             }
-            if (enableRotation) {
+            if (enableRotation || orient) {
                 VectorUtils.rotateVector(v, xRotation, yRotation, zRotation);
             }
             display(particle, location.add(v));

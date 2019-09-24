@@ -5,6 +5,7 @@
  - Some specific internal FX fixes (please let me know if any effects look weird now)
  - Add "rotation" and "orient" parameters to image effects
  - Add parameters to TornadoEffect to reduce lag
+ - Add orient parameter to Cylinder effect
 
 # 6.1
 
