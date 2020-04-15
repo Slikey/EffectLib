@@ -63,7 +63,7 @@ public class DonutEffect extends Effect {
                 v.setZ(radiusTube * Math.sin(phi));
 
                 VectorUtils.rotateVector(v, xRotation, yRotation, zRotation);
-                VectorUtils.rotateAroundAxisX(v, location.getPitch() * MathUtils.degreesToRadians);
+                VectorUtils.rotateAroundAxisX(v, (location.getPitch() + 90) * MathUtils.degreesToRadians);
                 VectorUtils.rotateAroundAxisY(v, -location.getYaw() * MathUtils.degreesToRadians);
 
                 display(particle, location.add(v));
