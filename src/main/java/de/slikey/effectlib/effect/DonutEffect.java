@@ -1,12 +1,14 @@
 package de.slikey.effectlib.effect;
 
-import de.slikey.effectlib.Effect;
-import de.slikey.effectlib.EffectManager;
-import de.slikey.effectlib.EffectType;
 import org.bukkit.Particle;
-import de.slikey.effectlib.util.VectorUtils;
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
+
+import de.slikey.effectlib.Effect;
+import de.slikey.effectlib.EffectType;
+import de.slikey.effectlib.EffectManager;
+import de.slikey.effectlib.util.MathUtils;
+import de.slikey.effectlib.util.VectorUtils;
 
 public class DonutEffect extends Effect {
 
@@ -31,7 +33,7 @@ public class DonutEffect extends Effect {
     public float radiusDonut = 2;
 
     /**
-     * Radius of the tube (the circles on the outside.
+     * Radius of the tube (the circles on the outside).
      */
     public float radiusTube = .5f;
 
@@ -61,6 +63,8 @@ public class DonutEffect extends Effect {
                 v.setZ(radiusTube * Math.sin(phi));
 
                 VectorUtils.rotateVector(v, xRotation, yRotation, zRotation);
+                VectorUtils.rotateAroundAxisX(v, location.getPitch() * MathUtils.degreesToRadians);
+                VectorUtils.rotateAroundAxisY(v, -location.getYaw() * MathUtils.degreesToRadians);
 
                 display(particle, location.add(v));
                 location.subtract(v);
