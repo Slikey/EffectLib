@@ -91,7 +91,7 @@ public class CircleEffect extends Effect {
             v.setX(Math.cos(angle) * radius);
             v.setZ(Math.sin(angle) * radius);
             VectorUtils.rotateVector(v, xRotation, yRotation, zRotation);
-            VectorUtils.rotateAroundAxisX(v, (location.getPitch() + 90) * MathUtils.degreesToRadians);
+            VectorUtils.rotateAroundAxisX(v, location.getPitch() * MathUtils.degreesToRadians);
             VectorUtils.rotateAroundAxisY(v, -location.getYaw() * MathUtils.degreesToRadians);
             if (enableRotation) VectorUtils.rotateVector(v, angularVelocityX * step, angularVelocityY * step, angularVelocityZ * step);
             display(particle, location.clone().add(v));
