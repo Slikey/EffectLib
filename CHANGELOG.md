@@ -2,6 +2,8 @@
 
 # 6.3
 
+ - Bleed effect now uses a "material" rather than "color"
+
 # 6.2
 
  - Some specific internal FX fixes (please let me know if any effects look weird now)
