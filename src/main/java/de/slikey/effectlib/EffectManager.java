@@ -360,7 +360,17 @@ public class EffectManager implements Disposable {
                 fieldKey = stringValue;
                 fieldSection = parameterMap;
             }
-            Field field = effect.getClass().getField(key);
+
+            Field field = null;
+
+            try {
+                field = effect.getClass().getField(key);
+            } catch (NoSuchFieldException exception) {
+
+            }
+
+            if (field == null) return false;
+
             if (field.getType().equals(Integer.TYPE) || field.getType().equals(Integer.class)) {
                 field.set(effect, fieldSection.getInt(fieldKey));
             } else if (field.getType().equals(Float.TYPE) || field.getType().equals(Float.class)) {
