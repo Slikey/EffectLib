@@ -12,6 +12,7 @@ import org.bukkit.material.MaterialData;
 import de.slikey.effectlib.util.ParticleDisplay;
 
 public class ParticleDisplay_12 extends ParticleDisplay {
+
     @Override
     @SuppressWarnings("deprecation")
     public void display(Particle particle, Location center, float offsetX, float offsetY, float offsetZ, float speed, int amount, float size, Color color, Material material, byte materialData, double range, List<Player> targetPlayers) {
@@ -28,12 +29,11 @@ public class ParticleDisplay_12 extends ParticleDisplay {
 
         Object data = null;
         if (particle == Particle.BLOCK_CRACK || particle == Particle.BLOCK_DUST || particle.name().equals("FALLING_DUST")) {
-            if (material == null || material == Material.AIR) {
-                return;
-            }
+            if (material == null || material == Material.AIR) return;
             data = new MaterialData(material, materialData);
         }
 
         display(particle, center, offsetX, offsetY, offsetZ, speed, amount, data, range, targetPlayers);
     }
+
 }

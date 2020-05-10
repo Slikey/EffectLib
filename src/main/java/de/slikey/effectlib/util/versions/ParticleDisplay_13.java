@@ -11,6 +11,7 @@ import org.bukkit.entity.Player;
 import de.slikey.effectlib.util.ParticleDisplay;
 
 public class ParticleDisplay_13 extends ParticleDisplay {
+
     @Override
     public void display(Particle particle, Location center, float offsetX, float offsetY, float offsetZ, float speed, int amount, float size, Color color, Material material, byte materialData, double range, List<Player> targetPlayers) {
         // Legacy colorizeable particles
@@ -26,23 +27,18 @@ public class ParticleDisplay_13 extends ParticleDisplay {
 
         Object data = null;
         if (particle == Particle.BLOCK_CRACK || particle == Particle.BLOCK_DUST || particle == Particle.FALLING_DUST) {
-            if (material == null || material == Material.AIR) {
-                return;
-            }
+            if (material == null || material.toString().contains("AIR")) return;
             data = material.createBlockData();
-            if (data == null) {
-                return;
-            }
+            if (data == null) return;
         }
 
         if (particle == Particle.REDSTONE) {
             // color is required for 1.13
-            if (color == null) {
-                color = Color.RED;
-            }
+            if (color == null) color = Color.RED;
             data = new Particle.DustOptions(color, size);
         }
 
         display(particle, center, offsetX, offsetY, offsetZ, speed, amount, data, range, targetPlayers);
     }
+
 }

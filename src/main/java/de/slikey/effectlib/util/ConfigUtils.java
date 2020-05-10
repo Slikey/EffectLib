@@ -1,16 +1,16 @@
 package de.slikey.effectlib.util;
 
-import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.MemoryConfiguration;
-
+import java.util.Map;
+import java.util.List;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
-import java.util.Map;
+
+import org.bukkit.configuration.MemoryConfiguration;
+import org.bukkit.configuration.ConfigurationSection;
 
 public class ConfigUtils {
     public static Collection<ConfigurationSection> getNodeList(ConfigurationSection node, String path) {
-        Collection<ConfigurationSection> results = new ArrayList<ConfigurationSection>();
+        Collection<ConfigurationSection> results = new ArrayList<>();
         List<Map<?, ?>> mapList = node.getMapList(path);
         for (Map<?, ?> map : mapList) {
             results.add(toConfigurationSection(map));
@@ -34,9 +34,8 @@ public class ConfigUtils {
     }
 
     public static ConfigurationSection toStringConfiguration(Map<String, String> stringMap) {
-        if (stringMap == null) {
-            return null;
-        }
+        if (stringMap == null) return null;
+
         ConfigurationSection configMap = new MemoryConfiguration();
         for (Map.Entry<String, String> entry : stringMap.entrySet()) {
             configMap.set(entry.getKey(), entry.getValue());
@@ -46,8 +45,7 @@ public class ConfigUtils {
     }
 
 
-    public static void set(ConfigurationSection node, String path, Object value)
-    {
+    public static void set(ConfigurationSection node, String path, Object value) {
         if (value == null) {
             node.set(path, null);
             return;
@@ -57,49 +55,38 @@ public class ConfigUtils {
         boolean isFalse = value.equals("false");
         if (isTrue || isFalse) {
             node.set(path, isTrue);
-        } else {
+            return;
+        }
+        try {
+            Integer i = (value instanceof Integer) ? (Integer) value : Integer.parseInt(value.toString());
+            node.set(path, i);
+        } catch (Exception ex) {
             try {
-                Integer i = (value instanceof Integer) ? (Integer)value : Integer.parseInt(value.toString());
-                node.set(path, i);
-            } catch (Exception ex) {
-                try {
-                    Double d;
-                    if (value instanceof Double) {
-                        d = (Double)value;
-                    } else if (value instanceof Float) {
-                        d = (double)(Float)value;
-                    } else {
-                        d = Double.parseDouble(value.toString());
-                    }
-                    node.set(path, d);
-                } catch (Exception ex2) {
-                    node.set(path, value);
-                }
+                Double d;
+                if (value instanceof Double) d = (Double) value;
+                else if (value instanceof Float) d = (double) (Float) value;
+                else d = Double.parseDouble(value.toString());
+                node.set(path, d);
+            } catch (Exception ex2) {
+                node.set(path, value);
             }
         }
     }
 
-    public static ConfigurationSection getConfigurationSection(ConfigurationSection base, String key)
-    {
+    public static ConfigurationSection getConfigurationSection(ConfigurationSection base, String key) {
         ConfigurationSection section = base.getConfigurationSection(key);
-        if (section != null) {
-            return section;
-        }
+        if (section != null) return section;
+
         Object value = base.get(key);
         if (value == null) return null;
 
-        if (value instanceof ConfigurationSection)
-        {
-            return (ConfigurationSection)value;
-        }
+        if (value instanceof ConfigurationSection) return (ConfigurationSection)value;
 
-        if (value instanceof Map)
-        {
+        if (value instanceof Map) {
             ConfigurationSection newChild = base.createSection(key);
             @SuppressWarnings("unchecked")
             Map<String, Object> map = (Map<String, Object>)value;
-            for (Map.Entry<String, Object> entry : map.entrySet())
-            {
+            for (Map.Entry<String, Object> entry : map.entrySet()) {
                 newChild.set(entry.getKey(), entry.getValue());
             }
             base.set(key, newChild);
@@ -108,4 +95,5 @@ public class ConfigUtils {
 
         return null;
     }
+
 }

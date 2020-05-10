@@ -1,52 +1,49 @@
 package de.slikey.effectlib.math;
 
+import java.util.Map;
+import java.util.List;
+import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.Collection;
+
+import de.slikey.effectlib.EffectLib;
 import de.slikey.effectlib.EffectManager;
 import de.slikey.effectlib.util.ConfigUtils;
 import org.bukkit.configuration.ConfigurationSection;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 public class Transforms {
+
     private static final String TRANSFORM_BUILTIN_CLASSPATH = "de.slikey.effectlib.math";
-    private static Map<String, Class<?>> transformClasses = new HashMap<String, Class<?>>();
-    private static EffectManager effectManager;
+    private static Map<String, Class<?>> transformClasses = new HashMap<>();
+    private static List<EffectManager> effectManagers = EffectLib.instance().getEffectManagers();
 
     public static Transform loadTransform(ConfigurationSection base, String value) {
-        if (base.isConfigurationSection(value)) {
-            return loadTransform(ConfigUtils.getConfigurationSection(base, value));
-        }
-        if (base.isDouble(value) || base.isInt(value)) {
-            return new ConstantTransform(base.getDouble(value));
-        }
+        if (base.isConfigurationSection(value)) return loadTransform(ConfigUtils.getConfigurationSection(base, value));
+        if (base.isDouble(value) || base.isInt(value)) return new ConstantTransform(base.getDouble(value));
         if (base.isString(value)) {
             String equation = base.getString(value);
-            if (equation.equalsIgnoreCase("t") || equation.equalsIgnoreCase("time")) {
-                return new EchoTransform();
-            }
+            if (equation.equalsIgnoreCase("t") || equation.equalsIgnoreCase("time")) return new EchoTransform();
             EquationTransform transform = EquationStore.getInstance().getTransform(equation, "t");
             Exception ex = transform.getException();
-            if (ex != null && effectManager != null) {
-                effectManager.onError("Error parsing equation: " + equation, ex);
+            if (ex != null && !effectManagers.isEmpty()) {
+                for (EffectManager effectManager : effectManagers) {
+                    if (effectManager == null) continue;
+                    effectManager.onError("Error parsing equation: " + equation, ex);
+                    break;
+                }
             }
             return transform;
         }
         return new ConstantTransform(0);
     }
 
-    public static Collection<Transform> loadTransformList(ConfigurationSection base, String value)
-    {
+    public static Collection<Transform> loadTransformList(ConfigurationSection base, String value) {
         Collection<ConfigurationSection> transformConfigs = ConfigUtils.getNodeList(base, value);
-        List<Transform> transforms = new ArrayList<Transform>();
-        if (transformConfigs != null)
-        {
-            for (ConfigurationSection transformConfig : transformConfigs)
-            {
-                transforms.add(loadTransform(transformConfig));
-            }
+        List<Transform> transforms = new ArrayList<>();
+        if (transformConfigs == null) return transforms;
+
+        for (ConfigurationSection transformConfig : transformConfigs) {
+            transforms.add(loadTransform(transformConfig));
         }
 
         return transforms;
@@ -54,15 +51,11 @@ public class Transforms {
 
     public static Transform loadTransform(ConfigurationSection parameters) {
         Transform transform = null;
-        if (parameters != null && parameters.contains("class"))
-        {
+        if (parameters != null && parameters.contains("class")) {
             String className = parameters.getString("class");
-            try
-            {
-                if (!className.contains("."))
-                {
-                    className = TRANSFORM_BUILTIN_CLASSPATH + "." + className;
-                }
+            try {
+                if (!className.contains(".")) className = TRANSFORM_BUILTIN_CLASSPATH + "." + className;
+
                 Class<?> genericClass = transformClasses.get(className);
                 if (genericClass == null) {
                     try {
@@ -71,9 +64,7 @@ public class Transforms {
                         genericClass = Class.forName(className);
                     }
 
-                    if (!Transform.class.isAssignableFrom(genericClass)) {
-                        throw new Exception("Must extend Transform");
-                    }
+                    if (!Transform.class.isAssignableFrom(genericClass)) throw new Exception("Must extend Transform");
                     transformClasses.put(className, genericClass);
                 }
 
@@ -83,8 +74,12 @@ public class Transforms {
                 parameters.set("class", null);
                 transform.load(parameters);
             } catch (Exception ex) {
-                if (effectManager != null) {
-                    effectManager.onError("Error loading class " + className, ex);
+                if (!effectManagers.isEmpty()) {
+                    for (EffectManager effectManager : effectManagers) {
+                        if (effectManager == null) continue;
+                        effectManager.onError("Error loading class " + className, ex);
+                        break;
+                    }
                 }
             }
         }
@@ -92,7 +87,4 @@ public class Transforms {
         return transform == null ? new ConstantTransform(0) : transform;
     }
 
-    public static void setEffectManager(EffectManager manager) {
-        effectManager = manager;
-    }
 }
