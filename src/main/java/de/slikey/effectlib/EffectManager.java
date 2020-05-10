@@ -330,6 +330,10 @@ public class EffectManager implements Disposable {
         }
     }
 
+    public Map<Effect, BukkitTask> getEffects() {
+        return effects;
+    }
+
     public int getParticleRange() {
         return visibleRange;
     }
