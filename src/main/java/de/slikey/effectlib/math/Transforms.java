@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import de.slikey.effectlib.EffectLib;
 import de.slikey.effectlib.EffectManager;
 import de.slikey.effectlib.util.ConfigUtils;
 import org.bukkit.configuration.ConfigurationSection;
@@ -15,7 +14,7 @@ public class Transforms {
 
     private static final String TRANSFORM_BUILTIN_CLASSPATH = "de.slikey.effectlib.math";
     private static Map<String, Class<?>> transformClasses = new HashMap<>();
-    private static List<EffectManager> effectManagers = EffectLib.instance().getEffectManagers();
+    private static List<EffectManager> effectManagers = EffectManager.getManagers();
 
     public static Transform loadTransform(ConfigurationSection base, String value) {
         if (base.isConfigurationSection(value)) return loadTransform(ConfigUtils.getConfigurationSection(base, value));
