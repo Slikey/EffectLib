@@ -268,6 +268,14 @@ public class EffectManager implements Disposable {
         if (effects.isEmpty()) dispose();
     }
 
+    public boolean isDisposed() {
+        return disposed;
+    }
+
+    public boolean isDisposedOnTermination() {
+        return disposeOnTermination;
+    }
+
     public void enableDebug(boolean enable) {
         debug = enable;
     }
