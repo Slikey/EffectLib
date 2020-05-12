@@ -254,6 +254,9 @@ public class EffectManager implements Disposable {
         if (disposed) return;
         disposed = true;
         cancel(false);
+        display = null;
+        imageCache = null;
+        imageCacheFolder = null;
         if (effectManagers != null) effectManagers.remove(this);
     }
     
@@ -416,7 +419,7 @@ public class EffectManager implements Disposable {
 
             return true;
         } catch (Exception ex) {
-            this.onError(ex);
+            onError(ex);
         }
 
         return false;
