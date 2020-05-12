@@ -128,7 +128,7 @@ public final class EffectLib extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        EffectManager.initialize();
+
     }
 
     @Override

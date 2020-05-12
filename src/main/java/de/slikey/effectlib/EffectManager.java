@@ -45,7 +45,7 @@ import com.google.common.base.CaseFormat;
  */
 public class EffectManager implements Disposable {
 
-    private static List<EffectManager> effectManagers;
+    private static List<EffectManager> effectManagers = new ArrayList<>();
     private static Map<String, Class<? extends Effect>> effectClasses = new HashMap<>();
     private Plugin owningPlugin;
     private Map<Effect, BukkitTask> effects;
@@ -260,7 +260,7 @@ public class EffectManager implements Disposable {
         imageCache = null;
         owningPlugin = null;
         imageCacheFolder = null;
-        if (effectManagers != null) effectManagers.remove(this);
+        effectManagers.remove(this);
     }
     
     public void disposeOnTermination() {
@@ -435,13 +435,8 @@ public class EffectManager implements Disposable {
 
         return false;
     }
-    
-    public static void initialize() {
-        effectManagers = new ArrayList<>();
-    }
-    
+
     public static List<EffectManager> getManagers() {
-        if (effectManagers == null) initialize();
         return effectManagers;
     }
     
