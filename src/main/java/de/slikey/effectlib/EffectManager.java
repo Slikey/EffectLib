@@ -63,6 +63,7 @@ public class EffectManager implements Disposable {
         effects = new HashMap<>();
         disposed = false;
         disposeOnTermination = false;
+        effectManagers.add(this);
     }
 
     private ParticleDisplay getDisplay() {
