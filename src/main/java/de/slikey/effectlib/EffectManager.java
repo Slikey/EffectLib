@@ -47,18 +47,19 @@ public class EffectManager implements Disposable {
 
     private static List<EffectManager> effectManagers;
     private static Map<String, Class<? extends Effect>> effectClasses = new HashMap<>();
-    private final Plugin owningPlugin;
-    private final Map<Effect, BukkitTask> effects;
+    private Plugin owningPlugin;
+    private Map<Effect, BukkitTask> effects;
     private ParticleDisplay display;
     private boolean disposed;
     private boolean disposeOnTermination;
     private boolean debug = false;
     private int visibleRange = 32;
     private File imageCacheFolder;
-    private Map<String, BufferedImage[]> imageCache = new HashMap<>();
+    private Map<String, BufferedImage[]> imageCache;
 
     public EffectManager(Plugin owningPlugin) {
         imageCacheFolder = owningPlugin == null ? null : new File(owningPlugin.getDataFolder(), "imagecache");
+        imageCache = new HashMap<>();
         this.owningPlugin = owningPlugin;
         effects = new HashMap<>();
         disposed = false;
@@ -254,8 +255,10 @@ public class EffectManager implements Disposable {
         if (disposed) return;
         disposed = true;
         cancel(false);
+        effects = null;
         display = null;
         imageCache = null;
+        owningPlugin = null;
         imageCacheFolder = null;
         if (effectManagers != null) effectManagers.remove(this);
     }
