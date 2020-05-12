@@ -3,6 +3,7 @@ package de.slikey.effectlib.math;
 import org.bukkit.configuration.ConfigurationSection;
 
 public class dSinTransform implements Transform {
+
     private Transform a;
     private Transform b;
     private Transform c;
@@ -27,4 +28,5 @@ public class dSinTransform implements Transform {
         double bValue = b.get(t);
         return a.get(t) * bValue * Math.cos(bValue * (t + c.get(t)));
     }
+
 }

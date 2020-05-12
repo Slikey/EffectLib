@@ -9,6 +9,7 @@ import org.bukkit.configuration.MemoryConfiguration;
 import org.bukkit.configuration.ConfigurationSection;
 
 public class ConfigUtils {
+
     public static Collection<ConfigurationSection> getNodeList(ConfigurationSection node, String path) {
         Collection<ConfigurationSection> results = new ArrayList<>();
         List<Map<?, ?>> mapList = node.getMapList(path);
@@ -62,7 +63,7 @@ public class ConfigUtils {
             node.set(path, i);
         } catch (Exception ex) {
             try {
-                Double d;
+                double d;
                 if (value instanceof Double) d = (Double) value;
                 else if (value instanceof Float) d = (double) (Float) value;
                 else d = Double.parseDouble(value.toString());

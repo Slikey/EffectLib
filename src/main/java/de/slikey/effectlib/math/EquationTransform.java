@@ -1,15 +1,17 @@
 package de.slikey.effectlib.math;
 
+import java.util.Set;
+import java.util.Random;
+import java.util.HashSet;
+
 import net.objecthunter.exp4j.Expression;
 import net.objecthunter.exp4j.ExpressionBuilder;
 import net.objecthunter.exp4j.function.Function;
+
 import org.bukkit.configuration.ConfigurationSection;
 
-import java.util.HashSet;
-import java.util.Random;
-import java.util.Set;
-
 public class EquationTransform implements Transform {
+
     private Expression expression;
     private static Function randFunction;
     private static Function minFunction;
@@ -24,7 +26,7 @@ public class EquationTransform implements Transform {
     }
 
     public EquationTransform() {
-        inputVariables = new HashSet<String>();
+        inputVariables = new HashSet<>();
     }
     
     public EquationTransform(String equation) {
@@ -32,13 +34,13 @@ public class EquationTransform implements Transform {
     }
 
     public EquationTransform(String equation, String inputVariable) {
-        inputVariables = new HashSet<String>();
+        inputVariables = new HashSet<>();
         inputVariables.add(inputVariable);
         setEquation(equation);
     }
 
     public EquationTransform(String equation, String... inputVariables) {
-        this.inputVariables = new HashSet<String>();
+        this.inputVariables = new HashSet<>();
         for (String inputVariable : inputVariables) {
             this.inputVariables.add(inputVariable);
         }
@@ -110,9 +112,7 @@ public class EquationTransform implements Transform {
 
     @Override
     public double get(double t) {
-        if (expression == null) {
-            return 0;
-        }
+        if (expression == null) return 0;
         for (String inputVariable : inputVariables) {
             expression.setVariable(inputVariable, t);
         }
@@ -120,9 +120,7 @@ public class EquationTransform implements Transform {
     }
     
     public double get(double... t) {
-        if (expression == null) {
-            return 0;
-        }
+        if (expression == null) return 0;
         int index = 0;
         for (String inputVariable : inputVariables) {
             expression.setVariable(inputVariable, t[index]);
@@ -136,15 +134,11 @@ public class EquationTransform implements Transform {
     }
 
     public void setVariable(String key, double value) {
-        if (expression != null) {
-            expression.setVariable(key, value);
-        }
+        if (expression != null) expression.setVariable(key, value);
     }
 
     public double get() {
-        if (expression == null) {
-            return Double.NaN;
-        }
+        if (expression == null) return Double.NaN;
         double value = Double.NaN;
         try {
             exception = null;
@@ -166,4 +160,5 @@ public class EquationTransform implements Transform {
     public Set<String> getParameters() {
         return inputVariables;
     }
+
 }

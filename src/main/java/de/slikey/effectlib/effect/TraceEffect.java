@@ -1,14 +1,16 @@
 package de.slikey.effectlib.effect;
 
-import de.slikey.effectlib.Effect;
-import de.slikey.effectlib.EffectManager;
-import de.slikey.effectlib.EffectType;
-import org.bukkit.Particle;
-import java.util.ArrayList;
 import java.util.List;
-import org.bukkit.Location;
+import java.util.ArrayList;
+
 import org.bukkit.World;
+import org.bukkit.Location;
+import org.bukkit.Particle;
 import org.bukkit.util.Vector;
+
+import de.slikey.effectlib.Effect;
+import de.slikey.effectlib.EffectType;
+import de.slikey.effectlib.EffectManager;
 
 public class TraceEffect extends Effect {
 
@@ -30,7 +32,7 @@ public class TraceEffect extends Effect {
     /**
      * Waypoints of the trace
      */
-    protected final List<Vector> wayPoints = new ArrayList<Vector>();
+    protected final List<Vector> wayPoints = new ArrayList<>();
 
     /**
      * Internal counter
@@ -51,7 +53,7 @@ public class TraceEffect extends Effect {
 
     @Override
     public void reset() {
-        this.step = 0;
+        step = 0;
     }
 
     @Override
@@ -64,21 +66,15 @@ public class TraceEffect extends Effect {
             return;
         }
 
-        synchronized(wayPoints)
-        {
-            if (wayPoints.size() >= maxWayPoints) {
-                wayPoints.remove(0);
-            }
+        synchronized(wayPoints) {
+            if (wayPoints.size() >= maxWayPoints) wayPoints.remove(0);
         }
 
         wayPoints.add(location.toVector());
         step++;
-        if (step % refresh != 0) {
-            return;
-        }
+        if (step % refresh != 0) return;
 
-        synchronized(wayPoints)
-        {
+        synchronized(wayPoints) {
             for (Vector position : wayPoints) {
                 Location particleLocation = new Location(world, position.getX(), position.getY(), position.getZ());
                 display(particle, particleLocation);

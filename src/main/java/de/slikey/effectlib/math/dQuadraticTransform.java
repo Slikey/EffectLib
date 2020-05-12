@@ -3,6 +3,7 @@ package de.slikey.effectlib.math;
 import org.bukkit.configuration.ConfigurationSection;
 
 public class dQuadraticTransform implements Transform {
+
     private Transform a;
     private Transform b;
     private Transform c;
@@ -26,4 +27,5 @@ public class dQuadraticTransform implements Transform {
     public double get(double t) {
         return  2 * a.get(t) * (t + b.get(t)) + c.get(t);
     }
+
 }

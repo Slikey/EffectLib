@@ -1,18 +1,19 @@
 package de.slikey.effectlib.effect;
 
-import de.slikey.effectlib.Effect;
-import de.slikey.effectlib.EffectManager;
-import de.slikey.effectlib.EffectType;
-import de.slikey.effectlib.util.RandomUtils;
 import org.bukkit.Color;
-import org.bukkit.FireworkEffect;
-import org.bukkit.FireworkEffect.Builder;
-import org.bukkit.Location;
 import org.bukkit.Sound;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Firework;
-import org.bukkit.inventory.meta.FireworkMeta;
+import org.bukkit.Location;
 import org.bukkit.util.Vector;
+import org.bukkit.FireworkEffect;
+import org.bukkit.entity.Firework;
+import org.bukkit.entity.EntityType;
+import org.bukkit.FireworkEffect.Builder;
+import org.bukkit.inventory.meta.FireworkMeta;
+
+import de.slikey.effectlib.Effect;
+import de.slikey.effectlib.EffectType;
+import de.slikey.effectlib.EffectManager;
+import de.slikey.effectlib.util.RandomUtils;
 
 public class BigBangEffect extends Effect {
 
@@ -42,7 +43,7 @@ public class BigBangEffect extends Effect {
 
     @Override
     public void reset() {
-        this.step = 0;
+        step = 0;
     }
 
     @Override
@@ -76,4 +77,5 @@ public class BigBangEffect extends Effect {
         fw.setFireworkMeta(meta);
         fw.detonate();
     }
+
 }

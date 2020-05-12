@@ -1,14 +1,15 @@
 package de.slikey.effectlib.effect;
 
+import org.bukkit.Location;
+import org.bukkit.Particle;
+import org.bukkit.util.Vector;
+
 import de.slikey.effectlib.Effect;
-import de.slikey.effectlib.EffectManager;
 import de.slikey.effectlib.EffectType;
+import de.slikey.effectlib.EffectManager;
+import de.slikey.effectlib.util.VectorUtils;
 import de.slikey.effectlib.math.EquationStore;
 import de.slikey.effectlib.math.EquationTransform;
-import org.bukkit.Particle;
-import de.slikey.effectlib.util.VectorUtils;
-import org.bukkit.Location;
-import org.bukkit.util.Vector;
 
 public class EquationEffect extends Effect {
 
@@ -104,8 +105,8 @@ public class EquationEffect extends Effect {
 
     @Override
     public void reset() {
-        this.step = 0;
-        this.miniStep = 0;
+        step = 0;
+        miniStep = 0;
     }
 
     @Override
@@ -125,44 +126,38 @@ public class EquationEffect extends Effect {
 
         boolean hasInnerEquation = (x2Transform != null && y2Transform != null && z2Transform != null);
         for (int i = 0; i < particles; i++) {
-            Double xValue = xTransform.get(step);
-            Double yValue = yTransform.get(step);
-            Double zValue = zTransform.get(step);
+            double xValue = xTransform.get(step);
+            double yValue = yTransform.get(step);
+            double zValue = zTransform.get(step);
             
             Vector result = new Vector(xValue, yValue, zValue);
-            if (orient && orientPitch) {
-                result = VectorUtils.rotateVector(result, location);
-            } else if (orient) {
-                result = VectorUtils.rotateVector(result, location.getYaw(), 0);
-            }
+            if (orient && orientPitch) result = VectorUtils.rotateVector(result, location);
+            else if (orient) result = VectorUtils.rotateVector(result, location.getYaw(), 0);
 
             Location targetLocation = location.clone();
             targetLocation.add(result);
-            if (!hasInnerEquation) {
-                display(particle, targetLocation);
-            } else {
+
+            if (hasInnerEquation) {
                 for (int j = 0; j < particles2; j++) {
-                    Double x2Value = x2Transform.get(step, miniStep);
-                    Double y2Value = y2Transform.get(step, miniStep);
-                    Double z2Value = z2Transform.get(step, miniStep);
-                    
+                    double x2Value = x2Transform.get(step, miniStep);
+                    double y2Value = y2Transform.get(step, miniStep);
+                    double z2Value = z2Transform.get(step, miniStep);
+
                     Vector result2 = new Vector(x2Value, y2Value, z2Value);
-                    if (orient && orientPitch) {
-                        result2 = VectorUtils.rotateVector(result2, location);
-                    } else if (orient) {
-                        result2 = VectorUtils.rotateVector(result2, location.getYaw(), 0);
-                    }
-                    
+                    if (orient && orientPitch) result2 = VectorUtils.rotateVector(result2, location);
+                    else if (orient) result2 = VectorUtils.rotateVector(result2, location.getYaw(), 0);
+
                     Location target2Location = targetLocation.clone().add(result2);
                     display(particle, target2Location);
-                    
+
                     miniStep++;
                 }
-                
-                if (cycleMiniStep) {
-                    miniStep = 0;
-                }
+
+                if (cycleMiniStep) miniStep = 0;
+            } else {
+                display(particle, targetLocation);
             }
+
             if (maxSteps != 0 && step > maxSteps) {
                 step = 0;
                 break;
@@ -171,4 +166,5 @@ public class EquationEffect extends Effect {
             }
         }
     }
+
 }

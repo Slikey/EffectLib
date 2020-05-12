@@ -1,6 +1,7 @@
 package de.slikey.effectlib;
 
 import java.util.List;
+
 import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.java.JavaPlugin;
 

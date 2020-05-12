@@ -1,6 +1,7 @@
 package de.slikey.effectlib.util;
 
 import java.util.Random;
+
 import org.bukkit.Material;
 import org.bukkit.util.Vector;
 

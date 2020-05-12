@@ -76,15 +76,17 @@ public class CircleEffect extends Effect {
 
     @Override
     public void reset() {
-        this.step = 0;
+        step = 0;
     }
 
     @Override
     public void onRun() {
         Location location = getLocation();
         location.subtract(xSubtract, ySubtract, zSubtract);
+
         double inc = (2 * Math.PI) / particles;
         int steps = wholeCircle ? particles : 1;
+
         for (int i = 0; i < steps; i++) {
             double angle = step * inc;
             Vector v = new Vector();

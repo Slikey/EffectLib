@@ -1,13 +1,14 @@
 package de.slikey.effectlib.effect;
 
-import de.slikey.effectlib.Effect;
-import de.slikey.effectlib.EffectManager;
-import de.slikey.effectlib.EffectType;
-import de.slikey.effectlib.util.MathUtils;
 import org.bukkit.Particle;
-import de.slikey.effectlib.util.VectorUtils;
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
+
+import de.slikey.effectlib.Effect;
+import de.slikey.effectlib.EffectType;
+import de.slikey.effectlib.EffectManager;
+import de.slikey.effectlib.util.MathUtils;
+import de.slikey.effectlib.util.VectorUtils;
 
 /**
  * Creates an animated Sphere.. Thanks to the author for sharing it!
@@ -59,14 +60,14 @@ public class AnimatedBallEffect extends Effect {
 
     public AnimatedBallEffect(EffectManager effectManager) {
         super(effectManager);
-        this.type = EffectType.REPEATING;
-        this.iterations = 500;
-        this.period = 1;
+        type = EffectType.REPEATING;
+        iterations = 500;
+        period = 1;
     }
 
     @Override
     public void reset() {
-        this.step = 0;
+        step = 0;
     }
 
     @Override

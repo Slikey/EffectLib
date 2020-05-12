@@ -1,12 +1,12 @@
 package de.slikey.effectlib.util;
 
-import java.awt.Color;
 import java.awt.Font;
-import java.awt.FontMetrics;
+import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.font.FontRenderContext;
+import java.awt.FontMetrics;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
+import java.awt.font.FontRenderContext;
 
 /**
  * Based on answer at StackOverflow

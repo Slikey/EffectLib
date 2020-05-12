@@ -1,10 +1,12 @@
 package de.slikey.effectlib.particle;
 
-import java.lang.reflect.Constructor;
+import java.util.Map;
+import java.util.HashMap;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.util.HashMap;
-import java.util.Map;
+import java.lang.reflect.Constructor;
+
 import org.bukkit.Bukkit;
 
 // TODO: This is out of date, but still used by ParticlePacket
@@ -286,7 +288,7 @@ public final class ReflectionHandler {
         DOUBLE(double.class, Double.class),
         BOOLEAN(boolean.class, Boolean.class);
 
-        private static final Map<Class<?>, DataType> CLASS_MAP = new HashMap<Class<?>, DataType>();
+        private static final Map<Class<?>, DataType> CLASS_MAP = new HashMap<>();
         private final Class<?> primitive;
         private final Class<?> reference;
 
@@ -343,9 +345,8 @@ public final class ReflectionHandler {
         }
 
         public static boolean equalsArray(Class<?>[] a1, Class<?>[] a2) {
-            if (a1 == null || a2 == null || a1.length != a2.length) {
-                return false;
-            }
+            if (a1 == null || a2 == null || a1.length != a2.length) return false;
+
             for (int i = 0; i < a1.length; i++) {
                 if (!a1[i].equals(a2[i]) && !a1[i].isAssignableFrom(a2[i])) {
                     return false;
@@ -353,6 +354,7 @@ public final class ReflectionHandler {
             }
             return true;
         }
+
     }
 
     /**
@@ -378,6 +380,7 @@ public final class ReflectionHandler {
         public Object getValue() {
             return this.value;
         }
+
     }
 
     /**
@@ -405,6 +408,7 @@ public final class ReflectionHandler {
         public String toString() {
             return name;
         }
+
     }
 
     /**
@@ -448,6 +452,7 @@ public final class ReflectionHandler {
         public String toString() {
             return name;
         }
+
     }
 
     /**
@@ -589,6 +594,7 @@ public final class ReflectionHandler {
             }
             return packet;
         }
+
     }
 
 }

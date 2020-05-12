@@ -21,11 +21,9 @@ public class ImageEffect extends BaseImageEffect {
     }
 
     protected void display(BufferedImage image, Vector v, Location location, int pixel) {
-        if (!invert && Color.black.getRGB() != pixel) {
-            return;
-        } else if (invert && Color.black.getRGB() == pixel) {
-            return;
-        }
+        if (!invert && Color.black.getRGB() != pixel) return;
+        else if (invert && Color.black.getRGB() == pixel) return;
+
         display(particle, location.add(v));
         location.subtract(v);
     }

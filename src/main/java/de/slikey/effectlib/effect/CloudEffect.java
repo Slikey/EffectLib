@@ -18,11 +18,13 @@ public class CloudEffect extends Effect {
     public Particle cloudParticle = Particle.CLOUD;
     public Color cloudColor = null;
     public float cloudSpeed = 0;
+    public int cloudParticles = 50;
 
     /*
      * Particle of the rain/snow
      */
     public Particle mainParticle = Particle.DRIP_WATER;
+    public int mainParticles = 15;
 
     /*
      * Size of the cloud
@@ -53,15 +55,18 @@ public class CloudEffect extends Effect {
     public void onRun() {
         Location location = getLocation();
         location.add(0, yOffset, 0);
-        for (int i = 0; i < 50; i++) {
+
+        for (int i = 0; i < cloudParticles; i++) {
             Vector v = RandomUtils.getRandomCircleVector().multiply(RandomUtils.random.nextDouble() * cloudSize);
             display(cloudParticle, location.add(v), cloudColor, cloudSpeed, 1);
             location.subtract(v);
         }
+
         Location l;
         if (increaseHeight) l = location.add(0, 0.2, 0);
         else l = location;
-        for (int i = 0; i < 15; i++) {
+
+        for (int i = 0; i < mainParticles; i++) {
             int r = RandomUtils.random.nextInt(2);
             double x = RandomUtils.random.nextDouble() * particleRadius;
             double z = RandomUtils.random.nextDouble() * particleRadius;

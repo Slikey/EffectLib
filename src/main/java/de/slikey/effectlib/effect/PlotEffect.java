@@ -1,20 +1,22 @@
 package de.slikey.effectlib.effect;
 
-import de.slikey.effectlib.Effect;
-import de.slikey.effectlib.EffectManager;
-import de.slikey.effectlib.EffectType;
-import de.slikey.effectlib.math.EquationStore;
-import de.slikey.effectlib.math.EquationTransform;
+import java.util.Set;
+import java.util.Arrays;
+import java.util.HashSet;
+
 import org.bukkit.Particle;
 import org.bukkit.Location;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
+import de.slikey.effectlib.Effect;
+import de.slikey.effectlib.EffectType;
+import de.slikey.effectlib.EffectManager;
+import de.slikey.effectlib.math.EquationStore;
+import de.slikey.effectlib.math.EquationTransform;
 
 public class PlotEffect extends Effect {
+
     private final static String[] _variables = {"t", "i"};
-    private final static Set<String> variables = new HashSet<String>(Arrays.asList(_variables));
+    private final static Set<String> variables = new HashSet<>(Arrays.asList(_variables));
 
     /**
      * ParticleType of spawned particle
@@ -56,14 +58,14 @@ public class PlotEffect extends Effect {
      */
     public boolean persistent = true;
 
+    private int step = 0;
+
     public PlotEffect(EffectManager effectManager) {
         super(effectManager);
         type = EffectType.REPEATING;
         period = 1;
         iterations = 100;
     }
-
-    private int step = 0;
 
     @Override
     public void onRun() {
@@ -95,4 +97,5 @@ public class PlotEffect extends Effect {
 
         step++;
     }
+
 }

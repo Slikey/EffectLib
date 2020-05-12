@@ -103,4 +103,5 @@ public final class VectorUtils {
     public static final double angleToXAxis(Vector vector) {
         return Math.atan2(vector.getX(), vector.getY());
     }
+
 }

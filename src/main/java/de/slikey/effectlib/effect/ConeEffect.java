@@ -1,14 +1,15 @@
 package de.slikey.effectlib.effect;
 
-import de.slikey.effectlib.Effect;
-import de.slikey.effectlib.EffectManager;
-import de.slikey.effectlib.EffectType;
-import de.slikey.effectlib.util.MathUtils;
 import org.bukkit.Particle;
-import de.slikey.effectlib.util.RandomUtils;
-import de.slikey.effectlib.util.VectorUtils;
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
+
+import de.slikey.effectlib.Effect;
+import de.slikey.effectlib.EffectType;
+import de.slikey.effectlib.EffectManager;
+import de.slikey.effectlib.util.MathUtils;
+import de.slikey.effectlib.util.RandomUtils;
+import de.slikey.effectlib.util.VectorUtils;
 
 public class ConeEffect extends Effect {
 
@@ -66,19 +67,17 @@ public class ConeEffect extends Effect {
 
     @Override
     public void reset() {
-        this.step = 0;
+        step = 0;
     }
 
     @Override
     public void onRun() {
         Location location = getLocation();
         for (int x = 0; x < particles; x++) {
-            if (step > particlesCone) {
-                step = 0;
-            }
-            if (randomize && step == 0) {
-                rotation = RandomUtils.getRandomAngle();
-            }
+
+            if (step > particlesCone) step = 0;
+            if (randomize && step == 0) rotation = RandomUtils.getRandomAngle();
+
             double angle = step * angularVelocity + rotation;
             float radius = step * radiusGrow;
             float length = step * lengthGrow;
@@ -92,4 +91,5 @@ public class ConeEffect extends Effect {
             step++;
         }
     }
+
 }

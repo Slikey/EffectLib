@@ -193,9 +193,8 @@ public abstract class Effect implements Runnable {
     private boolean done = false;
 
     public Effect(EffectManager effectManager) {
-        if (effectManager == null) {
-            throw new IllegalArgumentException("EffectManager cannot be null!");
-        }
+        if (effectManager == null) throw new IllegalArgumentException("EffectManager cannot be null!");
+
         this.effectManager = effectManager;
         visibleRange = effectManager.getParticleRange();
     }
@@ -320,7 +319,6 @@ public abstract class Effect implements Runnable {
         origin = location;
 
         if (offset != null) origin.addOffset(offset);
-
         if (relativeOffset != null) origin.addRelativeOffset(relativeOffset);
 
         origin.setDirectionOffset(yawOffset, pitchOffset);
@@ -337,10 +335,9 @@ public abstract class Effect implements Runnable {
     public void setDynamicTarget(DynamicLocation location) {
         target = location;
         if (target != null && targetOffset != null) target.addOffset(targetOffset);
-        if (target != null) {
-            target.setUpdateLocation(updateLocations);
-            target.setUpdateDirection(updateDirections);
-        }
+        if (target == null) return;
+        target.setUpdateLocation(updateLocations);
+        target.setUpdateDirection(updateDirections);
     }
 
     protected final boolean validate() {
@@ -382,7 +379,7 @@ public abstract class Effect implements Runnable {
     }
 
     protected void display(Particle effect, Location location) {
-        display(effect, location, this.color);
+        display(effect, location, color);
     }
 
     protected void display(Particle particle, Location location, Color color) {
@@ -390,7 +387,7 @@ public abstract class Effect implements Runnable {
     }
 
     protected void display(Particle particle, Location location, float speed, int amount) {
-        display(particle, location, this.color, speed, amount);
+        display(particle, location, color, speed, amount);
     }
 
     protected void display(Particle particle, Location location, Color color, float speed, int amount) {

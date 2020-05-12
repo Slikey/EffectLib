@@ -1,20 +1,33 @@
 package de.slikey.effectlib.effect;
 
-import de.slikey.effectlib.Effect;
-import de.slikey.effectlib.EffectManager;
-import de.slikey.effectlib.EffectType;
-import de.slikey.effectlib.util.MathUtils;
-import org.bukkit.Particle;
-import de.slikey.effectlib.util.RandomUtils;
-import de.slikey.effectlib.util.VectorUtils;
-import java.util.HashSet;
 import java.util.Set;
+import java.util.HashSet;
+
+import org.bukkit.Color;
 import org.bukkit.Location;
+import org.bukkit.Particle;
 import org.bukkit.util.Vector;
 
+import de.slikey.effectlib.Effect;
+import de.slikey.effectlib.EffectType;
+import de.slikey.effectlib.EffectManager;
+import de.slikey.effectlib.util.MathUtils;
+import de.slikey.effectlib.util.RandomUtils;
+import de.slikey.effectlib.util.VectorUtils;
+
 public class EarthEffect extends Effect {
-    public Particle particle1 = Particle.VILLAGER_HAPPY;
-    public Particle particle2 = Particle.DRIP_WATER;
+
+    public Particle particleLand = Particle.VILLAGER_HAPPY;
+    public Particle particleOcean = Particle.DRIP_WATER;
+
+    public Color colorLand = null;
+    public Color colorOcean = null;
+
+    public int particlesLand = 3;
+    public int particlesOcean = 1;
+
+    public float speedLand = 0F;
+    public float speedOcean = 0F;
 
     /**
      * Precision of generation. Higher numbers have better results, but increase the time of generation. Don't pick Number above 10.000
@@ -51,13 +64,13 @@ public class EarthEffect extends Effect {
         type = EffectType.REPEATING;
         period = 5;
         iterations = 200;
-        cacheGreen = new HashSet<Vector>();
-        cacheBlue = new HashSet<Vector>();
+        cacheGreen = new HashSet<>();
+        cacheBlue = new HashSet<>();
     }
 
     @Override
     public void reset() {
-        this.firstStep = true;
+        firstStep = true;
     }
 
     public void invalidate() {
@@ -65,7 +78,7 @@ public class EarthEffect extends Effect {
         cacheGreen.clear();
         cacheBlue.clear();
 
-        Set<Vector> cache = new HashSet<Vector>();
+        Set<Vector> cache = new HashSet<>();
         int sqrtParticles = (int) Math.sqrt(particles);
         float theta = 0, phi, thetaStep = MathUtils.PI / sqrtParticles, phiStep = MathUtils.PI2 / sqrtParticles;
         for (int i = 0; i < sqrtParticles; i++) {
@@ -98,39 +111,34 @@ public class EarthEffect extends Effect {
         float minSquared = Float.POSITIVE_INFINITY, maxSquared = Float.NEGATIVE_INFINITY;
         for (Vector current : cache) {
             float lengthSquared = (float) current.lengthSquared();
-            if (minSquared > lengthSquared) {
-                minSquared = lengthSquared;
-            }
-            if (maxSquared < lengthSquared) {
-                maxSquared = lengthSquared;
-            }
+
+            if (minSquared > lengthSquared) minSquared = lengthSquared;
+            if (maxSquared < lengthSquared) maxSquared = lengthSquared;
         }
 
         // COLOR PARTICLES
         float average = (minSquared + maxSquared) / 2;
         for (Vector v : cache) {
             float lengthSquared = (float) v.lengthSquared();
-            if (lengthSquared >= average) {
-                cacheGreen.add(v);
-            } else {
-                cacheBlue.add(v);
-            }
+
+            if (lengthSquared >= average) cacheGreen.add(v);
+            else cacheBlue.add(v);
         }
     }
 
     @Override
     public void onRun() {
         Location location = getLocation();
-        if (firstStep) {
-            invalidate();
-        }
+        if (firstStep) invalidate();
+
         for (Vector v : cacheGreen) {
-            display(particle1, location.add(v), 0, 3);
+            display(particleLand, location.add(v), colorLand, speedLand, particlesLand);
             location.subtract(v);
         }
         for (Vector v : cacheBlue) {
-            display(particle2, location.add(v));
+            display(particleOcean, location.add(v), colorOcean, speedOcean, particlesOcean);
             location.subtract(v);
         }
     }
+
 }

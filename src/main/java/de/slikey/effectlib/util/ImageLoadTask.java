@@ -1,21 +1,22 @@
 package de.slikey.effectlib.util;
 
+import java.net.URL;
+import java.io.File;
+import java.io.InputStream;
+import java.net.URLEncoder;
+import java.io.OutputStream;
+import javax.imageio.ImageIO;
+import java.util.logging.Level;
+import java.io.FileOutputStream;
+import javax.imageio.ImageReader;
+import java.net.HttpURLConnection;
+import java.awt.image.BufferedImage;
+import javax.imageio.stream.ImageInputStream;
+
 import de.slikey.effectlib.EffectManager;
 
-import javax.imageio.ImageIO;
-import javax.imageio.ImageReader;
-import javax.imageio.stream.ImageInputStream;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLEncoder;
-import java.util.logging.Level;
-
 public class ImageLoadTask implements Runnable {
+
     private static final int REQUEST_TIMEOUT = 30000;
     private static final int BUFFER_SIZE = 10 * 1024;
     private static boolean dirsMade = false;
@@ -45,9 +46,7 @@ public class ImageLoadTask implements Runnable {
 
                 if (!dirsMade) {
                     dirsMade = true;
-                    if (!cacheFolder.mkdirs()) {
-                        effectManager.onError("Could not create cache folder: " + cacheFolder.getAbsolutePath());
-                    }
+                    if (!cacheFolder.mkdirs()) effectManager.onError("Could not create cache folder: " + cacheFolder.getAbsolutePath());
                 }
 
                 String cacheFileName = URLEncoder.encode(fileName, "UTF-8");
@@ -75,9 +74,7 @@ public class ImageLoadTask implements Runnable {
             }
         } else if (!fileName.startsWith(File.pathSeparator)) {
             imageFile = new File(effectManager.getOwningPlugin().getDataFolder(), fileName);
-            if (!imageFile.exists()) {
-                imageFile = new File(fileName);
-            }
+            if (!imageFile.exists()) imageFile = new File(fileName);
         } else {
             imageFile = new File(fileName);
         }
@@ -108,4 +105,5 @@ public class ImageLoadTask implements Runnable {
 
         callback.loaded(images);
     }
+
 }

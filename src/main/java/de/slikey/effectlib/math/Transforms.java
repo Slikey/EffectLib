@@ -8,6 +8,7 @@ import java.util.Collection;
 
 import de.slikey.effectlib.EffectManager;
 import de.slikey.effectlib.util.ConfigUtils;
+
 import org.bukkit.configuration.ConfigurationSection;
 
 public class Transforms {

@@ -1,10 +1,11 @@
 package de.slikey.effectlib.math;
 
-import org.bukkit.configuration.ConfigurationSection;
-
 import java.util.Collection;
 
+import org.bukkit.configuration.ConfigurationSection;
+
 public class MultiplyTransform implements Transform {
+
     private Collection<Transform> inputs;
 
     @Override
@@ -20,4 +21,5 @@ public class MultiplyTransform implements Transform {
         }
         return value;
     }
+
 }

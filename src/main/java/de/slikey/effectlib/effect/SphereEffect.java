@@ -30,7 +30,7 @@ public class SphereEffect extends Effect {
      * Particles to display
      */
     public int particles = 50;
-    
+
     /**
      * Amount to increase the radius per tick
      */
@@ -49,7 +49,7 @@ public class SphereEffect extends Effect {
     @Override
     public void onRun() {
         if (radiusIncrease != 0) radius += radiusIncrease;
-		if (particleIncrease != 0) particles += particleIncrease;
+        if (particleIncrease != 0) particles += particleIncrease;
 
         Location location = getLocation();
         location.add(0, yOffset, 0);

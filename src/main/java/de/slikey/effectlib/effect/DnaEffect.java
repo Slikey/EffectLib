@@ -1,14 +1,15 @@
 package de.slikey.effectlib.effect;
 
-import de.slikey.effectlib.Effect;
-import de.slikey.effectlib.EffectManager;
-import de.slikey.effectlib.EffectType;
-import de.slikey.effectlib.util.MathUtils;
-import org.bukkit.Particle;
-import de.slikey.effectlib.util.VectorUtils;
 import org.bukkit.Color;
 import org.bukkit.Location;
+import org.bukkit.Particle;
 import org.bukkit.util.Vector;
+
+import de.slikey.effectlib.Effect;
+import de.slikey.effectlib.EffectType;
+import de.slikey.effectlib.EffectManager;
+import de.slikey.effectlib.util.MathUtils;
+import de.slikey.effectlib.util.VectorUtils;
 
 public class DnaEffect extends Effect {
 
@@ -79,16 +80,15 @@ public class DnaEffect extends Effect {
 
     @Override
     public void reset() {
-        this.step = 0;
+        step = 0;
     }
 
     @Override
     public void onRun() {
         Location location = getLocation();
         for (int j = 0; j < particlesHelix; j++) {
-            if (step * grow > length) {
-                step = 0;
-            }
+            if (step * grow > length) step = 0;
+
             for (int i = 0; i < 2; i++) {
                 double angle = step * radials + Math.PI * i;
                 Vector v = new Vector(Math.cos(angle) * radius, step * grow, Math.sin(angle) * radius);
@@ -96,9 +96,8 @@ public class DnaEffect extends Effect {
             }
             if (step % baseInterval == 0) {
                 for (int i = -particlesBase; i <= particlesBase; i++) {
-                    if (i == 0) {
-                        continue;
-                    }
+                    if (i == 0) continue;
+
                     Particle particle = particleBase1;
                     Color color = colorBase1;
                     if (i < 0) {

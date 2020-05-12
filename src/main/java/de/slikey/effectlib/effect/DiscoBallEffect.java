@@ -3,14 +3,16 @@ package de.slikey.effectlib.effect;
 /*
  * Idea by coco5843
  */
-import de.slikey.effectlib.Effect;
-import de.slikey.effectlib.EffectManager;
-import de.slikey.effectlib.EffectType;
-import org.bukkit.Particle;
-import de.slikey.effectlib.util.RandomUtils;
+
 import org.bukkit.Color;
 import org.bukkit.Location;
+import org.bukkit.Particle;
 import org.bukkit.util.Vector;
+
+import de.slikey.effectlib.Effect;
+import de.slikey.effectlib.EffectType;
+import de.slikey.effectlib.EffectManager;
+import de.slikey.effectlib.util.RandomUtils;
 
 public class DiscoBallEffect extends Effect {
 
@@ -27,8 +29,11 @@ public class DiscoBallEffect extends Effect {
     /**
      * Particle of the sphere and of the lines
      */
-    public Particle sphereParticle = Particle.FLAME, lineParticle = Particle.REDSTONE;
-    public Color sphereColor = null, lineColor = null;
+    public Particle sphereParticle = Particle.FLAME;
+    public Particle lineParticle = Particle.REDSTONE;
+
+    public Color sphereColor = null;
+    public Color lineColor = null;
 
     /**
      * Max number of lines
@@ -38,7 +43,8 @@ public class DiscoBallEffect extends Effect {
     /**
      * Max number of particles per line
      */
-    public int lineParticles = 100, sphereParticles = 50;
+    public int lineParticles = 100;
+    public int sphereParticles = 50;
 
     /**
      * Direction of the lines
@@ -60,16 +66,16 @@ public class DiscoBallEffect extends Effect {
             double x = RandomUtils.random.nextInt(max - max * (-1)) + max * (-1);
             double y = RandomUtils.random.nextInt(max - max * (-1)) + max * (-1);
             double z = RandomUtils.random.nextInt(max - max * (-1)) + max * (-1);
-            if (direction == Direction.DOWN) {
-                y = RandomUtils.random.nextInt(max * 2 - max) + max;
-            } else if (direction == Direction.UP) {
-                y = RandomUtils.random.nextInt(max * (-1) - max * (-2)) + max * (-2);
-            }
+
+            if (direction == Direction.DOWN) y = RandomUtils.random.nextInt(max * 2 - max) + max;
+            else if (direction == Direction.UP) y = RandomUtils.random.nextInt(max * (-1) - max * (-2)) + max * (-2);
+
             Location target = location.clone().subtract(x, y, z);
             if (target == null) {
                 cancel();
                 return;
             }
+
             Vector link = target.toVector().subtract(location.toVector());
             float length = (float) link.length();
             link.normalize();

@@ -1,11 +1,12 @@
 package de.slikey.effectlib.effect;
 
-import de.slikey.effectlib.Effect;
-import de.slikey.effectlib.EffectManager;
-import de.slikey.effectlib.EffectType;
 import org.bukkit.Particle;
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
+
+import de.slikey.effectlib.Effect;
+import de.slikey.effectlib.EffectType;
+import de.slikey.effectlib.EffectManager;
 
 public class LineEffect extends Effect {
 
@@ -59,18 +60,17 @@ public class LineEffect extends Effect {
 
     @Override
     public void reset() {
-        this.step = 0;
+        step = 0;
     }
 
     @Override
     public void onRun() {
         Location location = getLocation();
-        Location target = null;
-        if (length > 0) {
-            target = location.clone().add(location.getDirection().normalize().multiply(length));
-        } else {
-            target = getTarget();
-        }
+        Location target;
+
+        if (length > 0) target = location.clone().add(location.getDirection().normalize().multiply(length));
+        else target = getTarget();
+
         int amount = particles / zigZags;
         if (target == null) {
             cancel();
@@ -85,18 +85,11 @@ public class LineEffect extends Effect {
         Location loc = location.clone().subtract(v);
         for (int i = 0; i < particles; i++) {
             if (isZigZag) {
-                if (zag) {
-                    loc.add(zigZagOffset);
-                } else {
-                    loc.subtract(zigZagOffset);
-                }
+                if (zag) loc.add(zigZagOffset);
+                else loc.subtract(zigZagOffset);
             }
             if (step >= amount) {
-                if (zag) {
-                    zag = false;
-                } else {
-                    zag = true;
-                }
+                zag = !zag;
                 step = 0;
             }
             step++;

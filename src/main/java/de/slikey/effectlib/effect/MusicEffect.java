@@ -1,12 +1,14 @@
 package de.slikey.effectlib.effect;
 
-import de.slikey.effectlib.Effect;
-import de.slikey.effectlib.EffectManager;
-import de.slikey.effectlib.EffectType;
 import org.bukkit.Particle;
 import org.bukkit.Location;
 
+import de.slikey.effectlib.Effect;
+import de.slikey.effectlib.EffectType;
+import de.slikey.effectlib.EffectManager;
+
 public class MusicEffect extends Effect {
+
     public Particle particle = Particle.NOTE;
 
     /**
@@ -33,7 +35,7 @@ public class MusicEffect extends Effect {
 
     @Override
     public void reset() {
-        this.step = 0;
+        step = 0;
     }
 
     @Override

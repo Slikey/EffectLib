@@ -149,9 +149,7 @@ public final class MathUtils {
         }
         float invDiv = 1 / ((x < y ? y : x) * INV_ATAN2_DIM_MINUS_1);
 
-        if (invDiv == Float.POSITIVE_INFINITY) {
-            return ((float) Math.atan2(y, x) + add) * mul;
-        }
+        if (invDiv == Float.POSITIVE_INFINITY) return ((float) Math.atan2(y, x) + add) * mul;
 
         int xi = (int) (x * invDiv);
         int yi = (int) (y * invDiv);
@@ -215,9 +213,8 @@ public final class MathUtils {
      * Returns the next power of two. Returns the specified value if the value is already a power of two.
      */
     static public int nextPowerOfTwo(int value) {
-        if (value == 0) {
-            return 1;
-        }
+        if (value == 0) return 1;
+
         value--;
         value |= value >> 1;
         value |= value >> 2;
@@ -233,32 +230,23 @@ public final class MathUtils {
 
     // ---
     static public int clamp(int value, int min, int max) {
-        if (value < min) {
-            return min;
-        }
-        if (value > max) {
-            return max;
-        }
+        if (value < min) return min;
+        if (value > max) return max;
+
         return value;
     }
 
     static public short clamp(short value, short min, short max) {
-        if (value < min) {
-            return min;
-        }
-        if (value > max) {
-            return max;
-        }
+        if (value < min) return min;
+        if (value > max) return max;
+
         return value;
     }
 
     static public float clamp(float value, float min, float max) {
-        if (value < min) {
-            return min;
-        }
-        if (value > max) {
-            return max;
-        }
+        if (value < min) return min;
+        if (value > max) return max;
+
         return value;
     }
 
@@ -361,4 +349,5 @@ public final class MathUtils {
     static public boolean isFinite(double value) {
         return !Double.isNaN(value) && !Double.isInfinite(value);
     }
+
 }

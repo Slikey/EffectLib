@@ -1,10 +1,11 @@
 package de.slikey.effectlib.effect;
 
-import de.slikey.effectlib.Effect;
-import de.slikey.effectlib.EffectManager;
-import de.slikey.effectlib.EffectType;
-import org.bukkit.entity.Entity;
 import org.bukkit.util.Vector;
+import org.bukkit.entity.Entity;
+
+import de.slikey.effectlib.Effect;
+import de.slikey.effectlib.EffectType;
+import de.slikey.effectlib.EffectManager;
 
 public class JumpEffect extends Effect {
 

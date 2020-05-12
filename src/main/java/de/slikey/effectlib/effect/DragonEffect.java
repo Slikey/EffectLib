@@ -1,16 +1,18 @@
 package de.slikey.effectlib.effect;
 
-import de.slikey.effectlib.Effect;
-import de.slikey.effectlib.EffectManager;
-import de.slikey.effectlib.EffectType;
-import de.slikey.effectlib.util.MathUtils;
+import java.util.List;
+import java.util.ArrayList;
+
+import org.bukkit.Location;
 import org.bukkit.Particle;
+import org.bukkit.util.Vector;
+
+import de.slikey.effectlib.Effect;
+import de.slikey.effectlib.EffectType;
+import de.slikey.effectlib.EffectManager;
+import de.slikey.effectlib.util.MathUtils;
 import de.slikey.effectlib.util.RandomUtils;
 import de.slikey.effectlib.util.VectorUtils;
-import java.util.ArrayList;
-import java.util.List;
-import org.bukkit.Location;
-import org.bukkit.util.Vector;
 
 public class DragonEffect extends Effect {
 
@@ -50,13 +52,13 @@ public class DragonEffect extends Effect {
         type = EffectType.REPEATING;
         period = 2;
         iterations = 200;
-        rndF = new ArrayList<Float>(arcs);
-        rndAngle = new ArrayList<Double>(arcs);
+        rndF = new ArrayList<>(arcs);
+        rndAngle = new ArrayList<>(arcs);
     }
 
     @Override
     public void reset() {
-        this.step = 0;
+        step = 0;
     }
 
     @Override
@@ -87,4 +89,5 @@ public class DragonEffect extends Effect {
             step++;
         }
     }
+
 }

@@ -1,18 +1,20 @@
 package de.slikey.effectlib.effect;
 
-import de.slikey.effectlib.Effect;
-import de.slikey.effectlib.EffectManager;
-import de.slikey.effectlib.EffectType;
-import de.slikey.effectlib.util.MathUtils;
-import org.bukkit.Particle;
-import de.slikey.effectlib.util.StringParser;
-import de.slikey.effectlib.util.VectorUtils;
-import java.awt.Color;
 import java.awt.Font;
+import java.awt.Color;
+import java.util.Objects;
 import java.awt.image.BufferedImage;
 
 import org.bukkit.Location;
+import org.bukkit.Particle;
 import org.bukkit.util.Vector;
+
+import de.slikey.effectlib.Effect;
+import de.slikey.effectlib.EffectType;
+import de.slikey.effectlib.EffectManager;
+import de.slikey.effectlib.util.MathUtils;
+import de.slikey.effectlib.util.VectorUtils;
+import de.slikey.effectlib.util.StringParser;
 
 public class TextEffect extends Effect {
 
@@ -75,7 +77,7 @@ public class TextEffect extends Effect {
 
     public TextEffect(EffectManager effectManager) {
         super(effectManager);
-        this.font = new Font("Tahoma", Font.PLAIN, 16);
+        font = new Font("Tahoma", Font.PLAIN, 16);
         type = EffectType.REPEATING;
         period = 40;
         iterations = 20;
@@ -92,7 +94,7 @@ public class TextEffect extends Effect {
             return;
         }
         Location location = getLocation();
-        int clr = 0;
+        int clr;
         try {
             if (image == null || shouldRecalculateImage()) {
                 lastParsedText = text;
@@ -103,11 +105,9 @@ public class TextEffect extends Effect {
             for (int y = 0; y < image.getHeight(); y += stepY) {
                 for (int x = 0; x < image.getWidth(); x += stepX) {
                     clr = image.getRGB(x, y);
-                    if (!invert && Color.black.getRGB() != clr) {
-                        continue;
-                    } else if (invert && Color.black.getRGB() == clr) {
-                        continue;
-                    }
+                    if (!invert && Color.black.getRGB() != clr) continue;
+                    else if (invert && Color.black.getRGB() == clr) continue;
+
                     Vector v = new Vector((float) image.getWidth() / 2 - x, (float) image.getHeight() / 2 - y, 0).multiply(size);
                     VectorUtils.rotateAroundAxisY(v, -location.getYaw() * MathUtils.degreesToRadians);
                     display(particle, location.add(v));
@@ -120,17 +120,13 @@ public class TextEffect extends Effect {
             cancel(true);
         }
     }
-
-    // Replacement for Java 1.7 Objects.equals
-    public static boolean objectsEquals(Object a, Object b) {
-        return (a == b) || (a != null && a.equals(b));
-    }
     
     private boolean shouldRecalculateImage() {
         // Don't bother if we don't use real time updates
         if (!realtime) return false;
         
         // Text content or font is different, recalculate
-        return !objectsEquals(lastParsedText, text) || !objectsEquals(lastParsedFont, font);
+        return !Objects.equals(lastParsedText, text) || !Objects.equals(lastParsedFont, font);
     }
+
 }

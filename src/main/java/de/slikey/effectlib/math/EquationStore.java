@@ -1,13 +1,14 @@
 package de.slikey.effectlib.math;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.HashMap;
 
 public class EquationStore {
+
     private static final String DEFAULT_VARIABLE = "x";
     private static EquationStore instance;
-    private Map<String, EquationTransform> transforms = new HashMap<String, EquationTransform>();
+    private Map<String, EquationTransform> transforms = new HashMap<>();
 
     public EquationTransform getTransform(String equation) {
         return getTransform(equation, DEFAULT_VARIABLE);
@@ -44,16 +45,13 @@ public class EquationStore {
     }
 
     public static void clear() {
-        if (instance != null) {
-            instance.transforms.clear();
-        }
+        if (instance != null) instance.transforms.clear();
     }
     
     public static EquationStore getInstance() {
-        if (instance == null) {
-            instance = new EquationStore();
-        }
+        if (instance == null) instance = new EquationStore();
         
         return instance;
     }
+
 }

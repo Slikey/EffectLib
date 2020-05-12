@@ -13,6 +13,6 @@ public enum EffectType {
     /**
      * Effect is once delayed played. Set delay with {@link Effect.delay}.
      */
-    DELAYED;
+    DELAYED
 
 }

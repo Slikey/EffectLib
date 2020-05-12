@@ -1,11 +1,12 @@
 package de.slikey.effectlib.effect;
 
-import de.slikey.effectlib.Effect;
-import de.slikey.effectlib.EffectManager;
-import de.slikey.effectlib.EffectType;
 import org.bukkit.Particle;
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
+
+import de.slikey.effectlib.Effect;
+import de.slikey.effectlib.EffectType;
+import de.slikey.effectlib.EffectManager;
 
 public class ArcEffect extends Effect {
 
@@ -38,20 +39,23 @@ public class ArcEffect extends Effect {
 
     @Override
     public void reset() {
-        this.step = 0;
+        step = 0;
     }
 
     @Override
     public void onRun() {
         Location location = getLocation();
         Location target = getTarget();
+
         if (target == null) {
             cancel();
             return;
         }
+
         Vector link = target.toVector().subtract(location.toVector());
         float length = (float) link.length();
         float pitch = (float) (4 * height / Math.pow(length, 2));
+
         for (int i = 0; i < particles; i++) {
             Vector v = link.clone().normalize().multiply((float) length * i / particles);
             float x = ((float) i / particles) * length - length / 2;

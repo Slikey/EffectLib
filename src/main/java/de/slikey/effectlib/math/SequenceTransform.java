@@ -1,23 +1,26 @@
 package de.slikey.effectlib.math;
 
-import de.slikey.effectlib.util.ConfigUtils;
-import org.bukkit.configuration.ConfigurationSection;
-
+import java.util.List;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
+
+import de.slikey.effectlib.util.ConfigUtils;
+
+import org.bukkit.configuration.ConfigurationSection;
 
 public class SequenceTransform implements Transform {
+
     private List<Sequence> steps;
 
     private static class Sequence {
+
         private final Transform transform;
         private final double start;
 
         public Sequence(ConfigurationSection configuration) {
-            this.transform = Transforms.loadTransform(configuration, "transform");
-            this.start = configuration.getDouble("start", 0);
+            transform = Transforms.loadTransform(configuration, "transform");
+            start = configuration.getDouble("start", 0);
         }
 
         public double getStart() {
@@ -27,11 +30,12 @@ public class SequenceTransform implements Transform {
         public double get(double t) {
             return transform.get(t);
         }
-    };
+
+    }
 
     @Override
     public void load(ConfigurationSection parameters) {
-        steps = new ArrayList<Sequence>();
+        steps = new ArrayList<>();
         Collection<ConfigurationSection> stepConfigurations = ConfigUtils.getNodeList(parameters, "steps");
         if (stepConfigurations != null) {
             for (ConfigurationSection stepConfig : stepConfigurations) {
@@ -45,10 +49,9 @@ public class SequenceTransform implements Transform {
     public double get(double t) {
         double value = 0;
         for (Sequence step : steps) {
-            if (step.getStart() <= t) {
-                return step.get(t);
-            }
+            if (step.getStart() <= t) return step.get(t);
         }
         return value;
     }
+
 }
