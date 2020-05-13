@@ -58,18 +58,19 @@ public class HeartEffect extends Effect {
     @Override
     public void onRun() {
         Location location = getLocation();
-        Vector vector = new Vector();
+        Vector v = new Vector();
         for (int i = 0; i < particles; i++) {
             float alpha = ((MathUtils.PI / compilation) / particles) * i;
             double phi = Math.pow(Math.abs(MathUtils.sin(2 * compilation * alpha)) + factorInnerSpike * Math.abs(MathUtils.sin(compilation * alpha)), 1 / compressYFactorTotal);
 
-            vector.setY(phi * (MathUtils.sin(alpha) + MathUtils.cos(alpha)) * yFactor);
-            vector.setZ(phi * (MathUtils.cos(alpha) - MathUtils.sin(alpha)) * xFactor);
+            v.setY(phi * (MathUtils.sin(alpha) + MathUtils.cos(alpha)) * yFactor);
+            v.setZ(phi * (MathUtils.cos(alpha) - MathUtils.sin(alpha)) * xFactor);
 
-            VectorUtils.rotateVector(vector, xRotation, yRotation, zRotation);
-
-            display(particle, location.add(vector));
-            location.subtract(vector);
+            VectorUtils.rotateVector(v, xRotation, yRotation, zRotation);
+            VectorUtils.rotateAroundAxisX(v, location.getPitch() * MathUtils.degreesToRadians);
+            VectorUtils.rotateAroundAxisY(v, -location.getYaw() * MathUtils.degreesToRadians);
+            display(particle, location.add(v));
+            location.subtract(v);
         }
     }
 
