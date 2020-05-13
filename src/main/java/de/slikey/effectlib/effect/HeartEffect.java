@@ -5,6 +5,7 @@ import org.bukkit.Particle;
 import org.bukkit.util.Vector;
 
 import de.slikey.effectlib.Effect;
+import de.slikey.effectlib.EffectType;
 import de.slikey.effectlib.EffectManager;
 import de.slikey.effectlib.util.MathUtils;
 import de.slikey.effectlib.util.VectorUtils;
@@ -53,6 +54,9 @@ public class HeartEffect extends Effect {
 
     public HeartEffect(EffectManager effectManager) {
         super(effectManager);
+        type = EffectType.REPEATING;
+        iterations = 200;
+        period = 5;
     }
 
     @Override
@@ -67,8 +71,6 @@ public class HeartEffect extends Effect {
             v.setZ(phi * (MathUtils.cos(alpha) - MathUtils.sin(alpha)) * xFactor);
 
             VectorUtils.rotateVector(v, xRotation, yRotation, zRotation);
-            VectorUtils.rotateAroundAxisX(v, location.getPitch() * MathUtils.degreesToRadians);
-            VectorUtils.rotateAroundAxisY(v, -location.getYaw() * MathUtils.degreesToRadians);
             display(particle, location.add(v));
             location.subtract(v);
         }
