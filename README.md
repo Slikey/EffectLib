@@ -12,9 +12,68 @@ Find more information on [BukkitForums] [forum] or [BukkitDev] [dev]!
 
 Note that **this library** is no standalone plugin! You have to **create yourself a plugin** to run the effects!
 
+# How to Shade
 
-License
-----
+It is recommended to shade this plugin into yours. This way users of your plugin do not need to install EffectLib separately.
+
+This easy to do with Maven. First, add the elMakers repository:
+
+```
+    <repositories>
+        <repository>
+            <id>elMakers</id>
+            <url>http://maven.elmakers.com/repository/</url>
+        </repository>
+    </repositories>
+```
+
+Then add the EffectLib dependency:
+
+```
+        <dependency>
+            <groupId>de.slikey</groupId>
+            <artifactId>EffectLib</artifactId>
+            <version>6.2</version>
+            <scope>compile</scope>
+        </dependency>
+
+```
+
+Note the "compile" scope!
+
+Then finally add the Maven shade plugin:
+
+```
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.0.0</version>
+                <configuration>
+                    <minimizeJar>false</minimizeJar>
+                    <dependencyReducedPomLocation>${project.build.directory}/dependency-reduced-pom.xml</dependencyReducedPomLocation>
+                    <relocations>
+                        <relocation>
+                            <pattern>de.slikey</pattern>
+                            <shadedPattern>com.your.own.package.slikey</shadedPattern>
+                        </relocation>
+                    </relocations>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+```
+
+Make sure to change the "shadedPattern" to match the base package of your own plugin
+
+# License
 
 MIT
 
