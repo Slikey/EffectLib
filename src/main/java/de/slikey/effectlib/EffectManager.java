@@ -362,19 +362,43 @@ public class EffectManager implements Disposable {
             }
             Field field = effect.getClass().getField(key);
             if (field.getType().equals(Integer.TYPE) || field.getType().equals(Integer.class)) {
-                field.set(effect, fieldSection.getInt(fieldKey));
+                int intValue = Integer.MAX_VALUE;
+                if (!ConfigUtils.isMaxValue(stringValue)) {
+                    intValue = fieldSection.getInt(fieldKey);
+                }
+                field.set(effect, intValue);
             } else if (field.getType().equals(Float.TYPE) || field.getType().equals(Float.class)) {
-                field.set(effect, (float)fieldSection.getDouble(fieldKey));
+                float floatValue = Float.MAX_VALUE;
+                if (!ConfigUtils.isMaxValue(stringValue)) {
+                    floatValue = (float)fieldSection.getDouble(fieldKey);
+                }
+                field.set(effect,floatValue);
             } else if (field.getType().equals(Double.TYPE) || field.getType().equals(Double.class)) {
-                field.set(effect, fieldSection.getDouble(fieldKey));
+                double doubleValue = Double.MAX_VALUE;
+                if (!ConfigUtils.isMaxValue(stringValue)) {
+                    doubleValue = fieldSection.getDouble(fieldKey);
+                }
+                field.set(effect, doubleValue);
             } else if (field.getType().equals(Boolean.TYPE) || field.getType().equals(Boolean.class)) {
                 field.set(effect, fieldSection.getBoolean(fieldKey));
             } else if (field.getType().equals(Long.TYPE) || field.getType().equals(Long.class)) {
-                field.set(effect, fieldSection.getLong(fieldKey));
+                long longValue = Long.MAX_VALUE;
+                if (!ConfigUtils.isMaxValue(stringValue)) {
+                    longValue = fieldSection.getLong(fieldKey);
+                }
+                field.set(effect, longValue);
             } else if (field.getType().equals(Short.TYPE) || field.getType().equals(Short.class)) {
-                field.set(effect, (short)fieldSection.getInt(fieldKey));
+                short shortValue = Short.MAX_VALUE;
+                if (!ConfigUtils.isMaxValue(stringValue)) {
+                    shortValue = (short)fieldSection.getInt(fieldKey);
+                }
+                field.set(effect, shortValue);
             } else if (field.getType().equals(Byte.TYPE) || field.getType().equals(Byte.class)) {
-                field.set(effect, (byte)fieldSection.getInt(fieldKey));
+                byte byteValue = Byte.MAX_VALUE;
+                if (!ConfigUtils.isMaxValue(stringValue)) {
+                    byteValue = (byte)fieldSection.getInt(fieldKey);
+                }
+                field.set(effect, byteValue);
             } else if (field.getType().equals(String.class)) {
                 String value = fieldSection.getString(fieldKey);
                 field.set(effect, value);

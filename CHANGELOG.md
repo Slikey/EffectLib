@@ -3,6 +3,7 @@
 # 6.3
 
  - Bleed effect now uses a "material" rather than "color"
+ - Allow "forever" durations
 
 # 6.2
 
