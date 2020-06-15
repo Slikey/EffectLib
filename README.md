@@ -21,6 +21,11 @@ This easy to do with Maven. First, add the elMakers repository:
 ```
     <repositories>
         <repository>
+            <id>github</id>
+            <url>https://maven.pkg.github.com/Slikey/EffectLib</url>
+        </repository>
+<!-- Use this repository if you need snapshot builds -->
+        <repository>
             <id>elMakers</id>
             <url>http://maven.elmakers.com/repository/</url>
         </repository>
@@ -33,7 +38,7 @@ Then add the EffectLib dependency:
         <dependency>
             <groupId>de.slikey</groupId>
             <artifactId>EffectLib</artifactId>
-            <version>6.2</version>
+            <version>6.3</version>
             <scope>compile</scope>
         </dependency>
 
