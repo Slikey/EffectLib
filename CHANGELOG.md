@@ -1,5 +1,9 @@
 # CHANGELOG
 
+# 6.4
+
+ - Add "Particle" effect for simple repeating particles
+
 # 6.3
 
  - Bleed effect now uses a "material" rather than "color"
