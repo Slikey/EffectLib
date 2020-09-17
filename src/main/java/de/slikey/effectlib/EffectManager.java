@@ -2,6 +2,7 @@ package de.slikey.effectlib;
 
 import de.slikey.effectlib.math.Transforms;
 import de.slikey.effectlib.util.ConfigUtils;
+import de.slikey.effectlib.util.CustomSound;
 import de.slikey.effectlib.util.Disposable;
 import de.slikey.effectlib.util.DynamicLocation;
 import de.slikey.effectlib.util.ImageLoadCallback;
@@ -476,6 +477,13 @@ public class EffectManager implements Disposable {
                     String value = fieldSection.getString(fieldKey);
                     Font font = Font.decode(value);
                     field.set(effect, font);
+                } catch (Exception ex) {
+                    onError(ex);
+                }
+            } else if (field.getType().equals(CustomSound.class)) {
+                try {
+                    String value = fieldSection.getString(fieldKey);
+                    field.set(effect, new CustomSound(value));
                 } catch (Exception ex) {
                     onError(ex);
                 }

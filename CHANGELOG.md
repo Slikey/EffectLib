@@ -3,6 +3,7 @@
 # 6.4
 
  - Add "Particle" effect for simple repeating particles
+ - Add "Sound" effect for playing sounds or custom sounds, supporting volume and pitch-shifting
 
 # 6.3
 
