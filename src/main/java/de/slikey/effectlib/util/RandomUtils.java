@@ -38,4 +38,8 @@ public final class RandomUtils {
         return random.nextDouble() * 2 * Math.PI;
     }
 
+    public static boolean checkProbability(double probability) {
+        return probability >= 1 ? true : random.nextDouble() < probability;
+    }
+
 }

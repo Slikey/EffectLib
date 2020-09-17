@@ -4,6 +4,7 @@
 
  - Add "Particle" effect for simple repeating particles
  - Add "Sound" effect for playing sounds or custom sounds, supporting volume and pitch-shifting
+ - Add "probability" parameter for randomizing effects
 
 # 6.3
 

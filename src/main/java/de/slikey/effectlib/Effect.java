@@ -1,6 +1,7 @@
 package de.slikey.effectlib;
 
 import de.slikey.effectlib.util.DynamicLocation;
+import de.slikey.effectlib.util.RandomUtils;
 
 import org.bukkit.Particle;
 import org.bukkit.Color;
@@ -73,6 +74,11 @@ public abstract class Effect implements Runnable {
      * a specific duration.
      */
     public Integer duration = null;
+
+    /**
+     * Probability that this effect will play on each iteration
+     */
+    public double probability = 1;
 
     /**
      * Callback to run, after effect is done.
@@ -234,7 +240,9 @@ public abstract class Effect implements Runnable {
             return;
         }
         try {
-            onRun();
+            if (RandomUtils.checkProbability(probability)) {
+                onRun();
+            }
         } catch (Exception ex) {
             done();
             effectManager.onError(ex);
