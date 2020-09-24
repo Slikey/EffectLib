@@ -60,7 +60,10 @@ public class EffectManager implements Disposable {
     private Map<String, BufferedImage[]> imageCache = new HashMap<String, BufferedImage[]>();
 
     public EffectManager(Plugin owningPlugin) {
-        imageCacheFolder = owningPlugin == null ? null : new File(owningPlugin.getDataFolder(), "imagecache");
+        if (owningPlugin == null) {
+            throw new IllegalArgumentException("EffectManager must be given a valid owning plugin");
+        }
+        imageCacheFolder = new File(owningPlugin.getDataFolder(), "imagecache");
         this.owningPlugin = owningPlugin;
         Transforms.setEffectManager(this);
         effects = new HashMap<Effect, BukkitTask>();
