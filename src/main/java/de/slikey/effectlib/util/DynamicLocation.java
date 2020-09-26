@@ -64,9 +64,21 @@ public class DynamicLocation {
         updateOffsets();
     }
 
+    public void subtractOffset(Vector offset) {
+        if (this.offset == null) this.offset = offset.clone();
+        else this.offset.subtract(offset);
+        updateOffsets();
+    }
+
     public void addRelativeOffset(Vector offset) {
         if (relativeOffset == null) relativeOffset = offset.clone();
         else relativeOffset.add(offset);
+        updateOffsets();
+    }
+
+    public void subtractRelativeOffset(Vector offset) {
+        if (relativeOffset == null) relativeOffset = offset.clone();
+        else relativeOffset.subtract(offset);
         updateOffsets();
     }
 

@@ -22,6 +22,14 @@ public final class RandomUtils {
         return new Vector(x, y, z).normalize();
     }
 
+    public static Vector getRandomFlatVector() {
+        double x, z;
+        x = random.nextDouble() * 2 - 1;
+        z = random.nextDouble() * 2 - 1;
+
+        return new Vector(x, 0, z);
+    }
+
     public static Vector getRandomCircleVector() {
         double rnd, x, z;
         rnd = random.nextDouble() * 2 * Math.PI;
