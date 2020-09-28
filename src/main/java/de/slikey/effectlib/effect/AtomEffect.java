@@ -55,6 +55,11 @@ public class AtomEffect extends Effect {
     public double rotation = 0;
 
     /**
+     * Whether or not to orient to the direction of the source location
+     */
+    public boolean orient = false;
+
+    /**
      * Velocity of the orbitals
      */
     public double angularVelocity = Math.PI / 80d;
@@ -81,6 +86,9 @@ public class AtomEffect extends Effect {
         Location location = getLocation();
         for (int i = 0; i < particlesNucleus; i++) {
             Vector v = RandomUtils.getRandomVector().multiply(radius * radiusNucleus);
+            if (orient) {
+                 v = VectorUtils.rotateVector(v, location);
+            }
             location.add(v);
             display(particleNucleus, location, colorNucleus);
             location.subtract(v);
@@ -92,6 +100,9 @@ public class AtomEffect extends Effect {
                 Vector v = new Vector(Math.cos(angle), Math.sin(angle), 0).multiply(radius);
                 VectorUtils.rotateAroundAxisX(v, xRotation);
                 VectorUtils.rotateAroundAxisY(v, rotation);
+                if (orient) {
+                     v = VectorUtils.rotateVector(v, location);
+                }
                 location.add(v);
                 display(particleOrbital, location, colorOrbital);
                 location.subtract(v);
