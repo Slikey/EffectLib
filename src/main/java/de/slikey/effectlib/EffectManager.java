@@ -365,7 +365,15 @@ public class EffectManager implements Disposable {
             } else if (field.getType().equals(Color.class)) {
                 try {
                     String value = fieldSection.getString(fieldKey);
-                    Integer rgb = Integer.parseInt(value, 16);
+                    Integer rgb;
+                    if (value.equalsIgnoreCase("random")) {
+                        byte red =  (byte) (Math.random() * 255);
+                        byte green =  (byte) (Math.random() * 255);
+                        byte blue  =  (byte) (Math.random() * 255);
+                        rgb = (red << 16) | (green << 8) | blue;
+                    } else {
+                        rgb = Integer.parseInt(value, 16);
+                    }
                     Color color = Color.fromRGB(rgb);
                     field.set(effect, color);
                 } catch (Exception ex) {
