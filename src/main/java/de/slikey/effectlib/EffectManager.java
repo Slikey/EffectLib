@@ -14,13 +14,6 @@ import java.util.logging.Level;
 import java.awt.image.BufferedImage;
 import java.lang.reflect.Constructor;
 
-import de.slikey.effectlib.util.Disposable;
-import de.slikey.effectlib.util.ConfigUtils;
-import de.slikey.effectlib.util.ImageLoadTask;
-import de.slikey.effectlib.util.ParticleDisplay;
-import de.slikey.effectlib.util.DynamicLocation;
-import de.slikey.effectlib.util.ImageLoadCallback;
-
 import org.bukkit.Color;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -36,6 +29,8 @@ import org.bukkit.configuration.MemoryConfiguration;
 import org.bukkit.configuration.ConfigurationSection;
 
 import com.google.common.base.CaseFormat;
+
+import de.slikey.effectlib.util.*;
 
 /**
  * Dispose the EffectManager if you don't need him anymore.
@@ -421,6 +416,13 @@ public class EffectManager implements Disposable {
                     String value = fieldSection.getString(fieldKey);
                     Font font = Font.decode(value);
                     field.set(effect, font);
+                } catch (Exception ex) {
+                    onError(ex);
+                }
+            } else if (field.getType().equals(CustomSound.class)) {
+                try {
+                    String value = fieldSection.getString(fieldKey);
+                    field.set(effect, new CustomSound(value));
                 } catch (Exception ex) {
                     onError(ex);
                 }
