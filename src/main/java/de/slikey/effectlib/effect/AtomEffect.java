@@ -60,6 +60,8 @@ public class AtomEffect extends Effect {
      */
     public double angularVelocity = Math.PI / 80d;
 
+    public boolean orient = false;
+
     /**
      * Internal counter
      */
@@ -82,6 +84,7 @@ public class AtomEffect extends Effect {
         Location location = getLocation();
         for (int i = 0; i < particlesNucleus; i++) {
             Vector v = RandomUtils.getRandomVector().multiply(radius * radiusNucleus);
+            if (orient) v = VectorUtils.rotateVector(v, location);
             location.add(v);
             display(particleNucleus, location, colorNucleus);
             location.subtract(v);
@@ -94,6 +97,7 @@ public class AtomEffect extends Effect {
                 Vector v = new Vector(Math.cos(angle), Math.sin(angle), 0).multiply(radius);
                 VectorUtils.rotateAroundAxisX(v, xRotation);
                 VectorUtils.rotateAroundAxisY(v, rotation);
+                if (orient) v = VectorUtils.rotateVector(v, location);
                 location.add(v);
                 display(particleOrbital, location, colorOrbital);
                 location.subtract(v);
