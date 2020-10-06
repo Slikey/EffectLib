@@ -11,6 +11,7 @@ import org.bukkit.util.Vector;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
+import de.slikey.effectlib.util.RandomUtils;
 import de.slikey.effectlib.util.DynamicLocation;
 
 public abstract class Effect implements Runnable {
@@ -73,6 +74,11 @@ public abstract class Effect implements Runnable {
      * a specific duration.
      */
     public Integer duration = null;
+
+    /**
+     * Probability that this effect will play on each iteration
+     */
+    public double probability = 1;
 
     /**
      * Callback to run, after effect is done.
@@ -229,7 +235,9 @@ public abstract class Effect implements Runnable {
         if (done) return;
 
         try {
-            onRun();
+            if (RandomUtils.checkProbability(probability)) {
+                onRun();
+            }
         } catch (Exception ex) {
             done();
             effectManager.onError(ex);
