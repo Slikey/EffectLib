@@ -97,4 +97,11 @@ public class ConfigUtils {
         return null;
     }
 
+    public static boolean isMaxValue(String stringValue) {
+        return stringValue.equalsIgnoreCase("infinite")
+                || stringValue.equalsIgnoreCase("forever")
+                || stringValue.equalsIgnoreCase("infinity")
+                || stringValue.equalsIgnoreCase("max");
+    }
+
 }
