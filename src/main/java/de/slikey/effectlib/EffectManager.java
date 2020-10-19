@@ -317,9 +317,7 @@ public class EffectManager implements Disposable {
     }
     
     public void onError(Throwable ex) {
-        if (debug) {
-            owningPlugin.getLogger().log(Level.WARNING, "Particle Effect error", ex);
-        }
+        onError("Particle Effect error", ex);
     }
 
     public void onError(String message) {
