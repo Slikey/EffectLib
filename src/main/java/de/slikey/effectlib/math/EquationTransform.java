@@ -1,13 +1,15 @@
 package de.slikey.effectlib.math;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Random;
+
+import org.bukkit.configuration.ConfigurationSection;
+
 import net.objecthunter.exp4j.Expression;
 import net.objecthunter.exp4j.ExpressionBuilder;
 import net.objecthunter.exp4j.function.Function;
-import org.bukkit.configuration.ConfigurationSection;
-
-import java.util.HashSet;
-import java.util.Random;
-import java.util.Set;
 
 public class EquationTransform implements Transform {
     private Expression expression;
@@ -15,7 +17,7 @@ public class EquationTransform implements Transform {
     private static Function minFunction;
     private static Function maxFunction;
     private static Function selectFunction;
-    private final Set<String> inputVariables;
+    private final Collection<String> inputVariables;
     private Exception exception;
 
     @Override
@@ -24,7 +26,7 @@ public class EquationTransform implements Transform {
     }
 
     public EquationTransform() {
-        inputVariables = new HashSet<String>();
+        inputVariables = new ArrayList<String>();
     }
     
     public EquationTransform(String equation) {
@@ -32,20 +34,20 @@ public class EquationTransform implements Transform {
     }
 
     public EquationTransform(String equation, String inputVariable) {
-        inputVariables = new HashSet<String>();
+        inputVariables = new ArrayList<String>();
         inputVariables.add(inputVariable);
         setEquation(equation);
     }
 
     public EquationTransform(String equation, String... inputVariables) {
-        this.inputVariables = new HashSet<String>();
+        this.inputVariables = new ArrayList<String>();
         for (String inputVariable : inputVariables) {
             this.inputVariables.add(inputVariable);
         }
         setEquation(equation);
     }
 
-    public EquationTransform(String equation, Set<String> inputVariables) {
+    public EquationTransform(String equation, Collection<String> inputVariables) {
         this.inputVariables = inputVariables;
         setEquation(equation);
     }
@@ -98,7 +100,7 @@ public class EquationTransform implements Transform {
                 .function(minFunction)
                 .function(maxFunction)
                 .function(selectFunction)
-                .variables(inputVariables)
+                .variables(new HashSet<String>(inputVariables))
                 .build();
         } catch (Exception ex) {
             expression = null;
@@ -163,7 +165,7 @@ public class EquationTransform implements Transform {
         return exception == null;
     }
     
-    public Set<String> getParameters() {
+    public Collection<String> getParameters() {
         return inputVariables;
     }
 }

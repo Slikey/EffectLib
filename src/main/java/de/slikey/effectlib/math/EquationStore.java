@@ -1,8 +1,10 @@
 package de.slikey.effectlib.math;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
+
+import org.apache.commons.lang.StringUtils;
 
 public class EquationStore {
     private static final String DEFAULT_VARIABLE = "x";
@@ -24,20 +26,22 @@ public class EquationStore {
     }
 
     public EquationTransform getTransform(String equation, String... variables) {
-        EquationTransform transform = transforms.get(equation);
+        String equationKey = equation + ":" + StringUtils.join(variables, ",");
+        EquationTransform transform = transforms.get(equationKey);
         if (transform == null) {
             transform = new EquationTransform(equation, variables);
-            transforms.put(equation, transform);
+            transforms.put(equationKey, transform);
         }
 
         return transform;
     }
 
-    public EquationTransform getTransform(String equation, Set<String> variables) {
-        EquationTransform transform = transforms.get(equation);
+    public EquationTransform getTransform(String equation, Collection<String> variables) {
+        String equationKey = equation + ":" + StringUtils.join(variables, ",");
+        EquationTransform transform = transforms.get(equationKey);
         if (transform == null) {
             transform = new EquationTransform(equation, variables);
-            transforms.put(equation, transform);
+            transforms.put(equationKey, transform);
         }
         
         return transform;
