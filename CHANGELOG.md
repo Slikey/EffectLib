@@ -6,6 +6,9 @@
  - Add "Sound" effect for playing sounds or custom sounds, supporting volume and pitch-shifting
  - Add "probability" parameter for randomizing effects
  - Add "orient" parameter to Atom effect
+ - Add "variableA" and "variableB" parameters to Modified effect
+ - Add Cuboid effect, requires a source and target location to work
+ - Fix some issues with using lists of variables in equations getting out of order
 
 # 6.3
 
