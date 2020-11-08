@@ -11,6 +11,7 @@
  - Add "orient" parameter to Atom effect
  - Add "variableA" and "variableB" parameters to Modified effect
  - Add "particle_offset", shortcut for "particle_offset_x", y and z
+ - Add "center" option to Grid effect
 
 # 6.3
 
