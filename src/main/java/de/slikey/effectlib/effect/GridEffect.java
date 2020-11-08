@@ -50,6 +50,16 @@ public class GridEffect extends Effect {
      */
     public double rotation = 0;
 
+    /**
+     * Rotation around the X-axis
+     */
+    public double rotationX = 0;
+
+    /**
+     * Rotation around the Z-axis
+     */
+    public double rotationZ = 0;
+
     public GridEffect(EffectManager effectManager) {
         super(effectManager);
         type = EffectType.INSTANT;
@@ -82,6 +92,12 @@ public class GridEffect extends Effect {
     protected void addParticle(Location location, Vector v) {
         v.setZ(0);
         VectorUtils.rotateAroundAxisY(v, rotation);
+        if (rotationX != 0) {
+            VectorUtils.rotateAroundAxisX(v, rotationX);
+        }
+        if (rotationZ != 0) {
+            VectorUtils.rotateAroundAxisZ(v, rotationZ);
+        }
         location.add(v);
         display(particle, location);
         location.subtract(v);
