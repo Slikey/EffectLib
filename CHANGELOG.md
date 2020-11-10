@@ -1,5 +1,7 @@
 # CHANGELOG
 
+# 6.5
+
 # 6.4
 
  - Fix some issues with using lists of variables in equations getting out of order
