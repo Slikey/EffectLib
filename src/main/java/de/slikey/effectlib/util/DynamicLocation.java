@@ -96,11 +96,13 @@ public class DynamicLocation {
     }
 
     public void setDirection(Vector direction) {
+        if (location == null || direction == null) return;
         location.setDirection(direction);
         updateDirection();
     }
 
     public void updateDirection() {
+        if (location == null) return;
         if (yaw != null) location.setYaw(yaw);
         if (pitch != null) location.setPitch(pitch);
         if (yawOffset != 0) location.setYaw(location.getYaw() + yawOffset);
