@@ -78,6 +78,10 @@ Then finally add the Maven shade plugin:
 
 Make sure to change the "shadedPattern" to match the base package of your own plugin
 
+# Support
+
+Come visit the Magic Discord if you'd like EffectLib help: https://discord.gg/fWJ3W3kMjG
+
 # License
 
 MIT
