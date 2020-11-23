@@ -36,6 +36,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import com.google.common.base.CaseFormat;
 
@@ -50,21 +51,28 @@ public class EffectManager implements Disposable {
     private static List<EffectManager> effectManagers;
     private static Map<String, Class<? extends Effect>> effectClasses = new HashMap<String, Class<? extends Effect>>();
     private final Plugin owningPlugin;
+    private final Logger logger;
     private final Map<Effect, BukkitTask> effects;
     private ParticleDisplay display;
     private boolean disposed;
     private boolean disposeOnTermination;
     private boolean debug = false;
+    private boolean stackTraces = true;
     private int visibleRange = 32;
     private File imageCacheFolder;
     private Map<String, BufferedImage[]> imageCache = new HashMap<String, BufferedImage[]>();
 
     public EffectManager(Plugin owningPlugin) {
+        this(owningPlugin, owningPlugin.getLogger());
+    }
+
+    public EffectManager(Plugin owningPlugin, Logger logger) {
         if (owningPlugin == null) {
             throw new IllegalArgumentException("EffectManager must be given a valid owning plugin");
         }
         imageCacheFolder = new File(owningPlugin.getDataFolder(), "imagecache");
         this.owningPlugin = owningPlugin;
+        this.logger = logger;
         Transforms.setEffectManager(this);
         effects = new HashMap<Effect, BukkitTask>();
         disposed = false;
@@ -237,11 +245,13 @@ public class EffectManager implements Disposable {
             }
 
             if (!setField(effect, key, parameters, parameterMap) && debug) {
-                owningPlugin.getLogger().warning("Unable to assign EffectLib property " + key + " of class " + effect.getClass().getName());
+                getLogger().warning("Unable to assign EffectLib property " + key + " of class " + effect.getClass().getSimpleName());
             }
         }
 
-        effect.setDynamicOrigin(origin);
+        if (origin != null) {
+            effect.setDynamicOrigin(origin);
+        }
         effect.setDynamicTarget(target);
 
         if (targetPlayer != null)
@@ -326,24 +336,39 @@ public class EffectManager implements Disposable {
         debug = enable;
     }
 
+    public void enableStackTraces(boolean enable) {
+        stackTraces = enable;
+    }
+
     public boolean isDebugEnabled() {
         return debug;
     }
     
     public void onError(Throwable ex) {
-        onError("Particle Effect error", ex);
+        // This is usually sent along side a more useful error message, so we'll make this one INFO
+        if (stackTraces) {
+            getLogger().log(Level.INFO, "Particle Effect error", ex);
+        }
     }
 
     public void onError(String message) {
         if (debug) {
-            owningPlugin.getLogger().log(Level.WARNING, message);
+            getLogger().log(Level.WARNING, message);
         }
     }
 
     public void onError(String message, Throwable ex) {
         if (debug) {
-            owningPlugin.getLogger().log(Level.WARNING, message, ex);
+            if (stackTraces) {
+                getLogger().log(Level.WARNING, message, ex);
+            } else {
+                getLogger().log(Level.WARNING, message);
+            }
         }
+    }
+
+    public Logger getLogger() {
+        return logger;
     }
 
     public int getParticleRange() {

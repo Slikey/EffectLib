@@ -2,6 +2,8 @@
 
 # 6.5
 
+ - Add EffectManager.enableStackTraces to turn off stack traces in error messages
+
 # 6.4
 
  - Fix some issues with using lists of variables in equations getting out of order

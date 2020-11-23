@@ -22,7 +22,7 @@ public class SoundEffect extends Effect {
     @Override
     public void onRun() {
         if (sound != null) {
-            sound.play(effectManager.getOwningPlugin(), getLocation());
+            sound.play(effectManager.getOwningPlugin(), effectManager.getLogger(), getLocation());
         }
     }
 }
