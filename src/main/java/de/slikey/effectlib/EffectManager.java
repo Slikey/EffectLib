@@ -345,9 +345,8 @@ public class EffectManager implements Disposable {
     }
     
     public void onError(Throwable ex) {
-        // This is usually sent along side a more useful error message, so we'll make this one INFO
         if (stackTraces) {
-            getLogger().log(Level.INFO, "Particle Effect error", ex);
+            getLogger().log(Level.WARNING, "Particle Effect error", ex);
         }
     }
 
