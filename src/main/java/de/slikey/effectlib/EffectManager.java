@@ -244,9 +244,7 @@ public class EffectManager implements Disposable {
                 continue;
             }
 
-            if (!setField(effect, key, parameters, parameterMap) && debug) {
-                getLogger().warning("Unable to assign EffectLib property " + key + " of class " + effect.getClass().getSimpleName());
-            }
+            setField(effect, key, parameters, parameterMap);
         }
 
         if (origin != null) {
@@ -345,9 +343,7 @@ public class EffectManager implements Disposable {
     }
     
     public void onError(Throwable ex) {
-        if (stackTraces) {
-            getLogger().log(Level.WARNING, "Particle Effect error", ex);
-        }
+        getLogger().log(Level.SEVERE, "Unexpected EffectLib Error: " + ex.getMessage(), ex);
     }
 
     public void onError(String message) {
@@ -443,22 +439,18 @@ public class EffectManager implements Disposable {
                 String value = fieldSection.getString(fieldKey);
                 field.set(effect, value);
             } else if (field.getType().equals(Color.class)) {
-                try {
-                    String value = fieldSection.getString(fieldKey);
-                    Integer rgb = null;
-                    if (value.equalsIgnoreCase("random")) {
-                        byte red =  (byte)(Math.random() * 255);
-                        byte green =  (byte)(Math.random() * 255);
-                        byte blue  =  (byte)(Math.random() * 255);
-                        rgb = (red << 16) | (green << 8) | blue;
-                    } else {
-                        rgb = Integer.parseInt(value, 16);
-                    }
-                    Color color = Color.fromRGB(rgb);
-                    field.set(effect, color);
-                } catch (Exception ex) {
-                    onError(ex);
+                String value = fieldSection.getString(fieldKey);
+                Integer rgb = null;
+                if (value.equalsIgnoreCase("random")) {
+                    byte red =  (byte)(Math.random() * 255);
+                    byte green =  (byte)(Math.random() * 255);
+                    byte blue  =  (byte)(Math.random() * 255);
+                    rgb = (red << 16) | (green << 8) | blue;
+                } else {
+                    rgb = Integer.parseInt(value, 16);
                 }
+                Color color = Color.fromRGB(rgb);
+                field.set(effect, color);
             } else if (Map.class.isAssignableFrom(field.getType()) && section.isConfigurationSection(key)) {
                 Map<String, Object> map = (Map<String, Object>)field.get(effect);
                 ConfigurationSection subSection = section.getConfigurationSection(key);
@@ -487,52 +479,34 @@ public class EffectManager implements Disposable {
                 }
                 field.set(effect, configSection);
             } else if (field.getType().equals(Vector.class)) {
-                double x = 0;
-                double y = 0;
-                double z = 0;
-                try {
-                    String value = fieldSection.getString(fieldKey);
-                    String[] pieces = value.split(",");
-                    x = pieces.length > 0 ? Double.parseDouble(pieces[0]) : 0;
-                    y = pieces.length > 1 ? Double.parseDouble(pieces[1]) : 0;
-                    z = pieces.length > 2 ? Double.parseDouble(pieces[2]) : 0;
-                } catch (Exception ex) {
-                    onError(ex);
-                }
+                String value = fieldSection.getString(fieldKey);
+                String[] pieces = value.split(",");
+                double x = pieces.length > 0 ? Double.parseDouble(pieces[0]) : 0;
+                double y = pieces.length > 1 ? Double.parseDouble(pieces[1]) : 0;
+                double z = pieces.length > 2 ? Double.parseDouble(pieces[2]) : 0;
                 field.set(effect, new Vector(x, y, z));
             } else if (field.getType().isEnum()) {
                 Class<Enum> enumType = (Class<Enum>)field.getType();
-                try {
-                    String value = fieldSection.getString(fieldKey);
-                    Enum enumValue = Enum.valueOf(enumType, value.toUpperCase());
-                    field.set(effect, enumValue);
-                } catch (Exception ex) {
-                    onError(ex);
-                }
+                String value = fieldSection.getString(fieldKey);
+                Enum enumValue = Enum.valueOf(enumType, value.toUpperCase());
+                field.set(effect, enumValue);
             } else if (field.getType().equals(Font.class)) {
-                try {
-                    // Should caching the fonts be considered?
-                    // Or is the performance gain negligible?
-                    String value = fieldSection.getString(fieldKey);
-                    Font font = Font.decode(value);
-                    field.set(effect, font);
-                } catch (Exception ex) {
-                    onError(ex);
-                }
+                // Should caching the fonts be considered?
+                // Or is the performance gain negligible?
+                String value = fieldSection.getString(fieldKey);
+                Font font = Font.decode(value);
+                field.set(effect, font);
             } else if (field.getType().equals(CustomSound.class)) {
-                try {
-                    String value = fieldSection.getString(fieldKey);
-                    field.set(effect, new CustomSound(value));
-                } catch (Exception ex) {
-                    onError(ex);
-                }
+                String value = fieldSection.getString(fieldKey);
+                field.set(effect, new CustomSound(value));
             } else {
+                onError("Unable to assign EffectLib property " + key + " of class " + effect.getClass().getSimpleName());
                 return false;
             }
 
             return true;
         } catch (Exception ex) {
-            this.onError(ex);
+            onError("Error assigning EffectLib property " + key + " of class " + effect.getClass().getSimpleName() + ": " + ex.getMessage(), ex);
         }
 
         return false;
