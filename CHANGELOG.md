@@ -3,6 +3,7 @@
 # 6.5
 
  - Add EffectManager.enableStackTraces to turn off stack traces in error messages
+ - Add orient parameter to Circle effect
 
 # 6.4
 
