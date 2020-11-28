@@ -46,12 +46,9 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.bukkit</groupId>
-            <artifactId>bukkit</artifactId>
-            <version>1.13-R0.1-SNAPSHOT</version>
-            <!-- for testing backwards-compat
-            <version>1.9-R0.1-SNAPSHOT</version>
-            -->
+            <groupId>org.spigotmc</groupId>
+            <artifactId>spigot-api</artifactId>
+            <version>1.16.4-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <dependency>

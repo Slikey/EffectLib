@@ -1,13 +1,14 @@
 package de.slikey.effectlib.util;
 
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 import org.bukkit.Material;
 import org.bukkit.util.Vector;
 
 public final class RandomUtils {
 
-    public static final Random random = new Random(System.nanoTime());
+    public static final Random random = ThreadLocalRandom.current();
 
     private RandomUtils() {
         // No instance allowed
