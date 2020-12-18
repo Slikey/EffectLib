@@ -2,6 +2,7 @@ package de.slikey.effectlib;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.concurrent.ThreadLocalRandom;
 
 import org.bukkit.Color;
 import org.bukkit.Particle;
@@ -28,6 +29,9 @@ public abstract class Effect implements Runnable {
      * include SPELL_MOB_AMBIENT, SPELL_MOB and REDSTONE.
      */
     public Color color = null;
+
+    public List<Color> colorList = null;
+    public String colors = null;
 
     /**
      * This can be used to give particles a set speed when spawned.
@@ -203,6 +207,22 @@ public abstract class Effect implements Runnable {
 
         this.effectManager = effectManager;
         visibleRange = effectManager.getParticleRange();
+    }
+
+    protected void initialize() {
+        if (colors != null) {
+            colorList = new ArrayList<>();
+            String[] args = colors.split(",");
+            if (args.length >= 1) {
+                for (String str : args) {
+                    try {
+                        int rgb = Integer.parseInt(str, 16);
+                        colorList.add(Color.fromRGB(rgb));
+                    } catch (NumberFormatException ignored) {
+                    }
+                }
+            }
+        }
     }
 
     public final void cancel() {
@@ -403,8 +423,12 @@ public abstract class Effect implements Runnable {
             targetPlayers = new ArrayList<>();
             targetPlayers.add(targetPlayer);
         }
+
+        Color currentColor = color;
+        if (colorList != null && !colorList.isEmpty()) currentColor = colorList.get(ThreadLocalRandom.current().nextInt(colorList.size()));
+
         effectManager.display(particle, location, particleOffsetX, particleOffsetY, particleOffsetZ, speed, amount,
-                particleSize, color, material, materialData, visibleRange, targetPlayers);
+                particleSize, currentColor, material, materialData, visibleRange, targetPlayers);
     }
 
     private void done() {

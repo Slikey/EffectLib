@@ -194,6 +194,8 @@ public class EffectManager implements Disposable {
             }
         }
 
+        effect.initialize();
+
         effect.setDynamicOrigin(origin);
         effect.setDynamicTarget(target);
 
