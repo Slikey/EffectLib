@@ -216,7 +216,7 @@ public abstract class Effect implements Runnable {
             if (args.length >= 1) {
                 for (String str : args) {
                     try {
-                        int rgb = Integer.parseInt(str, 16);
+                        int rgb = Integer.parseInt(str.trim().replace("#", ""), 16);
                         colorList.add(Color.fromRGB(rgb));
                     } catch (NumberFormatException ignored) {
                     }
