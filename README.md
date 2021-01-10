@@ -76,6 +76,14 @@ Then finally add the Maven shade plugin:
         </plugins>
 ```
 
+To use EffectLib via gradle just add
+
+```
+compile 'de.slikey:EffectLib:version'
+```
+
+To your build.gradle file, remember to change version to the latest version, you can find the latest version in the maven area above.  
+
 Make sure to change the "shadedPattern" to match the base package of your own plugin
 
 # Support
