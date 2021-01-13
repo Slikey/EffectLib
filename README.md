@@ -1,6 +1,14 @@
 EffectLib - Manage your effects the nice way.
 =========
 
+# Note - Outdated!
+
+Development of this plugin/lib has been moved to http://github.com/elBukkit/EffectLib/ with much respect and appreciation to Slikey!
+
+This move was mainly done so the Maven group id could be changed to something that can be verified for submission to Maven central.
+
+# Introduction
+
 You have no idea what an vector or matrix is, but you want to give your users some nice effects with particles? No problem. this library comes with a load of effects for you. It handles rotation, text-parsing, and creation of 3D objects with particles in Minecraft.
 
   - Text-Parsing
