@@ -50,6 +50,21 @@ public class GridEffect extends Effect {
      */
     public double rotation = 0;
 
+    /**
+     * Rotation around the X-axis
+     */
+    public double rotationX = 0;
+
+    /**
+     * Rotation around the Z-axis
+     */
+    public double rotationZ = 0;
+
+    /**
+     * To center the grid on the location
+     */
+    public boolean center = false;
+
     public GridEffect(EffectManager effectManager) {
         super(effectManager);
         type = EffectType.INSTANT;
@@ -60,8 +75,8 @@ public class GridEffect extends Effect {
     @Override
     public void onRun() {
         Location location = getLocation();
-        // Draw rows
         Vector v = new Vector();
+        // Draw rows
         for (int i = 0; i <= (rows + 1); i++) {
             for (int j = 0; j < particlesWidth * (columns + 1); j++) {
                 v.setY(i * heightCell);
@@ -81,7 +96,17 @@ public class GridEffect extends Effect {
 
     protected void addParticle(Location location, Vector v) {
         v.setZ(0);
+        if (center) {
+            v.setY(v.getY() + heightCell * -(rows + 1) / 2);
+            v.setX(v.getX() + widthCell * -(columns + 1) / 2);
+        }
         VectorUtils.rotateAroundAxisY(v, rotation);
+        if (rotationX != 0) {
+            VectorUtils.rotateAroundAxisX(v, rotationX);
+        }
+        if (rotationZ != 0) {
+            VectorUtils.rotateAroundAxisZ(v, rotationZ);
+        }
         location.add(v);
         display(particle, location);
         location.subtract(v);

@@ -2,6 +2,7 @@ package de.slikey.effectlib;
 
 import de.slikey.effectlib.math.Transforms;
 import de.slikey.effectlib.util.ConfigUtils;
+import de.slikey.effectlib.util.CustomSound;
 import de.slikey.effectlib.util.Disposable;
 import de.slikey.effectlib.util.DynamicLocation;
 import de.slikey.effectlib.util.ImageLoadCallback;
@@ -35,6 +36,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import com.google.common.base.CaseFormat;
 
@@ -49,18 +51,28 @@ public class EffectManager implements Disposable {
     private static List<EffectManager> effectManagers;
     private static Map<String, Class<? extends Effect>> effectClasses = new HashMap<String, Class<? extends Effect>>();
     private final Plugin owningPlugin;
+    private final Logger logger;
     private final Map<Effect, BukkitTask> effects;
     private ParticleDisplay display;
     private boolean disposed;
     private boolean disposeOnTermination;
     private boolean debug = false;
+    private boolean stackTraces = true;
     private int visibleRange = 32;
     private File imageCacheFolder;
     private Map<String, BufferedImage[]> imageCache = new HashMap<String, BufferedImage[]>();
 
     public EffectManager(Plugin owningPlugin) {
-        imageCacheFolder = owningPlugin == null ? null : new File(owningPlugin.getDataFolder(), "imagecache");
+        this(owningPlugin, owningPlugin.getLogger());
+    }
+
+    public EffectManager(Plugin owningPlugin, Logger logger) {
+        if (owningPlugin == null) {
+            throw new IllegalArgumentException("EffectManager must be given a valid owning plugin");
+        }
+        imageCacheFolder = new File(owningPlugin.getDataFolder(), "imagecache");
         this.owningPlugin = owningPlugin;
+        this.logger = logger;
         Transforms.setEffectManager(this);
         effects = new HashMap<Effect, BukkitTask>();
         disposed = false;
@@ -212,18 +224,32 @@ public class EffectManager implements Disposable {
             return null;
         }
 
+        // Some specific shortcuts
+        if (parameters.contains("particle_offset")) {
+            parameters.set("particle_offset_x", parameters.get("particle_offset"));
+            parameters.set("particle_offset_y", parameters.get("particle_offset"));
+            parameters.set("particle_offset_z", parameters.get("particle_offset"));
+            parameters.set("particle_offset", null);
+        }
+        if (parameters.contains("particleOffset")) {
+            parameters.set("particleOffsetX", parameters.get("particleOffset"));
+            parameters.set("particleOffsetY", parameters.get("particleOffset"));
+            parameters.set("particleOffsetZ", parameters.get("particleOffset"));
+            parameters.set("particleOffset", null);
+        }
+
         Collection<String> keys = parameters.getKeys(false);
         for (String key : keys) {
             if (key.equals("class")) {
                 continue;
             }
 
-            if (!setField(effect, key, parameters, parameterMap) && debug) {
-                owningPlugin.getLogger().warning("Unable to assign EffectLib property " + key + " of class " + effect.getClass().getName());
-            }
+            setField(effect, key, parameters, parameterMap);
         }
 
-        effect.setDynamicOrigin(origin);
+        if (origin != null) {
+            effect.setDynamicOrigin(origin);
+        }
         effect.setDynamicTarget(target);
 
         if (targetPlayer != null)
@@ -308,26 +334,36 @@ public class EffectManager implements Disposable {
         debug = enable;
     }
 
+    public void enableStackTraces(boolean enable) {
+        stackTraces = enable;
+    }
+
     public boolean isDebugEnabled() {
         return debug;
     }
     
     public void onError(Throwable ex) {
-        if (debug) {
-            owningPlugin.getLogger().log(Level.WARNING, "Particle Effect error", ex);
-        }
+        getLogger().log(Level.SEVERE, "Unexpected EffectLib Error: " + ex.getMessage(), ex);
     }
 
     public void onError(String message) {
         if (debug) {
-            owningPlugin.getLogger().log(Level.WARNING, message);
+            getLogger().log(Level.WARNING, message);
         }
     }
 
     public void onError(String message, Throwable ex) {
         if (debug) {
-            owningPlugin.getLogger().log(Level.WARNING, message, ex);
+            if (stackTraces) {
+                getLogger().log(Level.WARNING, message, ex);
+            } else {
+                getLogger().log(Level.WARNING, message);
+            }
         }
+    }
+
+    public Logger getLogger() {
+        return logger;
     }
 
     public int getParticleRange() {
@@ -362,31 +398,59 @@ public class EffectManager implements Disposable {
             }
             Field field = effect.getClass().getField(key);
             if (field.getType().equals(Integer.TYPE) || field.getType().equals(Integer.class)) {
-                field.set(effect, fieldSection.getInt(fieldKey));
+                int intValue = Integer.MAX_VALUE;
+                if (!ConfigUtils.isMaxValue(stringValue)) {
+                    intValue = fieldSection.getInt(fieldKey);
+                }
+                field.set(effect, intValue);
             } else if (field.getType().equals(Float.TYPE) || field.getType().equals(Float.class)) {
-                field.set(effect, (float)fieldSection.getDouble(fieldKey));
+                float floatValue = Float.MAX_VALUE;
+                if (!ConfigUtils.isMaxValue(stringValue)) {
+                    floatValue = (float)fieldSection.getDouble(fieldKey);
+                }
+                field.set(effect,floatValue);
             } else if (field.getType().equals(Double.TYPE) || field.getType().equals(Double.class)) {
-                field.set(effect, fieldSection.getDouble(fieldKey));
+                double doubleValue = Double.MAX_VALUE;
+                if (!ConfigUtils.isMaxValue(stringValue)) {
+                    doubleValue = fieldSection.getDouble(fieldKey);
+                }
+                field.set(effect, doubleValue);
             } else if (field.getType().equals(Boolean.TYPE) || field.getType().equals(Boolean.class)) {
                 field.set(effect, fieldSection.getBoolean(fieldKey));
             } else if (field.getType().equals(Long.TYPE) || field.getType().equals(Long.class)) {
-                field.set(effect, fieldSection.getLong(fieldKey));
+                long longValue = Long.MAX_VALUE;
+                if (!ConfigUtils.isMaxValue(stringValue)) {
+                    longValue = fieldSection.getLong(fieldKey);
+                }
+                field.set(effect, longValue);
             } else if (field.getType().equals(Short.TYPE) || field.getType().equals(Short.class)) {
-                field.set(effect, (short)fieldSection.getInt(fieldKey));
+                short shortValue = Short.MAX_VALUE;
+                if (!ConfigUtils.isMaxValue(stringValue)) {
+                    shortValue = (short)fieldSection.getInt(fieldKey);
+                }
+                field.set(effect, shortValue);
             } else if (field.getType().equals(Byte.TYPE) || field.getType().equals(Byte.class)) {
-                field.set(effect, (byte)fieldSection.getInt(fieldKey));
+                byte byteValue = Byte.MAX_VALUE;
+                if (!ConfigUtils.isMaxValue(stringValue)) {
+                    byteValue = (byte)fieldSection.getInt(fieldKey);
+                }
+                field.set(effect, byteValue);
             } else if (field.getType().equals(String.class)) {
                 String value = fieldSection.getString(fieldKey);
                 field.set(effect, value);
             } else if (field.getType().equals(Color.class)) {
-                try {
-                    String value = fieldSection.getString(fieldKey);
-                    Integer rgb = Integer.parseInt(value, 16);
-                    Color color = Color.fromRGB(rgb);
-                    field.set(effect, color);
-                } catch (Exception ex) {
-                    onError(ex);
+                String value = fieldSection.getString(fieldKey);
+                Integer rgb = null;
+                if (value.equalsIgnoreCase("random")) {
+                    byte red =  (byte)(Math.random() * 255);
+                    byte green =  (byte)(Math.random() * 255);
+                    byte blue  =  (byte)(Math.random() * 255);
+                    rgb = (red << 16) | (green << 8) | blue;
+                } else {
+                    rgb = Integer.parseInt(value, 16);
                 }
+                Color color = Color.fromRGB(rgb);
+                field.set(effect, color);
             } else if (Map.class.isAssignableFrom(field.getType()) && section.isConfigurationSection(key)) {
                 Map<String, Object> map = (Map<String, Object>)field.get(effect);
                 ConfigurationSection subSection = section.getConfigurationSection(key);
@@ -415,45 +479,34 @@ public class EffectManager implements Disposable {
                 }
                 field.set(effect, configSection);
             } else if (field.getType().equals(Vector.class)) {
-                double x = 0;
-                double y = 0;
-                double z = 0;
-                try {
-                    String value = fieldSection.getString(fieldKey);
-                    String[] pieces = value.split(",");
-                    x = pieces.length > 0 ? Double.parseDouble(pieces[0]) : 0;
-                    y = pieces.length > 1 ? Double.parseDouble(pieces[1]) : 0;
-                    z = pieces.length > 2 ? Double.parseDouble(pieces[2]) : 0;
-                } catch (Exception ex) {
-                    onError(ex);
-                }
+                String value = fieldSection.getString(fieldKey);
+                String[] pieces = value.split(",");
+                double x = pieces.length > 0 ? Double.parseDouble(pieces[0]) : 0;
+                double y = pieces.length > 1 ? Double.parseDouble(pieces[1]) : 0;
+                double z = pieces.length > 2 ? Double.parseDouble(pieces[2]) : 0;
                 field.set(effect, new Vector(x, y, z));
             } else if (field.getType().isEnum()) {
                 Class<Enum> enumType = (Class<Enum>)field.getType();
-                try {
-                    String value = fieldSection.getString(fieldKey);
-                    Enum enumValue = Enum.valueOf(enumType, value.toUpperCase());
-                    field.set(effect, enumValue);
-                } catch (Exception ex) {
-                    onError(ex);
-                }
+                String value = fieldSection.getString(fieldKey);
+                Enum enumValue = Enum.valueOf(enumType, value.toUpperCase());
+                field.set(effect, enumValue);
             } else if (field.getType().equals(Font.class)) {
-                try {
-                    // Should caching the fonts be considered?
-                    // Or is the performance gain negligible?
-                    String value = fieldSection.getString(fieldKey);
-                    Font font = Font.decode(value);
-                    field.set(effect, font);
-                } catch (Exception ex) {
-                    onError(ex);
-                }
+                // Should caching the fonts be considered?
+                // Or is the performance gain negligible?
+                String value = fieldSection.getString(fieldKey);
+                Font font = Font.decode(value);
+                field.set(effect, font);
+            } else if (field.getType().equals(CustomSound.class)) {
+                String value = fieldSection.getString(fieldKey);
+                field.set(effect, new CustomSound(value));
             } else {
+                onError("Unable to assign EffectLib property " + key + " of class " + effect.getClass().getSimpleName());
                 return false;
             }
 
             return true;
         } catch (Exception ex) {
-            this.onError(ex);
+            onError("Error assigning EffectLib property " + key + " of class " + effect.getClass().getSimpleName() + ": " + ex.getMessage(), ex);
         }
 
         return false;

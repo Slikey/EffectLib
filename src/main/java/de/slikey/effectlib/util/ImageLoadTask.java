@@ -38,7 +38,7 @@ public class ImageLoadTask implements Runnable {
                 File cacheFolder = effectManager.getImageCacheFolder();
                 if (cacheFolder == null) {
                     // This should never really happen anymore, but leaving the check here just in case.
-                    effectManager.getOwningPlugin().getLogger().log(Level.WARNING, "Can't load from URL because no cache folder has been set by the owning plugin: " + fileName);
+                    effectManager.getLogger().log(Level.WARNING, "Can't load from URL because no cache folder has been set by the owning plugin: " + fileName);
                     callback.loaded(new BufferedImage[0]);
                     return;
                 }
@@ -69,7 +69,7 @@ public class ImageLoadTask implements Runnable {
                     out.close();
                 }
             } catch (Exception ex) {
-                effectManager.getOwningPlugin().getLogger().log(Level.WARNING, "Failed to load file " + fileName, ex);
+                effectManager.getLogger().log(Level.WARNING, "Failed to load file " + fileName, ex);
                 callback.loaded(new BufferedImage[0]);
                 return;
             }
@@ -82,7 +82,7 @@ public class ImageLoadTask implements Runnable {
             imageFile = new File(fileName);
         }
         if (!imageFile.exists()) {
-            effectManager.getOwningPlugin().getLogger().log(Level.WARNING, "Failed to find file " + fileName);
+            effectManager.getLogger().log(Level.WARNING, "Failed to find file " + fileName);
             images = new BufferedImage[0];
             callback.loaded(images);
             return;
@@ -102,7 +102,7 @@ public class ImageLoadTask implements Runnable {
                 images[0] = ImageIO.read(imageFile);
             }
         } catch (Exception ex) {
-            effectManager.getOwningPlugin().getLogger().log(Level.WARNING, "Failed to load file " + fileName, ex);
+            effectManager.getLogger().log(Level.WARNING, "Failed to load file " + fileName, ex);
             images = new BufferedImage[0];
         }
 

@@ -10,6 +10,10 @@ import org.bukkit.util.Vector;
 
 public class CircleEffect extends Effect {
 
+    /**
+     * Whether or not to orient to the direction of the source location
+     */
+    public boolean orient = false;
 
     /*
      * ParticleType of spawned particle
@@ -92,6 +96,9 @@ public class CircleEffect extends Effect {
             VectorUtils.rotateVector(v, xRotation, yRotation, zRotation);
             if (enableRotation) {
                 VectorUtils.rotateVector(v, angularVelocityX * step, angularVelocityY * step, angularVelocityZ * step);
+            }
+            if (orient) {
+                 v = VectorUtils.rotateVector(v, location);
             }
             display(particle, location.clone().add(v), 0, 30);
             step++;

@@ -1,6 +1,28 @@
 # CHANGELOG
 
+# 6.5
+
+ - Add EffectManager.enableStackTraces to turn off stack traces in error messages
+ - Add orient parameter to Circle effect
+
+# 6.4
+
+ - Fix some issues with using lists of variables in equations getting out of order
+ - Add Cuboid effect, can work with a source and target location (good for showing cuboid selections)
+ - Add Pyramid effect
+ - Add "Particle" effect for simple repeating particles
+ - Add "Sound" effect for playing sounds or custom sounds, supporting volume and pitch-shifting
+ - Add "probability" parameter for randomizing effects
+ - Add "orient" parameter to Atom effect
+ - Add "variableA" and "variableB" parameters to Modified effect
+ - Add "particle_offset", shortcut for "particle_offset_x", y and z
+ - Add "center" option to Grid effect
+
 # 6.3
+
+ - Bleed effect now uses a "material" rather than "color"
+ - Allow "forever" durations
+ - All "random" colors
 
 # 6.2
 
