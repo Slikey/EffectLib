@@ -34,7 +34,7 @@
        </repository>
         <snapshotRepository>
             <id>maven.elmakers.com</id>
-            <url>http://maven.elmakers.com/repository/</url>
+            <url>https://maven.elmakers.com/repository/</url>
         </snapshotRepository>
     </distributionManagement>
 
