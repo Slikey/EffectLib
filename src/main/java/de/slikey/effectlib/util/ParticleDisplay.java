@@ -23,10 +23,9 @@ public abstract class ParticleDisplay {
     protected void display(Particle particle, Location center, float offsetX, float offsetY, float offsetZ, float speed, int amount, Object data, double range, List<Player> targetPlayers) {
         try {
             if (targetPlayers == null) {
-                String worldName = center.getWorld().getName();
                 double squared = range * range;
                 for (Player player : Bukkit.getOnlinePlayers()) {
-                    if (!player.getWorld().getName().equals(worldName) || player.getLocation().distanceSquared(center) > squared) {
+                    if (player.getWorld() != center.getWorld() || player.getLocation().distanceSquared(center) > squared) {
                         continue;
                     }
                     player.spawnParticle(particle, center, amount, offsetX, offsetY, offsetZ, speed, data);

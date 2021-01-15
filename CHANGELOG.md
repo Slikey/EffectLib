@@ -1,5 +1,9 @@
 # CHANGELOG
 
+# 7.0
+
+- Plugin cleanup and additional code changes
+
 # 6.2
 
  - Some specific internal FX fixes (please let me know if any effects look weird now)
