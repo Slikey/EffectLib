@@ -23,17 +23,17 @@ public class CircleEffect extends Effect {
     public double xRotation, yRotation, zRotation = 0;
 
     /*
-     * Turns the cube by this angle each iteration around the x-axis
+     * Turns the circle by this angle each iteration around the x-axis
      */
     public double angularVelocityX = Math.PI / 200;
 
     /*
-     * Turns the cube by this angle each iteration around the y-axis
+     * Turns the circle by this angle each iteration around the y-axis
      */
     public double angularVelocityY = Math.PI / 170;
 
     /*
-     * Turns the cube by this angle each iteration around the z-axis
+     * Turns the circle by this angle each iteration around the z-axis
      */
     public double angularVelocityZ = Math.PI / 155;
 
