@@ -5,17 +5,26 @@ import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
 
 import org.bukkit.Color;
+import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.util.Vector;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.configuration.ConfigurationSection;
 
 import de.slikey.effectlib.util.RandomUtils;
 import de.slikey.effectlib.util.DynamicLocation;
 
 public abstract class Effect implements Runnable {
+
+    /**
+     * Sub effect
+     * This will play a subeffect on the effect location
+     */
+    private String subEffectClass = null;
+    public ConfigurationSection subEffect = null;
+
 
     /**
      * Handles the type, the effect is played.
@@ -223,6 +232,10 @@ public abstract class Effect implements Runnable {
                 }
             }
         }
+
+        if (subEffect != null) {
+            subEffectClass = subEffect.getString("subEffectClass");
+        }
     }
 
     public final void cancel() {
@@ -419,16 +432,23 @@ public abstract class Effect implements Runnable {
     }
 
     protected void display(Particle particle, Location location, Color color, float speed, int amount) {
-        if (targetPlayers == null && targetPlayer != null) {
-            targetPlayers = new ArrayList<>();
-            targetPlayers.add(targetPlayer);
+        // display particles only when particleCount is equal or more than 0
+        if (particleCount >= 0) {
+            if (targetPlayers == null && targetPlayer != null) {
+                targetPlayers = new ArrayList<>();
+                targetPlayers.add(targetPlayer);
+            }
+
+            Color currentColor = color;
+            if (colorList != null && !colorList.isEmpty()) {
+                currentColor = colorList.get(ThreadLocalRandom.current().nextInt(colorList.size()));
+            }
+
+            effectManager.display(particle, location, particleOffsetX, particleOffsetY, particleOffsetZ, speed, amount,
+                    particleSize, currentColor, material, materialData, visibleRange, targetPlayers);
         }
 
-        Color currentColor = color;
-        if (colorList != null && !colorList.isEmpty()) currentColor = colorList.get(ThreadLocalRandom.current().nextInt(colorList.size()));
-
-        effectManager.display(particle, location, particleOffsetX, particleOffsetY, particleOffsetZ, speed, amount,
-                particleSize, currentColor, material, materialData, visibleRange, targetPlayers);
+        if (subEffectClass != null) effectManager.start(subEffectClass, subEffect, location);
     }
 
     private void done() {
