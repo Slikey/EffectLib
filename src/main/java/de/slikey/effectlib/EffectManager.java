@@ -374,6 +374,7 @@ public class EffectManager implements Disposable {
                         byte blue  =  (byte) (Math.random() * 255);
                         rgb = (red << 16) | (green << 8) | blue;
                     } else {
+                        if (value.startsWith("#")) value = value.substring(1);
                         rgb = Integer.parseInt(value, 16);
                     }
                     Color color = Color.fromRGB(rgb);
