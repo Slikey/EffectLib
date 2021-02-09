@@ -1,10 +1,9 @@
 package de.slikey.effectlib.effect;
 
 import java.util.Map;
-import java.util.Set;
+import java.util.List;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.lang.reflect.Field;
 
 import org.bukkit.Location;
@@ -22,8 +21,8 @@ import com.google.common.base.CaseFormat;
 
 public class ModifiedEffect extends Effect {
 
-    private final static String[] _variables = {"t", "i"};
-    private final static Set<String> variables = new HashSet<>(Arrays.asList(_variables));
+    private final static String[] _variables = {"t", "i", "a", "b"};
+    private final static List<String> variables = Arrays.asList(_variables);
 
     /**
      * The base configuration of the inner effect.
@@ -51,6 +50,16 @@ public class ModifiedEffect extends Effect {
      * Move the entire effect's z location around
      */
     public String zEquation = null;
+
+    /**
+     * The starting value of variable a
+     */
+    public double variableA;
+
+    /**
+     * The starting value of variable b
+     */
+    public double variableB;
 
     /**
      * Whether or not to orient the effect in the direction
@@ -164,9 +173,9 @@ public class ModifiedEffect extends Effect {
 
         if (origin != null && xTransform != null || yTransform != null || zTransform != null) {
             Vector offset = new Vector(
-                xTransform == null ? 0 : xTransform.get(step, maxIterations),
-                yTransform == null ? 0 : yTransform.get(step, maxIterations),
-                zTransform == null ? 0 : zTransform.get(step, maxIterations)
+                xTransform == null ? 0 : xTransform.get(step, maxIterations, variableA, variableB),
+                yTransform == null ? 0 : yTransform.get(step, maxIterations, variableA, variableB),
+                zTransform == null ? 0 : zTransform.get(step, maxIterations, variableA, variableB)
             );
 
             if (previousOffset != null) offset.subtract(previousOffset);
@@ -181,7 +190,7 @@ public class ModifiedEffect extends Effect {
         }
 
         for (Map.Entry<Field, EquationTransform> entry : parameterTransforms.entrySet()) {
-            double value = entry.getValue().get(step, maxIterations);
+            double value = entry.getValue().get(step, maxIterations, variableA, variableB);
             try {
                 Field field = entry.getKey();
                 if (field.getType().equals(Double.class) || field.getType().equals(Double.TYPE)) {

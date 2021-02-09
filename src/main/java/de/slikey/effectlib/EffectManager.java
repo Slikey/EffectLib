@@ -185,6 +185,20 @@ public class EffectManager implements Disposable {
         Effect effect = getEffectByClassName(effectClass);
         if (effect == null) return null;
 
+        // Some specific shortcuts
+        if (parameters.contains("particle_offset")) {
+            parameters.set("particle_offset_x", parameters.get("particle_offset"));
+            parameters.set("particle_offset_y", parameters.get("particle_offset"));
+            parameters.set("particle_offset_z", parameters.get("particle_offset"));
+            parameters.set("particle_offset", null);
+        }
+        if (parameters.contains("particleOffset")) {
+            parameters.set("particleOffsetX", parameters.get("particleOffset"));
+            parameters.set("particleOffsetY", parameters.get("particleOffset"));
+            parameters.set("particleOffsetZ", parameters.get("particleOffset"));
+            parameters.set("particleOffset", null);
+        }
+
         Collection<String> keys = parameters.getKeys(false);
         for (String key : keys) {
             if (key.equals("class")) continue;

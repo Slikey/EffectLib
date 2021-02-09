@@ -2,6 +2,7 @@ package de.slikey.effectlib.util;
 
 import java.util.Collection;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.lang.reflect.Method;
 
 import org.bukkit.Sound;
@@ -15,7 +16,6 @@ import org.apache.commons.lang.StringUtils;
 public class CustomSound {
 
 	private static boolean initializedReflection;
-
 	private static Method player_playCustomSoundMethod;
 	private static Method player_stopSoundMethod;
 	private static Method player_stopCustomSoundMethod;
@@ -28,7 +28,7 @@ public class CustomSound {
 
 	public CustomSound(Sound sound) {
 		this.sound = sound;
-		customSound = null;
+		this.customSound = null;
 	}
 
 	public CustomSound(String key) {
@@ -46,7 +46,6 @@ public class CustomSound {
 			} else {
 				customSound = soundName;
 			}
-
 			if (pieces.length > 1) {
 				try {
 					volume = Float.parseFloat(pieces[1]);
@@ -54,7 +53,6 @@ public class CustomSound {
 					volume = 1;
 				}
 			}
-
 			if (pieces.length > 2) {
 				try {
 					pitch = Float.parseFloat(pieces[2]);
@@ -62,7 +60,6 @@ public class CustomSound {
 					pitch = 1;
 				}
 			}
-
 			if (pieces.length > 3) {
 				try {
 					range = Integer.parseInt(pieces[3]);
@@ -130,13 +127,17 @@ public class CustomSound {
 	}
 
 	public void play(Plugin plugin, Location sourceLocation) {
+		play(plugin, plugin == null ? null : plugin.getLogger(), sourceLocation);
+	}
+
+	public void play(Plugin plugin, Logger logger, Location sourceLocation) {
 		if (sourceLocation == null || plugin == null) return;
 
 		if (customSound != null) {
 			try {
 				int range = this.range;
 				if (range <= 0) {
-					range = (int) (volume > 1.0 ? (16.0 * volume) : 16.0);
+					range = (int)(volume > 1.0 ? (16.0 * volume) : 16.0);
 				}
 				int rangeSquared = range * range;
 				Collection<? extends Player> players = plugin.getServer().getOnlinePlayers();
@@ -144,24 +145,43 @@ public class CustomSound {
 					Location location = player.getLocation();
 					if (location.getWorld().equals(sourceLocation.getWorld()) && location.distanceSquared(sourceLocation) <= rangeSquared) {
 						// player.playSound(sourceLocation, customSound, volume, pitch);
-						playCustomSound(plugin, player, sourceLocation, customSound, volume, pitch);
+						playCustomSound(logger, player, sourceLocation, customSound, volume, pitch);
 					}
 				}
 			} catch (Exception ex) {
-				plugin.getLogger().warning("Failed to play custom sound: " + customSound);
+				if (logger != null) {
+					logger.warning("Failed to play custom sound: " + customSound);
+				}
 			}
 		}
 
 		if (sound != null) {
 			try {
-				sourceLocation.getWorld().playSound(sourceLocation, sound, volume, pitch);
+				if (range > 0) {
+					int rangeSquared = range * range;
+					Collection<? extends Player> players = plugin.getServer().getOnlinePlayers();
+					for (Player player : players) {
+						Location location = player.getLocation();
+						if (location.getWorld().equals(sourceLocation.getWorld()) && location.distanceSquared(sourceLocation) <= rangeSquared) {
+							player.playSound(sourceLocation, sound, volume, pitch);
+						}
+					}
+				} else {
+					sourceLocation.getWorld().playSound(sourceLocation, sound, volume, pitch);
+				}
 			} catch (Exception ex) {
-				plugin.getLogger().warning("Failed to play sound: " + sound);
+				if (logger != null) {
+					logger.warning("Failed to play sound: " + sound);
+				}
 			}
 		}
 	}
 
 	public void play(Plugin plugin, Entity entity) {
+		play(plugin, plugin == null ? null : plugin.getLogger(), entity);
+	}
+
+	public void play(Plugin plugin, Logger logger, Entity entity) {
 		if (entity == null || plugin == null) return;
 
 		Location sourceLocation = entity.getLocation();
@@ -174,17 +194,19 @@ public class CustomSound {
 						Location location = player.getLocation();
 						if (location.getWorld().equals(sourceLocation.getWorld()) && location.distanceSquared(sourceLocation) <= rangeSquared) {
 							// player.playSound(sourceLocation, customSound, volume, pitch);
-							playCustomSound(plugin, player, sourceLocation, customSound, volume, pitch);
+							playCustomSound(logger, player, sourceLocation, customSound, volume, pitch);
 						}
 					}
 				} else if (entity instanceof Player) {
 					Player player = (Player)entity;
 					// player.playSound(sourceLocation, customSound, volume, pitch);
-					playCustomSound(plugin, player, sourceLocation, customSound, volume, pitch);
+					playCustomSound(logger, player, sourceLocation, customSound, volume, pitch);
 
 				}
 			} catch (Exception ex) {
-				plugin.getLogger().warning("Failed to play custom sound: " + customSound);
+				if (logger != null) {
+					logger.warning("Failed to play custom sound: " + customSound);
+				}
 			}
 		}
 
@@ -197,7 +219,9 @@ public class CustomSound {
 					sourceLocation.getWorld().playSound(sourceLocation, sound, volume, pitch);
 				}
 			} catch (Exception ex) {
-				plugin.getLogger().warning("Failed to play sound: " + sound);
+				if (logger != null) {
+					logger.warning("Failed to play sound: " + sound);
+				}
 			}
 		}
 	}
@@ -206,65 +230,59 @@ public class CustomSound {
 		this.range = range;
 	}
 
-	private static void initializeReflection(Plugin plugin) {
+	private static void initializeReflection(Logger logger) {
 		if (!initializedReflection) {
 			initializedReflection = true;
 			try {
 				player_playCustomSoundMethod = Player.class.getMethod("playSound", Location.class, String.class, Float.TYPE, Float.TYPE);
 			} catch (Exception ex) {
-				if (plugin != null) {
-					plugin.getLogger().warning("Failed to bind to custom sound method");
-				}
+				if (logger != null) logger.warning("Failed to bind to custom sound method");
 			}
 			try {
 				player_stopCustomSoundMethod = Player.class.getMethod("stopSound", String.class);
 			} catch (Exception ex) {
-				if (plugin != null) {
-					plugin.getLogger().warning("Failed to bind to stop custom sound method");
-				}
+				if (logger != null) logger.warning("Failed to bind to stop custom sound method");
 			}
 			try {
 				player_stopSoundMethod = Player.class.getMethod("stopSound", Sound.class);
 			} catch (Exception ex) {
-				if (plugin != null) {
-					plugin.getLogger().warning("Failed to bind to stop sound method");
-				}
+				if (logger != null) logger.warning("Failed to bind to stop sound method");
 			}
 		}
 	}
 
-	public static void stopSound(Plugin plugin, Player player, String sound) {
-		initializeReflection(plugin);
+	public static void stopSound(Logger logger, Player player, String sound) {
+		initializeReflection(logger);
 		if (player_stopCustomSoundMethod == null) return;
 		try {
 			player_stopCustomSoundMethod.invoke(player, sound);
 		} catch (Exception ex) {
-			if (plugin != null) {
-				plugin.getLogger().log(Level.WARNING, "Failed to stop custom sound: " + sound, ex);
+			if (logger != null) {
+				logger.log(Level.WARNING, "Failed to stop custom sound: " + sound, ex);
 			}
 		}
 	}
 
-	public static void stopSound(Plugin plugin, Player player, Sound sound) {
-		initializeReflection(plugin);
+	public static void stopSound(Logger logger, Player player, Sound sound) {
+		initializeReflection(logger);
 		if (player_stopSoundMethod == null) return;
 		try {
 			player_stopSoundMethod.invoke(player, sound);
 		} catch (Exception ex) {
-			if (plugin != null) {
-				plugin.getLogger().log(Level.WARNING, "Failed to stop sound: " + sound, ex);
+			if (logger != null) {
+				logger.log(Level.WARNING, "Failed to stop sound: " + sound, ex);
 			}
 		}
 	}
 
-	public static void playCustomSound(Plugin plugin, Player player, Location location, String sound, float volume, float pitch) {
-		initializeReflection(plugin);
+	public static void playCustomSound(Logger logger, Player player, Location location, String sound, float volume, float pitch) {
+		initializeReflection(logger);
 		if (player_playCustomSoundMethod == null) return;
 		try {
 			player_playCustomSoundMethod.invoke(player, location, sound, volume, pitch);
 		} catch (Exception ex) {
-			if (plugin != null) {
-				plugin.getLogger().log(Level.WARNING, "Failed to play custom sound: " + sound, ex);
+			if (logger != null) {
+				logger.log(Level.WARNING, "Failed to play custom sound: " + sound, ex);
 			}
 		}
 	}
