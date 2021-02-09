@@ -7,6 +7,7 @@ import org.bukkit.util.Vector;
 import de.slikey.effectlib.Effect;
 import de.slikey.effectlib.EffectType;
 import de.slikey.effectlib.EffectManager;
+import de.slikey.effectlib.util.VectorUtils;
 
 public class LineEffect extends Effect {
 
@@ -28,7 +29,12 @@ public class LineEffect extends Effect {
     /**
      * Direction of zig-zags
      */
-    public Vector zigZagOffset = new Vector(0,0.1,0);
+    public Vector zigZagOffset = new Vector(0, 0.1, 0);
+
+    /**
+     * Relative direction of zig-zags
+     */
+    public Vector zigZagRelativeOffset = new Vector(0, 0, 0);
 
     /**
      * Particles per arc
@@ -83,10 +89,17 @@ public class LineEffect extends Effect {
         float ratio = length / particles;
         Vector v = link.multiply(ratio);
         Location loc = location.clone().subtract(v);
+        Vector rel;
         for (int i = 0; i < particles; i++) {
             if (isZigZag) {
-                if (zag) loc.add(zigZagOffset);
-                else loc.subtract(zigZagOffset);
+                rel = VectorUtils.rotateVector(zigZagRelativeOffset, loc);
+                if (zag) {
+                    loc.add(rel);
+                    loc.add(zigZagOffset);
+                } else {
+                    loc.subtract(zigZagOffset);
+                    loc.subtract(rel);
+                }
             }
             if (step >= amount) {
                 zag = !zag;
