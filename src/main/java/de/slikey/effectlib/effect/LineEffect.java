@@ -65,6 +65,11 @@ public class LineEffect extends Effect {
      */
     protected int step = 0;
 
+    /**
+     * Internal effectAtEnd instance
+     */
+    protected Effect effectAtEnd = null;
+
     public LineEffect(EffectManager effectManager) {
         super(effectManager);
         type = EffectType.REPEATING;
@@ -75,6 +80,10 @@ public class LineEffect extends Effect {
     @Override
     public void reset() {
         step = 0;
+        if (effectAtEnd != null) {
+            effectAtEnd.cancel();
+            effectAtEnd = null;
+        }
     }
 
     @Override
@@ -118,7 +127,7 @@ public class LineEffect extends Effect {
             display(particle, loc);
         }
 
-        if (subEffectAtEndClass != null) effectManager.start(subEffectAtEndClass, subEffectAtEnd, loc);
+        if (subEffectAtEndClass != null && effectAtEnd == null) effectAtEnd = effectManager.start(subEffectAtEndClass, subEffectAtEnd, loc);
     }
 
     @Override
