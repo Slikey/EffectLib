@@ -56,6 +56,14 @@ public class LineEffect extends Effect {
     public ConfigurationSection subEffectAtEnd = null;
 
     /**
+     * Sub effect at end.
+     * This will play a subeffect at the end location of the line
+     * This effect will also be cached
+     */
+    private String subEffectAtEndCachedClass = null;
+    public ConfigurationSection subEffectAtEndCached = null;
+
+    /**
      * Internal boolean
      */
     protected boolean zag = false;
@@ -68,7 +76,7 @@ public class LineEffect extends Effect {
     /**
      * Internal effectAtEnd instance
      */
-    protected Effect effectAtEnd = null;
+    protected Effect effectAtEndCached = null;
 
     public LineEffect(EffectManager effectManager) {
         super(effectManager);
@@ -80,9 +88,9 @@ public class LineEffect extends Effect {
     @Override
     public void reset() {
         step = 0;
-        if (effectAtEnd != null) {
-            effectAtEnd.cancel();
-            effectAtEnd = null;
+        if (effectAtEndCached != null) {
+            effectAtEndCached.cancel();
+            effectAtEndCached = null;
         }
     }
 
@@ -127,7 +135,8 @@ public class LineEffect extends Effect {
             display(particle, loc);
         }
 
-        if (subEffectAtEndClass != null && effectAtEnd == null) effectAtEnd = effectManager.start(subEffectAtEndClass, subEffectAtEnd, loc);
+        if (subEffectAtEndClass != null) effectManager.start(subEffectAtEndClass, subEffectAtEnd, loc);
+        if (subEffectAtEndCachedClass != null && effectAtEndCached == null) effectAtEndCached = effectManager.start(subEffectAtEndCachedClass, subEffectAtEndCached, loc);
     }
 
     @Override
@@ -136,6 +145,10 @@ public class LineEffect extends Effect {
 
         if (subEffectAtEnd != null) {
             subEffectAtEndClass = subEffectAtEnd.getString("subEffectAtEndClass");
+        }
+
+        if (subEffectAtEndCached != null) {
+            subEffectAtEndCachedClass = subEffectAtEndCached.getString("subEffectAtEndCachedClass");
         }
     }
 
