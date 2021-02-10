@@ -3,6 +3,7 @@ package de.slikey.effectlib.effect;
 import org.bukkit.Particle;
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
+import org.bukkit.configuration.ConfigurationSection;
 
 import de.slikey.effectlib.Effect;
 import de.slikey.effectlib.EffectType;
@@ -46,6 +47,13 @@ public class LineEffect extends Effect {
      * A non-zero value here will use a length instead of the target endpoint
      */
     public double length = 0;
+
+    /**
+     * Sub effect at end.
+     * This will play a subeffect at the end location of the line
+     */
+    private String subEffectAtEndClass = null;
+    public ConfigurationSection subEffectAtEnd = null;
 
     /**
      * Internal boolean
@@ -97,8 +105,8 @@ public class LineEffect extends Effect {
                     loc.add(rel);
                     loc.add(zigZagOffset);
                 } else {
-                    loc.subtract(zigZagOffset);
                     loc.subtract(rel);
+                    loc.subtract(zigZagOffset);
                 }
             }
             if (step >= amount) {
@@ -108,6 +116,17 @@ public class LineEffect extends Effect {
             step++;
             loc.add(v);
             display(particle, loc);
+        }
+
+        if (subEffectAtEndClass != null) effectManager.start(subEffectAtEndClass, subEffectAtEnd, loc);
+    }
+
+    @Override
+    protected void initialize() {
+        super.initialize();
+
+        if (subEffectAtEnd != null) {
+            subEffectAtEndClass = subEffectAtEnd.getString("subEffectAtEndClass");
         }
     }
 
