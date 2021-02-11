@@ -224,4 +224,8 @@ public class ModifiedEffect extends Effect {
         step++;
     }
 
+    public Effect getInnerEffect() {
+        return innerEffect;
+    }
+
 }
