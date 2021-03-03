@@ -211,6 +211,8 @@ public abstract class Effect implements Runnable {
 
     private boolean done = false;
 
+    private long startTime;
+
     public Effect(EffectManager effectManager) {
         if (effectManager == null) throw new IllegalArgumentException("EffectManager cannot be null!");
 
@@ -227,8 +229,7 @@ public abstract class Effect implements Runnable {
                     try {
                         int rgb = Integer.parseInt(str.trim().replace("#", ""), 16);
                         colorList.add(Color.fromRGB(rgb));
-                    } catch (NumberFormatException ignored) {
-                    }
+                    } catch (NumberFormatException ignored) {}
                 }
             }
         }
@@ -495,6 +496,14 @@ public abstract class Effect implements Runnable {
 
     public void setTargetPlayer(Player p) {
     	targetPlayer = p;
+    }
+
+    public long getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(long startTime) {
+        this.startTime = startTime;
     }
 
 }

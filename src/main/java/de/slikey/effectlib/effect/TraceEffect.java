@@ -62,7 +62,7 @@ public class TraceEffect extends Effect {
         if (world == null) {
             world = location.getWorld();
         } else if (!location.getWorld().equals(world)) {
-            cancel(true);
+            cancel();
             return;
         }
 

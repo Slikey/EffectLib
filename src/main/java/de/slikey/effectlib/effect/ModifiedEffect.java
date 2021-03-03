@@ -132,8 +132,10 @@ public class ModifiedEffect extends Effect {
                 cancel();
                 return;
             }
+
             innerEffect.material = material;
             innerEffect.materialData = materialData;
+
             for (Map.Entry<String, String> entry : parameters.entrySet()) {
                 String equation = entry.getValue();
                 String fieldName = entry.getKey();
@@ -152,6 +154,7 @@ public class ModifiedEffect extends Effect {
                     effectManager.onError("Error parsing equation: " + equation, ex);
                     continue;
                 }
+
                 try {
                     Field field = innerEffect.getClass().getField(fieldName);
                     parameterTransforms.put(field, transform);
@@ -160,12 +163,14 @@ public class ModifiedEffect extends Effect {
                     continue;
                 }
             }
+
             innerEffect.prepare();
 
             if (xEquation != null) xTransform = EquationStore.getInstance().getTransform(xEquation, _variables);
             if (yEquation != null) yTransform = EquationStore.getInstance().getTransform(yEquation, _variables);
             if (zEquation != null) zTransform = EquationStore.getInstance().getTransform(zEquation, _variables);
         }
+
         if (innerEffect == null) {
             cancel();
             return;

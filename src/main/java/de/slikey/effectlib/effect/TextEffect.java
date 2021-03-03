@@ -117,7 +117,7 @@ public class TextEffect extends Effect {
         } catch (Exception ex) {
             // This seems to happen on bad characters in strings,
             // I'm choosing to ignore the exception and cancel the effect for now.
-            cancel(true);
+            cancel();
         }
     }
     

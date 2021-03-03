@@ -97,6 +97,7 @@ public class EffectManager implements Disposable {
                 break;
         }
         synchronized (this) {
+            effect.setStartTime(System.currentTimeMillis());
             effects.put(effect, task);
         }
     }
