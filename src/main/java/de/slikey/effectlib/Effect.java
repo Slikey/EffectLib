@@ -266,7 +266,10 @@ public abstract class Effect implements Runnable {
             cancel();
             return;
         }
-        if (done) return;
+        if (done) {
+            effectManager.removeEffect(this);
+            return;
+        }
 
         try {
             if (RandomUtils.checkProbability(probability)) {

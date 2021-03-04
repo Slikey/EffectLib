@@ -253,13 +253,17 @@ public class EffectManager implements Disposable {
     }
     
     public void done(Effect effect) {
+        removeEffect(effect);
+        if (effect.callback != null && owningPlugin.isEnabled()) Bukkit.getScheduler().runTask(owningPlugin, effect.callback);
+        if (disposeOnTermination && effects.isEmpty()) dispose();
+    }
+
+    public void removeEffect(Effect effect) {
         synchronized (this) {
             BukkitTask existingTask = effects.get(effect);
             if (existingTask != null) existingTask.cancel();
             effects.remove(effect);
         }
-        if (effect.callback != null && owningPlugin.isEnabled()) Bukkit.getScheduler().runTask(owningPlugin, effect.callback);
-        if (disposeOnTermination && effects.isEmpty()) dispose();
     }
     
     @Override
