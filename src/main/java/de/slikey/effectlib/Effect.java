@@ -221,6 +221,8 @@ public abstract class Effect implements Runnable {
     }
 
     protected void initialize() {
+        if (period < 1) period = 1;
+
         if (colors != null) {
             colorList = new ArrayList<>();
             String[] args = colors.split(",");
