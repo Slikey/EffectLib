@@ -42,6 +42,17 @@ public class CircleEffect extends Effect {
      */
     public float radius = .4f;
 
+    /**
+     * Used to make a partial circle
+     */
+    public double maxAngle = Math.PI * 2;
+
+    /**
+     * Start at the same location each step, use this
+     * along with maxAngle and wholeCircle to form persistent semicircles
+     */
+    public boolean resetCircle = false;
+
     /*
      * Current step. Works as a counter
      */
@@ -84,7 +95,7 @@ public class CircleEffect extends Effect {
         Location location = getLocation();
         location.subtract(xSubtract, ySubtract, zSubtract);
 
-        double inc = (2 * Math.PI) / particles;
+        double inc = maxAngle / particles;
         int steps = wholeCircle ? particles : 1;
 
         for (int i = 0; i < steps; i++) {
@@ -98,6 +109,10 @@ public class CircleEffect extends Effect {
             if (enableRotation) VectorUtils.rotateVector(v, angularVelocityX * step, angularVelocityY * step, angularVelocityZ * step);
             display(particle, location.clone().add(v));
             step++;
+        }
+
+        if (resetCircle) {
+            step = 0;
         }
     }
 
